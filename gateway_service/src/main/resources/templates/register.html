@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <div>
+        <p>Register a new account</p>
+
+        <form th:action="@{/register}" th:object="${userData}" method="post">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+            </div>
+            <div>
+                <label>
+                    <input type="text" class="form-control" th:field="*{username}" placeholder="Username"
+                           th:errorclass="is-invalid">
+                </label>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>
+                    <input type="text" class="form-control" th:field="*{firstname}" placeholder="First Name"
+                           th:errorclass="is-invalid">
+                </label>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>
+                    <input type="text" class="form-control" th:field="*{lastname}" placeholder="Last Name"
+                           th:errorclass="is-invalid">
+                </label>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>
+                    <input type="email" class="form-control" th:field="*{email}" placeholder="Email"
+                           th:errorclass="is-invalid">
+                </label>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>
+                    <input type="password" class="form-control" th:field="*{password}" placeholder="Password"
+                           th:errorclass="is-invalid">
+                </label>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>
+                    <input type="password" class="form-control" placeholder="Retype password">
+                </label>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <input type="submit" value="Submit"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>
