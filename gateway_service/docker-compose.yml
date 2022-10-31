@@ -10,3 +10,10 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgresDB
     restart: always
+
+  gateway-service:
+    build: .
+    ports:
+      - "28888:28888"
+    depends_on:
+      - postgres
