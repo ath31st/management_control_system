@@ -1,6 +1,9 @@
 server:
   port: 28880
 
+topic:
+  name: t.order
+
 spring:
   kafka:
     bootstrap-servers: "localhost:9092"

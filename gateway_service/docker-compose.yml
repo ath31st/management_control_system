@@ -1,10 +1,17 @@
 version: "3.9"
+
+networks:
+  kafka-net:
+    driver: bridge
+
 services:
   zookeeper:
     container_name: zookeeper
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+    networks:
+      - kafka-net
 
   kafka:
     container_name: kafka
@@ -12,13 +19,30 @@ services:
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER_INTERNAL:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: DOCKER_INTERNAL://:29092,DOCKER_EXTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: DOCKER_INTERNAL://kafka:29092,DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - kafka-net
     depends_on:
       - zookeeper
+
+  kafdrop:
+    container_name: kafdrop
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+    networks:
+      - kafka-net
+    depends_on:
+      - kafka
 
   postgres:
     image: postgres:15.0
@@ -30,11 +54,15 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgresDB
     restart: always
+    networks:
+      - kafka-net
 
   gateway-service:
     container_name: gateway-service
     build: .
     ports:
       - "28888:28888"
+    networks:
+      - kafka-net
     depends_on:
       - postgres

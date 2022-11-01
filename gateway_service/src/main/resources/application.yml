@@ -1,6 +1,9 @@
 server:
   port: 28888
 
+topic:
+  name: t.order
+
 spring:
   datasource:
     #url: jdbc:postgresql://localhost:5432/postgresDB
@@ -19,6 +22,7 @@ spring:
     bootstrap-servers: "localhost:9092"
     consumer:
       auto-offset-reset: earliest
+      group-id: "default"
 
 logging:
   level:
