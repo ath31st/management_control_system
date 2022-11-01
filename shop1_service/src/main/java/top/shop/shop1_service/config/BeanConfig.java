@@ -1,7 +1,7 @@
 package top.shop.shop1_service.config;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,21 +10,19 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
+import java.util.Collections;
 import java.util.Map;
 
 @Configuration
-public class Config {
+@RequiredArgsConstructor
+public class BeanConfig {
 
     private final KafkaProperties kafkaProperties;
-
-    @Autowired
-    public Config(KafkaProperties kafkaProperties) {
-        this.kafkaProperties = kafkaProperties;
-    }
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         // get configs on application.properties/yml
+        kafkaProperties.setBootstrapServers(Collections.singletonList("localhost:9093"));
         Map<String, Object> properties = kafkaProperties.buildProducerProperties();
         return new DefaultKafkaProducerFactory<>(properties);
     }
