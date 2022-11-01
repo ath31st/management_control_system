@@ -2,6 +2,8 @@ package top.shop.shop1_service.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,7 @@ import top.shop.shop1_service.dto.OrderDto;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class Producer {
 
     @Value("${topic.name}")
@@ -18,12 +21,6 @@ public class Producer {
 
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
-
-    @Autowired
-    public Producer(KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
-        this.kafkaTemplate = kafkaTemplate;
-        this.objectMapper = objectMapper;
-    }
 
     public String sendMessage(OrderDto orderDto) throws JsonProcessingException {
         String orderAsMessage = objectMapper.writeValueAsString(orderDto);

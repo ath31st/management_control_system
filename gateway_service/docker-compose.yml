@@ -2,12 +2,13 @@ version: "3.9"
 
 networks:
   kafka-net:
+    name: kafka-net
     driver: bridge
 
 services:
   zookeeper:
     container_name: zookeeper
-    image: wurstmeister/zookeeper
+    image: zookeeper
     ports:
       - "2181:2181"
     networks:
@@ -15,7 +16,7 @@ services:
 
   kafka:
     container_name: kafka
-    image: wurstmeister/kafka
+    image: obsidiandynamics/kafka
     ports:
       - "9092:9092"
     environment:
