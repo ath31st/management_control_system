@@ -85,3 +85,13 @@ services:
       - kafka-net
     depends_on:
       - postgres-gateway
+
+#  backend-service:
+#    container_name: backend-service
+#    build: .
+#    ports:
+#      - "28889:28889"
+#    networks:
+#      - kafka-net
+#    depends_on:
+#      - postgres-backend

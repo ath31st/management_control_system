@@ -10,4 +10,5 @@ public class OrderDto {
     private String productName;
     private String customerName;
     private LocalDateTime orderDate;
+    private int amount;
 }

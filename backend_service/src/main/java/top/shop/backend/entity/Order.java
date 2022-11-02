@@ -26,4 +26,6 @@ public class Order {
     private LocalDateTime orderDate;
     private LocalDateTime executionDate;
     private boolean isExecuted;
+    private int amount;
+    private double totalPrice;
 }

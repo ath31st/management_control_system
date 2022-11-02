@@ -2,7 +2,10 @@ server:
   port: 28880
 
 topic:
-  name: t.order
+  delivery:
+    name: t.delivery
+  order:
+    name: t.order
 
 shop:
   name: shop1

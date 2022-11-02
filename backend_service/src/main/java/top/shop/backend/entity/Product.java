@@ -22,7 +22,6 @@ public class Product {
     @Size(min = 1, max = 100)
     private String name;
     private String category;
-    private double purchasePrice;
-    private double salePrice;
-    private long count;
+    private double price;
+    private long amount;
 }

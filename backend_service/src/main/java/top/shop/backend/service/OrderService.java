@@ -13,9 +13,12 @@ import top.shop.backend.repository.OrderRepository;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ShopService shopService;
+    private final ProductService productService;
 
     public void persistOrder(OrderDto orderDto) {
         Order order = Order.builder()
+                .totalPrice(productService.getTotalPrice(orderDto.getAmount(),orderDto.getProductName()))
+                .amount(orderDto.getAmount())
                 .isExecuted(false)
                 .orderDate(orderDto.getOrderDate())
                 .customerName(orderDto.getCustomerName())

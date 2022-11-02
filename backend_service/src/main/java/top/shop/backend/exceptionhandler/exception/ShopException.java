@@ -9,4 +9,5 @@ public class ShopException extends AbstractException{
     public ShopException(HttpStatus status, String errorMessage) {
         super(status, errorMessage);
     }
+
 }

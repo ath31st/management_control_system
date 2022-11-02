@@ -2,13 +2,13 @@ package top.shop.shop1_service.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
-public class OrderDto {
+public class DeliveryOrderDto {
+
     private String shopName;
     private String productName;
     private String customerName;
-    private LocalDateTime orderDate;
     private int amount;
+    private double totalPrice;
+
 }
