@@ -15,3 +15,4 @@ spring:
     bootstrap-servers: "localhost:9093"
     consumer:
       auto-offset-reset: earliest
+      group-id: "default"
