@@ -2,6 +2,7 @@ package top.shop.shop1_service.config;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +18,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BeanConfig {
 
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootStrapServers;
     private final KafkaProperties kafkaProperties;
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         // get configs on application.properties/yml
-        kafkaProperties.setBootstrapServers(Collections.singletonList("localhost:9093"));
+        kafkaProperties.setBootstrapServers(Collections.singletonList(bootStrapServers));
         Map<String, Object> properties = kafkaProperties.buildProducerProperties();
         return new DefaultKafkaProducerFactory<>(properties);
     }
