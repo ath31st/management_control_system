@@ -1,0 +1,26 @@
+server:
+  port: 28889
+
+topic:
+  name: t.order
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgresDB
+#    url: jdbc:postgresql://postgres-container-backend:5432/postgresDB
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+  kafka:
+#    bootstrap-servers: "kafka:9092"
+    bootstrap-servers: "localhost:9093"
+    consumer:
+      auto-offset-reset: earliest
+      group-id: "default"
