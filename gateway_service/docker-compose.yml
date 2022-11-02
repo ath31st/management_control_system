@@ -49,11 +49,25 @@ services:
     depends_on:
       - kafka
 
-  postgres:
+  postgres-gateway:
     image: postgres:15.0
-    container_name: postgres-container
+    container_name: postgres-container-gateway
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgresDB
+    restart: always
+    networks:
+      - kafka-net
+
+  postgres-backend:
+    image: postgres:15.0
+    container_name: postgres-container-backend
+    ports:
+      - "5433:5433"
+    command: -p 5433
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -70,4 +84,4 @@ services:
     networks:
       - kafka-net
     depends_on:
-      - postgres
+      - postgres-gateway

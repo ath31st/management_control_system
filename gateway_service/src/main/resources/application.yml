@@ -7,7 +7,7 @@ topic:
 spring:
   datasource:
     #url: jdbc:postgresql://localhost:5432/postgresDB
-    url: jdbc:postgresql://postgres-container:5432/postgresDB
+    url: jdbc:postgresql://postgres-container-gateway:5432/postgresDB
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
