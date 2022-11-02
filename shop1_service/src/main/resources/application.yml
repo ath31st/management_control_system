@@ -4,6 +4,9 @@ server:
 topic:
   name: t.order
 
+shop:
+  name: shop1
+
 spring:
   kafka:
     bootstrap-servers: "localhost:9093"

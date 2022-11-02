@@ -13,13 +13,13 @@ import top.shop.gateway.service.OrderService;
 //@Component
 //@RequiredArgsConstructor
 //public class Consumer {
-//    private static final String orderTopic = "${topic.name}";
+//    private static final String ORDER_TOPIC = "${topic.name}";
 //
 //    private final ObjectMapper objectMapper;
 //    private final OrderService orderService;
 //
 //
-//    @KafkaListener(topics = orderTopic)
+//    @KafkaListener(topics = ORDER_TOPIC)
 //    public void consumeMessage(String message) throws JsonProcessingException {
 //        log.info("message consumed {}", message);
 //
