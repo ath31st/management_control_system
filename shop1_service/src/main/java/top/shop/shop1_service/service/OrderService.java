@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class OrderService {
 
     @Value("${shop.name}")
-    private String shopName;
+    private final String shopName = "shop1";
     private final OrderProducer orderProducer;
 
     public String createOrder(OrderDto orderDto) throws JsonProcessingException {
