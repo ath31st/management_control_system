@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.OrderDto;
-import top.shop.shop1_service.util.Producer;
+import top.shop.shop1_service.service.kafkalogic.OrderProducer;
 
 import java.time.LocalDateTime;
 
@@ -15,11 +15,11 @@ public class OrderService {
 
     @Value("${shop.name}")
     private final String shopName = "shop1";
-    private final Producer producer;
+    private final OrderProducer orderProducer;
 
     public String createOrder(OrderDto orderDto) throws JsonProcessingException {
         orderDto.setShopName(shopName);
         orderDto.setOrderDate(LocalDateTime.now());
-        return producer.sendMessage(orderDto);
+        return orderProducer.sendMessage(orderDto);
     }
 }

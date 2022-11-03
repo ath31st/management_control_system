@@ -8,7 +8,7 @@ import top.shop.backend.dto.DeliveryOrderDto;
 import top.shop.backend.dto.OrderDto;
 import top.shop.backend.entity.Order;
 import top.shop.backend.repository.OrderRepository;
-import top.shop.backend.util.Producer;
+import top.shop.backend.service.kafkalogic.DeliveryProducer;
 
 @Slf4j
 @Service
@@ -18,7 +18,7 @@ public class OrderService {
     private final ShopService shopService;
     private final ProductService productService;
 
-    private final Producer producer;
+    private final DeliveryProducer deliveryProducer;
 
     public void persistOrder(OrderDto orderDto) throws JsonProcessingException {
         Order order = Order.builder()
@@ -40,7 +40,7 @@ public class OrderService {
         deliveryOrderDto.setProductName(persistedOrder.getProductName());
         deliveryOrderDto.setTotalPrice(persistedOrder.getTotalPrice());
         deliveryOrderDto.setShopName(persistedOrder.getShop().getName());
-        producer.sendMessage(deliveryOrderDto);
+        deliveryProducer.sendMessage(deliveryOrderDto);
 
         log.info("order received and persisted {}", persistedOrder);
     }

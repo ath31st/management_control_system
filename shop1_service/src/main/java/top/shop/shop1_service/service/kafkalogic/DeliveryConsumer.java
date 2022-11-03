@@ -1,4 +1,4 @@
-package top.shop.shop1_service.util;
+package top.shop.shop1_service.service.kafkalogic;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,7 +12,7 @@ import top.shop.shop1_service.dto.DeliveryOrderDto;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Consumer {
+public class DeliveryConsumer {
     private static final String DELIVERY_TOPIC = "${topic.delivery.name}";
 
     private final ObjectMapper objectMapper;

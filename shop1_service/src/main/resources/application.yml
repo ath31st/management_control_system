@@ -12,6 +12,7 @@ shop:
 
 spring:
   kafka:
+    #    bootstrap-servers: "kafka:9092"
     bootstrap-servers: "localhost:9093"
     consumer:
       auto-offset-reset: earliest
