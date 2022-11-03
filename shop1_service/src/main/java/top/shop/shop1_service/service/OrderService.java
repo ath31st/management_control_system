@@ -22,4 +22,5 @@ public class OrderService {
         orderDto.setOrderDate(LocalDateTime.now());
         return orderProducer.sendMessage(orderDto);
     }
+
 }
