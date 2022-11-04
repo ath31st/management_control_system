@@ -6,6 +6,8 @@ topic:
     name: t.delivery
   order:
     name: t.order
+  catalogue:
+    name: t.catalogue
 
 
 spring:

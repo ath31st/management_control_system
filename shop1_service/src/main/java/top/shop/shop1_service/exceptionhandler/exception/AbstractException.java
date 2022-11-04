@@ -1,0 +1,13 @@
+package top.shop.shop1_service.exceptionhandler.exception;
+
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+@Getter
+public abstract class AbstractException extends RuntimeException {
+    private final HttpStatus status;
+
+    public AbstractException(HttpStatus status, String errorMessage) {
+        super(errorMessage);
+        this.status = status;
+    }
+}

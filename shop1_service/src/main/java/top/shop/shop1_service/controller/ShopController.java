@@ -1,6 +1,5 @@
 package top.shop.shop1_service.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class ShopController {
     private final CatalogueService catalogueService;
 
     @PostMapping("/order")
-    public String orderHandler(@RequestBody OrderDto orderDto) throws JsonProcessingException {
+    public String orderHandler(@RequestBody OrderDto orderDto) {
         log.info("create food order request received");
         return orderService.createOrder(orderDto);
     }

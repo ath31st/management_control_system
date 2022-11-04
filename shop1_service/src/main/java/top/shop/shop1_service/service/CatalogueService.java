@@ -2,39 +2,26 @@ package top.shop.shop1_service.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import top.shop.shop1_service.dto.CatalogueDto;
-import top.shop.shop1_service.dto.ProductDto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CatalogueService {
 
-    @Value("${catalogue.url}")
-    private String catalogueUrl;
+    //TODO MAKE STORAGE FOR CATALOGUE
+    public static CatalogueDto catalogue;
 
     public CatalogueDto getCatalogue() {
+        if (catalogue != null)
+            return catalogue;
         CatalogueDto catalogueDto = new CatalogueDto();
         catalogueDto.setCatalogueOnDate(LocalDateTime.now());
-        catalogueDto.setProducts(getListProductDtoFromBackend());
+        catalogueDto.setProducts(Collections.emptyList());
         return catalogueDto;
     }
-
-    private List<ProductDto> getListProductDtoFromBackend() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        ProductDto[] arrProducts = restTemplate.getForObject(catalogueUrl, ProductDto[].class);
-        List<ProductDto> products = new ArrayList<>();
-        if (arrProducts != null)
-            products.addAll(List.of(arrProducts));
-        return products;
-    }
-
 }
