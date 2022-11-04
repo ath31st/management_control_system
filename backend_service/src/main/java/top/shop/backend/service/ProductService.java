@@ -34,6 +34,13 @@ public class ProductService {
         return getProduct(productName).getPrice() * (double) amount;
     }
 
+    public void changeAmountProducts(int amount, String productName) {
+        Product product = getProduct(productName);
+        product.setAmount(product.getAmount() - amount);
+
+        productRepository.save(product);
+    }
+
     public List<ProductDto> getListProductDto() {
         List<Product> products = productRepository.findAll();
         return products.stream()
