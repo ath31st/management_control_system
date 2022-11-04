@@ -1,89 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
 </head>
 <body>
 <div class="wrapper">
-    <div>
-        <p>Register a new account</p>
+    <!-- START PAGE CONTAINER -->
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h2>
+                <span class="fa fa-arrow-circle-o-left"></span> Register a new account
+            </h2>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/register}" th:object="${userData}" method="post">
+                <table>
+                    <tr>
+                        <td>Username:</td>
+                        <td><input type="text" th:field="*{username}"></td>
+                        <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</td>
+                    </tr>
+                    <tr>
+                        <td>First name:</td>
+                        <td><input type="text" th:field="*{firstname}"></td>
+                        <td th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Firstname Error</td>
+                    </tr>
+                    <tr>
+                        <td>Last name:</td>
+                        <td><input type="text" th:field="*{lastname}"></td>
+                        <td th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Lastname Error</td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td><input type="text" th:field="*{email}"></td>
+                        <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td><input type="text" th:field="*{password}"></td>
+                        <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
 
-        <form th:action="@{/register}" th:object="${userData}" method="post">
-            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-            </div>
-            <div>
-                <label>
-                    <input type="text" class="form-control" th:field="*{username}" placeholder="Username"
-                           th:errorclass="is-invalid">
-                </label>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-user"></span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <label>
-                    <input type="text" class="form-control" th:field="*{firstname}" placeholder="First Name"
-                           th:errorclass="is-invalid">
-                </label>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-user"></span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <label>
-                    <input type="text" class="form-control" th:field="*{lastname}" placeholder="Last Name"
-                           th:errorclass="is-invalid">
-                </label>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-user"></span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <label>
-                    <input type="email" class="form-control" th:field="*{email}" placeholder="Email"
-                           th:errorclass="is-invalid">
-                </label>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-envelope"></span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <label>
-                    <input type="password" class="form-control" th:field="*{password}" placeholder="Password"
-                           th:errorclass="is-invalid">
-                </label>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-lock"></span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <label>
-                    <input type="password" class="form-control" placeholder="Retype password">
-                </label>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-lock"></span>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <input type="submit" value="Submit"/>
-        </form>
+        </div>
+        <!-- END PAGE CONTENT -->
+        <!-- END PAGE CONTAINER -->
     </div>
+
 </div>
 </body>
 </html>
