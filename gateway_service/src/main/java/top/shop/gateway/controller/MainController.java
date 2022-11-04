@@ -10,6 +10,8 @@ import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.UserService;
 
+import javax.validation.Valid;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -30,16 +32,16 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public String userRegistration(UserDto userData, BindingResult bindingResult, Model model){
+    public String userRegistration(@Valid UserDto userData, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
-            model.addAttribute("registrationForm", userData);
+            model.addAttribute("userData", userData);
             return "register";
         }
         try {
             userService.registerUser(userData);
         }catch (ResponseStatusException e){
             bindingResult.rejectValue("email", "userData.email","An account already exists for this email.");
-            model.addAttribute("registrationForm", userData);
+            model.addAttribute("userData", userData);
             return "register";
         }
         return "redirect:/index";

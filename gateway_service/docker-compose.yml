@@ -76,15 +76,15 @@ services:
     networks:
       - kafka-net
 
-  gateway-service:
-    container_name: gateway-service
-    build: .
-    ports:
-      - "28888:28888"
-    networks:
-      - kafka-net
-    depends_on:
-      - postgres-gateway
+#  gateway-service:
+#    container_name: gateway-service
+#    build: .
+#    ports:
+#      - "28888:28888"
+#    networks:
+#      - kafka-net
+#    depends_on:
+#      - postgres-gateway
 
 #  backend-service:
 #    container_name: backend-service

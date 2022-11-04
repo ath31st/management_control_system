@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import top.shop.gateway.entity.User;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -14,14 +15,25 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class UserDto implements Serializable {
-    @Size(min = 1, max = 25)
+
+    @NotEmpty(message = "Firstname cannot be empty.")
+    @Size(min = 3, max = 25, message = "Firstname must be minimum 3 and maximum 25 characters.")
     private String firstname;
-    @Size(min = 1, max = 25)
+
+    @NotEmpty(message = "Lastname cannot be empty.")
+    @Size(min = 3, max = 25, message = "Lastname must be minimum 3 and maximum 25 characters.")
     private String lastname;
+
+    @Email
     @Size(min = 1, max = 100)
     private String email;
-    @Size(min = 6)
+
+    @NotEmpty(message = "Password cannot be empty.")
+    @Size(min = 3, max = 25, message = "Password must be minimum 3 and maximum 25 characters.")
     private String password;
-    @Email
+
+    @NotEmpty(message = "Username cannot be empty.")
+    @Size(min = 3, max = 25, message = "Username must be minimum 3 and maximum 25 characters.")
     private String username;
+
 }

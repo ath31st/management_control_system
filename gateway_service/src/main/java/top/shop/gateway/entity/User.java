@@ -32,27 +32,38 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Size(min = 1, max = 25)
+
+    @Size(min = 3, max = 25)
     private String firstname;
-    @Size(min = 1, max = 25)
+
+    @Size(min = 3, max = 25)
     private String lastname;
-    @Size(min = 6)
+
+    @Size(min = 3)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     @Email
     @Size(min = 1, max = 100)
     private String email;
+
     @Size(min = 1, max = 25)
     private String username;
+
     private LocalDateTime registerDate;
+
     @JsonIgnore
     private boolean accountNonExpired;
+
     @JsonIgnore
     private boolean accountNonLocked;
+
     @JsonIgnore
     private boolean credentialsNonExpired;
+
     @JsonIgnore
     private boolean enabled;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;

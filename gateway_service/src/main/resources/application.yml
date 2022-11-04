@@ -6,8 +6,8 @@ topic:
 
 spring:
   datasource:
-    #url: jdbc:postgresql://localhost:5432/postgresDB
-    url: jdbc:postgresql://postgres-container-gateway:5432/postgresDB
+    url: jdbc:postgresql://localhost:5432/postgresDB
+    #url: jdbc:postgresql://postgres-container-gateway:5432/postgresDB
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
@@ -16,10 +16,11 @@ spring:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
   kafka:
-    bootstrap-servers: "kafka:9092"
+    #bootstrap-servers: "kafka:9092"
+    bootstrap-servers: "localhost:9093"
     consumer:
       auto-offset-reset: earliest
       group-id: "default"
