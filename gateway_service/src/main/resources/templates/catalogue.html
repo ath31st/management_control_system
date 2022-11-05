@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalogue</title>
+
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h2>
+                <span class="fa fa-arrow-circle-o-left"></span> Catalogue
+            </h2>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+
+            <table th:if="${not #lists.isEmpty(catalogueDto.getProducts())}">
+                <tr>
+                    <th>Product name</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Price</th>
+                </tr>
+                <tr th:each="product: ${catalogueDto.products}">
+                    <td th:text="${product.name}">product name</td>
+                    <td th:text="${product.category}">category</td>
+                    <td th:text="${product.amount}">amount</td>
+                    <td th:text="${product.price}">price</td>
+                </tr>
+            </table>
+            <div th:if="${#lists.isEmpty(catalogueDto.products)}">
+                <h4>No data found</h4>
+            </div>
+
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

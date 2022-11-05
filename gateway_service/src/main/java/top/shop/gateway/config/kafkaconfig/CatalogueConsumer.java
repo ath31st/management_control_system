@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import top.shop.gateway.dto.CatalogueDto;
 import top.shop.gateway.service.CatalogueService;
 
-
 @Slf4j
 @Component
 @RequiredArgsConstructor

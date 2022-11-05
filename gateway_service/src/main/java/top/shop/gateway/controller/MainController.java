@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
+import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.UserService;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 public class MainController {
 
     private final UserService userService;
+    private final CatalogueService catalogueService;
 
     @GetMapping("/index")
     public String index(Model model) {
@@ -27,24 +29,30 @@ public class MainController {
     }
 
     @GetMapping("/register")
-    public String register(Model model){
+    public String register(Model model) {
         model.addAttribute("userData", new UserDto());
         return "register";
     }
 
     @PostMapping("/register")
-    public String userRegistration(@Valid @ModelAttribute("userData") UserDto userData, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+    public String userRegistration(@Valid @ModelAttribute("userData") UserDto userData, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("userData", userData);
             return "register";
         }
         try {
             userService.registerUser(userData);
-        }catch (ResponseStatusException e){
-            bindingResult.rejectValue("email", "userData.email","An account already exists for this email.");
+        } catch (ResponseStatusException e) {
+            bindingResult.rejectValue("email", "userData.email", "An account already exists for this email.");
             model.addAttribute("userData", userData);
             return "register";
         }
         return "redirect:/index";
+    }
+
+    @GetMapping("/catalogue")
+    public String catalogue(Model model) {
+        model.addAttribute(catalogueService.getCatalogue());
+        return "catalogue";
     }
 }
