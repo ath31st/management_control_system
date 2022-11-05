@@ -95,3 +95,11 @@ services:
 #      - kafka-net
 #    depends_on:
 #      - postgres-backend
+
+#  shop1-service:
+#    container_name: shop1-service
+#    build: .
+#    ports:
+#      - "28880:28880"
+#    networks:
+#      - kafka-net

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New shop</title>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <!-- START PAGE CONTAINER -->
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h2>
+                <span class="fa fa-arrow-circle-o-left"></span> Register a new shop
+            </h2>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/new-shop}" th:object="${shopData}" method="post">
+                <table>
+                    <tr>
+                        <td>Shop name:</td>
+                        <td><input type="text" th:field="*{name}"></td>
+                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Shop name Error</td>
+                    </tr>
+                </table>
+                <br/>
+                <input type="submit" value="Create"/>
+            </form>
+
+        </div>
+        <!-- END PAGE CONTENT -->
+        <!-- END PAGE CONTAINER -->
+    </div>
+
+</div>
+</body>
+</html>

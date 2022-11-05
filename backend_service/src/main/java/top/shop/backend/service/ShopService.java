@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import top.shop.backend.dto.ShopDto;
 import top.shop.backend.entity.Shop;
@@ -25,11 +26,12 @@ public class ShopService {
                 () -> new ShopException(HttpStatus.NOT_FOUND, "Shop with name " + shopName + " not found!"));
     }
 
-    public Shop saveNewShop(Shop shop) {
-        if (shopRepository.getShop(shop.getName()).isPresent())
-            throw new ShopException(HttpStatus.CONFLICT, "Shop with name " + shop.getName() + " already exists!");
-
-        return shopRepository.save(shop);
+    public ResponseEntity<HttpStatus> saveNewShop(ShopDto shopDto) {
+        if (shopRepository.getShop(shopDto.getName()).isPresent())
+            throw new ShopException(HttpStatus.CONFLICT, "Shop with name " + shopDto.getName() + " already exists!");
+        Shop shop = modelMapper.map(shopDto, Shop.class);
+        shopRepository.save(shop);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public List<ShopDto> getShopDtoList() {

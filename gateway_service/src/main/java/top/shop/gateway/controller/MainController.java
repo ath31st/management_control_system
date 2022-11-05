@@ -7,7 +7,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
+import top.shop.gateway.dto.ShopDto;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.ShopService;
@@ -45,7 +47,7 @@ public class MainController {
         try {
             userService.registerUser(userData);
         } catch (ResponseStatusException e) {
-            bindingResult.rejectValue("email", "userData.email", "An account already exists for this email.");
+            bindingResult.rejectValue("username", "userData.username", "An account already exists for this username.");
             model.addAttribute("userData", userData);
             return "register";
         }
@@ -62,5 +64,28 @@ public class MainController {
     public String shops(Model model) {
         model.addAttribute(shopService.getShops());
         return "shops";
+    }
+
+    @GetMapping("/new-shop")
+    public String shopHandler(Model model) {
+        model.addAttribute("shopData", new ShopDto());
+        return "new-shop";
+    }
+
+    @PostMapping("/new-shop")
+    public String shopHandler(@Valid @ModelAttribute("shopData") ShopDto shopData, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("shopData", shopData);
+            return "new-shop";
+        }
+        try {
+            shopService.createShop(shopData);
+        } catch (HttpClientErrorException e) {
+            bindingResult.rejectValue("name", "shopData.name", "Shop already exists for this name.");
+            model.addAttribute("shopData", shopData);
+            return "new-shop";
+        }
+
+        return "redirect:/shops";
     }
 }

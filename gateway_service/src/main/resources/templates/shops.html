@@ -32,7 +32,9 @@
             <div th:if="${#lists.isEmpty(shopDtoList)}">
                 <h4>No data found</h4>
             </div>
-
+            <div>
+                <button><a th:href="@{/new-shop}">Create new shop</a></button>
+            </div>
         </div>
     </div>
     <div lang="en" th:replace="fragments/footer :: footer"></div>

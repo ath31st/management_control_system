@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import top.shop.backend.dto.ShopDto;
 import top.shop.backend.entity.Shop;
 import top.shop.backend.service.ShopService;
 
@@ -16,13 +17,13 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Shop shop1 = new Shop();
+        ShopDto shop1 = new ShopDto();
         shop1.setName("shop1");
 
-        Shop shop2 = new Shop();
+        ShopDto shop2 = new ShopDto();
         shop2.setName("shop2");
 
-        Shop shop3 = new Shop();
+        ShopDto shop3 = new ShopDto();
         shop3.setName("shop3");
 
         shopService.saveNewShop(shop1);
