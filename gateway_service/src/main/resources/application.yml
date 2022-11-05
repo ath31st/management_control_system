@@ -5,6 +5,10 @@ topic:
   catalogue:
     name: t.catalogue
 
+backend:
+  url: http://localhost:28889
+  #url: http://backend-service:28889
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgresDB

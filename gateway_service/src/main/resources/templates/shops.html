@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shops</title>
+
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h2>
+                <span class="fa fa-arrow-circle-o-left"></span> Shops
+            </h2>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+
+            <table th:if="${not #lists.isEmpty(shopDtoList)}">
+                <tr>
+                    <th>Shop name</th>
+                </tr>
+                <tr th:each="shop: ${shopDtoList}">
+                    <td th:text="${shop.name}">shop name</td>
+                </tr>
+            </table>
+            <div th:if="${#lists.isEmpty(shopDtoList)}">
+                <h4>No data found</h4>
+            </div>
+
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

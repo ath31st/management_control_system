@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.CatalogueService;
+import top.shop.gateway.service.ShopService;
 import top.shop.gateway.service.UserService;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ public class MainController {
 
     private final UserService userService;
     private final CatalogueService catalogueService;
+    private final ShopService shopService;
 
     @GetMapping("/index")
     public String index(Model model) {
@@ -54,5 +56,11 @@ public class MainController {
     public String catalogue(Model model) {
         model.addAttribute(catalogueService.getCatalogue());
         return "catalogue";
+    }
+
+    @GetMapping("/shops")
+    public String shops(Model model) {
+        model.addAttribute(shopService.getShops());
+        return "shops";
     }
 }

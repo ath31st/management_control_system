@@ -19,6 +19,7 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(unique = true)
     @Size(min = 1, max = 100)
     private String name;
 }
