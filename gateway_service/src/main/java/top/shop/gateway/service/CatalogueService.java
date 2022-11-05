@@ -1,10 +1,9 @@
-package top.shop.shop1_service.service;
+package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.shop.shop1_service.dto.CatalogueDto;
-
+import top.shop.gateway.dto.CatalogueDto;
 import java.time.LocalDateTime;
 import java.util.Collections;
 

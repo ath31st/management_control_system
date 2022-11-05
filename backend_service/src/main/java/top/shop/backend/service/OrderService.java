@@ -10,7 +10,7 @@ import top.shop.backend.dto.OrderDto;
 import top.shop.backend.entity.Order;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
-import top.shop.backend.service.kafkalogic.DeliveryProducer;
+import top.shop.backend.config.kafkaconfig.DeliveryProducer;
 
 import java.time.LocalDateTime;
 import java.util.List;

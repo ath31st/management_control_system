@@ -2,7 +2,8 @@ server:
   port: 28888
 
 topic:
-  name: t.order
+  catalogue:
+    name: t.catalogue
 
 spring:
   datasource:

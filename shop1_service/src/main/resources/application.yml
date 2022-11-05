@@ -12,9 +12,6 @@ topic:
 shop:
   name: shop1
 
-catalogue:
-  url: http://localhost:28889/api/products
-
 spring:
   kafka:
     #    bootstrap-servers: "kafka:9092"

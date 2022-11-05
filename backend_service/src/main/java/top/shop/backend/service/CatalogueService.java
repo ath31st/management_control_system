@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.dto.CatalogueDto;
 import top.shop.backend.exceptionhandler.exception.CatalogueException;
-import top.shop.backend.service.kafkalogic.CatalogueProducer;
+import top.shop.backend.config.kafkaconfig.CatalogueProducer;
 
 import java.time.LocalDateTime;
 
@@ -16,18 +16,19 @@ public class CatalogueService {
 
     private final ProductService productService;
     private final CatalogueProducer catalogueProducer;
+    private final CatalogueDto catalogueDto;
 
     public CatalogueDto getCatalogue() {
-        CatalogueDto catalogueDto = new CatalogueDto();
         catalogueDto.setCatalogueOnDate(LocalDateTime.now());
         catalogueDto.setProducts(productService.getListProductDto());
         return catalogueDto;
     }
 
     public void sendCatalogue() {
+        if (getCatalogue().getProducts().isEmpty()) return;
 
         try {
-            catalogueProducer.sendMessage(getCatalogue());
+            catalogueProducer.sendMessage(catalogueDto);
         } catch (JsonProcessingException e) {
             throw new CatalogueException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

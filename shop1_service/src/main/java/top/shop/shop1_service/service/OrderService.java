@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
-import top.shop.shop1_service.service.kafkalogic.OrderProducer;
+import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package top.shop.backend.service.kafkalogic;
+package top.shop.backend.config.kafkaconfig;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,12 +20,11 @@ public class CatalogueProducer {
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public String sendMessage(CatalogueDto catalogueDto) throws JsonProcessingException {
+    public void sendMessage(CatalogueDto catalogueDto) throws JsonProcessingException {
         String catalogueAsMessage = objectMapper.writeValueAsString(catalogueDto);
         kafkaTemplate.send(catalogueTopic, catalogueAsMessage);
 
         log.info("catalogue produced {}", catalogueAsMessage);
 
-        return "message sent";
     }
 }

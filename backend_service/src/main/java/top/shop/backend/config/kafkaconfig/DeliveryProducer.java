@@ -1,4 +1,4 @@
-package top.shop.backend.service.kafkalogic;
+package top.shop.backend.config.kafkaconfig;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
