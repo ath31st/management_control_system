@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.ShopDto;
@@ -31,6 +32,18 @@ public class MainController {
         model.addAttribute("message", "Hello!");
         return "index";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/login-error")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "login";
+    }
+
 
     @GetMapping("/register")
     public String register(Model model) {

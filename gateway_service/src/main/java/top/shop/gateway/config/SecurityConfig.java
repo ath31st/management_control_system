@@ -22,13 +22,13 @@ public class SecurityConfig {
 //                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler)
 //                .and()
 
-//                .authorizeRequests().anyRequest().permitAll()
                 .authorizeRequests()
-                .antMatchers( "/css/**","/webjars/**", "/register").permitAll()
-  //              .antMatchers("/index").hasAuthority(ROLE_USER.name())
+                .antMatchers( "/css/**","/webjars/**", "/register", "/login", "/login-error").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .loginPage("/login")
+                .failureUrl("/login-error")
                 .and()
                 .logout()
                 .logoutSuccessUrl("/index");
