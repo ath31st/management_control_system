@@ -3,12 +3,14 @@ package top.shop.backend.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.dto.ProductDto;
 import top.shop.backend.entity.Product;
 import top.shop.backend.exceptionhandler.exception.ProductException;
 import top.shop.backend.repository.ProductRepository;
+import top.shop.backend.service.event.CatalogueEvent;
 
 import java.util.List;
 
@@ -19,9 +21,11 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public String receiveProducts(List<Product> products) {
         productRepository.saveAll(products);
+        eventPublisher.publishEvent(new CatalogueEvent(true));
         return "products received";
     }
 
