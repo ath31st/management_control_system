@@ -13,8 +13,10 @@ import top.shop.backend.dto.OrderDto;
 import top.shop.backend.entity.Order;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
+import top.shop.backend.service.event.CatalogueEvent;
 import top.shop.backend.service.event.OrderEvent;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -44,6 +46,7 @@ public class OrderService {
     }
 
     @EventListener
+    @Transactional
     public void sendDelivery(OrderEvent event) {
         Order order = (Order) event.getSource();
         DeliveryOrderDto deliveryOrderDto = processingDelivery(order);
@@ -53,7 +56,10 @@ public class OrderService {
         } catch (JsonProcessingException e) {
             throw new OrderServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopName());
+
+        productService.changeAmountProducts(order.getAmount(),order.getProductName());
         setExecutedStatusOrder(order);
     }
 
@@ -73,6 +79,7 @@ public class OrderService {
             order.setExecutionDate(LocalDateTime.now());
 
             orderRepository.save(order);
+            eventPublisher.publishEvent(new CatalogueEvent(true));
         }
     }
 

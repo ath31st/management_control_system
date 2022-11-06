@@ -24,7 +24,16 @@ public class ProductService {
     private final ApplicationEventPublisher eventPublisher;
 
     public String receiveProducts(List<Product> products) {
-        productRepository.saveAll(products);
+        products.forEach(p -> {
+            if (productRepository.getProduct(p.getName()).isPresent()) {
+                Product product = getProduct(p.getName());
+                product.setAmount(product.getAmount() + p.getAmount());
+                productRepository.save(product);
+            } else {
+                productRepository.save(p);
+            }
+        });
+
         eventPublisher.publishEvent(new CatalogueEvent(true));
         return "products received";
     }
