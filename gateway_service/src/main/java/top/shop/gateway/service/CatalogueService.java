@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.shop.gateway.dto.CatalogueDto;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -14,6 +15,10 @@ public class CatalogueService {
 
     //TODO MAKE STORAGE FOR CATALOGUE
     public static CatalogueDto catalogue;
+
+    public void sendPricesToShop(CatalogueDto catalogue) {
+        this.catalogue = catalogue;
+    }
 
     public CatalogueDto getCatalogue() {
         if (catalogue != null) return catalogue;

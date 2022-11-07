@@ -7,16 +7,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
-import top.shop.gateway.dto.ShopDto;
-import top.shop.gateway.dto.UserDto;
+import top.shop.gateway.dto.*;
 import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.ShopService;
 import top.shop.gateway.service.UserService;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -69,9 +70,21 @@ public class MainController {
 
     @GetMapping("/catalogue")
     public String catalogue(Model model) {
-        model.addAttribute(catalogueService.getCatalogue());
+        CatalogueDto catalogueDto = catalogueService.getCatalogue();
+        model.addAttribute("catalogueDto", catalogueDto);
         return "catalogue";
     }
+
+    @PostMapping("/catalogue")
+    public String catalogue(@Valid @ModelAttribute("catalogueDto") CatalogueDto catalogueDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("catalogueDto", catalogueDto);
+            return "catalogue";
+        }
+        catalogueService.sendPricesToShop(catalogueDto);
+        return "catalogue";
+    }
+
 
     @GetMapping("/shops")
     public String shops(Model model) {
