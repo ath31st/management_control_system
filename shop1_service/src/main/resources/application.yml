@@ -21,7 +21,7 @@ spring:
       group-id: "shop1"
 
   datasource:
-    url: jdbc:sqlite:./shop1.db
+    url: jdbc:sqlite:../shop1.db
     driver-class-name: org.sqlite.JDBC
     username: admin
     password: admin

@@ -8,6 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.service.CatalogueService;
+import top.shop.shop1_service.service.ProductService;
 
 @Slf4j
 @Component
@@ -16,6 +17,7 @@ public class CatalogueConsumer {
     private static final String CATALOGUE_TOPIC = "${topic.catalogue.name}";
 
     private final ObjectMapper objectMapper;
+    private final ProductService productService;
 
 
     @KafkaListener(topics = CATALOGUE_TOPIC)
@@ -23,10 +25,9 @@ public class CatalogueConsumer {
         log.info("message consumed {}", message);
 
         CatalogueDto catalogueDto = objectMapper.readValue(message, CatalogueDto.class);
-        log.info("catalogue {} has been successfully received", catalogueDto.getCatalogueOnDate());
+        productService.receiveCatalogueFromBackend(catalogueDto);
 
-        //TODO MAKE STORAGE FOR CATALOGUE
-        CatalogueService.catalogue = catalogueDto;
+        log.info("catalogue {} has been successfully received", catalogueDto.getCatalogueOnDate());
     }
 
 }

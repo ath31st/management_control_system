@@ -26,6 +26,6 @@ public class ShopController {
 
     @GetMapping("/catalogue")
     public ResponseEntity<CatalogueDto> catalogueHandler() {
-        return ResponseEntity.ok(catalogueService.getCatalogue());
+        return ResponseEntity.ok(catalogueService.getCatalogueForCustomers());
     }
 }

@@ -13,15 +13,13 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class CatalogueService {
 
-    //TODO MAKE STORAGE FOR CATALOGUE
-    public static CatalogueDto catalogue;
+    private final ProductService productService;
 
-    public CatalogueDto getCatalogue() {
-        if (catalogue != null) return catalogue;
+    public CatalogueDto getCatalogueForCustomers() {
 
         CatalogueDto catalogueDto = new CatalogueDto();
         catalogueDto.setCatalogueOnDate(LocalDateTime.now());
-        catalogueDto.setProducts(Collections.emptyList());
+        catalogueDto.setProducts(productService.getProductsWithPrice());
         return catalogueDto;
     }
 }
