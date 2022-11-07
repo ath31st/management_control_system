@@ -25,7 +25,18 @@ public class ShopController {
     }
 
     @GetMapping("/catalogue")
-    public ResponseEntity<CatalogueDto> catalogueHandler() {
+    public ResponseEntity<CatalogueDto> catalogueForCustomersHandler() {
         return ResponseEntity.ok(catalogueService.getCatalogueForCustomers());
     }
+
+    @GetMapping("/manager/catalogue")
+    public ResponseEntity<CatalogueDto> catalogueForGatewayHandler() {
+        return ResponseEntity.ok(catalogueService.getCatalogueForManagers());
+    }
+
+    @PostMapping("/manager/catalogue")
+    public ResponseEntity<CatalogueDto> catalogueForGatewayHandler(@RequestBody CatalogueDto catalogueDto) {
+        return ResponseEntity.ok(catalogueService.receiveCatalogueFromGateway(catalogueDto));
+    }
+
 }

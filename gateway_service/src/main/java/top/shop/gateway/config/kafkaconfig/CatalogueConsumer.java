@@ -15,6 +15,7 @@ import top.shop.gateway.service.CatalogueService;
 public class CatalogueConsumer {
     private static final String CATALOGUE_TOPIC = "${topic.catalogue.name}";
 
+    private final CatalogueService catalogueService;
     private final ObjectMapper objectMapper;
 
 
@@ -25,8 +26,7 @@ public class CatalogueConsumer {
         CatalogueDto catalogueDto = objectMapper.readValue(message, CatalogueDto.class);
         log.info("catalogue {} has been successfully received", catalogueDto.getCatalogueOnDate());
 
-        //TODO MAKE STORAGE FOR CATALOGUE
-        CatalogueService.catalogue = catalogueDto;
+        catalogueService.setCatalogueFromStorage(catalogueDto);
     }
 
 }

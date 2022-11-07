@@ -70,17 +70,19 @@ public class MainController {
 
     @GetMapping("/catalogue")
     public String catalogue(Model model) {
-        CatalogueDto catalogueDto = catalogueService.getCatalogue();
-        model.addAttribute("catalogueDto", catalogueDto);
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogue());
+        model.addAttribute("catalogueFromShop", catalogueService.getCatalogueFromShop());
         return "catalogue";
     }
 
     @PostMapping("/catalogue")
-    public String catalogue(@Valid @ModelAttribute("catalogueDto") CatalogueDto catalogueDto, BindingResult bindingResult, Model model) {
+    public String catalogue(@Valid @ModelAttribute("catalogueFromShop") CatalogueDto catalogueDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("catalogueDto", catalogueDto);
+            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogue());
+            model.addAttribute("catalogueFromShop", catalogueDto);
             return "catalogue";
         }
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogue());
         catalogueService.sendPricesToShop(catalogueDto);
         return "catalogue";
     }

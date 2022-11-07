@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 @Slf4j
 @Service
@@ -16,10 +15,36 @@ public class CatalogueService {
     private final ProductService productService;
 
     public CatalogueDto getCatalogueForCustomers() {
+        return CatalogueDto.builder()
+                .catalogueOnDate(LocalDateTime.now())
+                .products(productService.getProductsWithPrice())
+                .build();
+    }
 
-        CatalogueDto catalogueDto = new CatalogueDto();
+    public CatalogueDto getCatalogueForManagers() {
+        return CatalogueDto.builder()
+                .catalogueOnDate(LocalDateTime.now())
+                .products(productService.getProducts())
+                .build();
+    }
+
+    public void receiveCatalogueFromBackend(CatalogueDto catalogueDto) {
+        if (catalogueDto == null) return;
+
+        catalogueDto.getProducts()
+                .forEach(pDto -> {
+                    if (productService.productExists(pDto.getName())) {
+                        productService.updateAmountProduct(pDto);
+                    } else {
+                        productService.saveNewProduct(pDto);
+                    }
+                });
+    }
+
+    public CatalogueDto receiveCatalogueFromGateway(CatalogueDto catalogueDto) {
+        catalogueDto.getProducts().forEach(productService::updatePriceProduct);
         catalogueDto.setCatalogueOnDate(LocalDateTime.now());
-        catalogueDto.setProducts(productService.getProductsWithPrice());
         return catalogueDto;
     }
+
 }

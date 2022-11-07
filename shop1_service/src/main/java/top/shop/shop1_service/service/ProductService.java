@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.ProductDto;
 import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.exceptionhandler.exception.ProductException;
@@ -24,29 +23,41 @@ public class ProductService {
                 () -> new ProductException(HttpStatus.NOT_FOUND, "Product with name " + productName + " not found!"));
     }
 
+    public Product saveNewProduct(ProductDto productDto) {
+        Product p = new Product();
+        p.setAmount(productDto.getAmount());
+        p.setCategory(productDto.getCategory());
+        p.setName(productDto.getName());
+        p.setPrice(0);
+        return productRepository.save(p);
+    }
+
+    public Product updateAmountProduct(ProductDto productDto) {
+        Product p = getProduct(productDto.getName());
+        p.setAmount(productDto.getAmount());
+        return productRepository.save(p);
+    }
+
+    public Product updatePriceProduct(ProductDto productDto) {
+        Product p = getProduct(productDto.getName());
+        p.setPrice(productDto.getPrice());
+        return productRepository.save(p);
+    }
+
     public List<ProductDto> getProductsWithPrice() {
         return productRepository.getProductWithPrice().stream()
                 .map(p -> modelMapper.map(p, ProductDto.class))
                 .toList();
     }
 
-    public void receiveCatalogueFromBackend(CatalogueDto catalogueDto) {
-        if (catalogueDto == null) return;
-
-        catalogueDto.getProducts()
-                .forEach(pDto -> {
-                    if (productRepository.getProduct(pDto.getName()).isPresent()) {
-                        Product p = getProduct(pDto.getName());
-                        p.setAmount(pDto.getAmount());
-                        productRepository.save(p);
-                    } else {
-                        Product p = new Product();
-                        p.setAmount(pDto.getAmount());
-                        p.setCategory(pDto.getCategory());
-                        p.setName(pDto.getName());
-                        p.setPrice(0);
-                        productRepository.save(p);
-                    }
-                });
+    public List<ProductDto> getProducts() {
+        return productRepository.findAll().stream()
+                .map(p -> modelMapper.map(p, ProductDto.class))
+                .toList();
     }
+
+    public boolean productExists(String productName) {
+        return productRepository.existsByName(productName);
+    }
+
 }

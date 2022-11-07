@@ -9,6 +9,10 @@ backend:
   url: http://localhost:28889
   #url: http://backend-service:28889
 
+shop1:
+  url: http://localhost:28880
+  #url: http://shop1-service:28880
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgresDB

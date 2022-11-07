@@ -17,7 +17,7 @@ public class CatalogueConsumer {
     private static final String CATALOGUE_TOPIC = "${topic.catalogue.name}";
 
     private final ObjectMapper objectMapper;
-    private final ProductService productService;
+    private final CatalogueService catalogueService;
 
 
     @KafkaListener(topics = CATALOGUE_TOPIC)
@@ -25,7 +25,7 @@ public class CatalogueConsumer {
         log.info("message consumed {}", message);
 
         CatalogueDto catalogueDto = objectMapper.readValue(message, CatalogueDto.class);
-        productService.receiveCatalogueFromBackend(catalogueDto);
+        catalogueService.receiveCatalogueFromBackend(catalogueDto);
 
         log.info("catalogue {} has been successfully received", catalogueDto.getCatalogueOnDate());
     }
