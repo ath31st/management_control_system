@@ -27,6 +27,10 @@ public class UserService implements UserDetailsService {
         return userRepository.getUser(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    public User getUserByUsername(String username) {
+        return userRepository.getUser(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
     public void registerUser(UserDto userDto) {
         if (userRepository.getUser(userDto.getUsername()).isPresent())
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists!");

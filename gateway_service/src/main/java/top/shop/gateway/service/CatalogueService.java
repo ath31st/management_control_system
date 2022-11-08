@@ -18,12 +18,10 @@ public class CatalogueService {
     @Value("${shop1.url}")
     private String shop1Url;
 
-    //TODO MAKE STORAGE FOR CATALOGUE
-
     private CatalogueDto catalogueFromStorage;
     private final RestTemplate restTemplate;
 
-    public CatalogueDto getCatalogue() {
+    public CatalogueDto getCatalogueFromStorage() {
         if (catalogueFromStorage == null) {
             catalogueFromStorage = new CatalogueDto();
             catalogueFromStorage.setCatalogueOnDate(LocalDateTime.now());
@@ -37,12 +35,12 @@ public class CatalogueService {
     }
 
     public CatalogueDto getCatalogueFromShop() {
-        String url = shop1Url + "/shop1/api/manager/catalogue";
+        String url = shop1Url + "/api/manager/catalogue";
         return restTemplate.getForObject(url, CatalogueDto.class);
     }
 
     public void sendPricesToShop(CatalogueDto catalogueDto) {
-        String url = shop1Url + "/shop1/api/manager/catalogue";
+        String url = shop1Url + "/api/manager/catalogue";
         restTemplate.postForObject(url, catalogueDto, CatalogueDto.class);
     }
 

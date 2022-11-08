@@ -49,9 +49,13 @@
                     </tr>
                 </table>
                 <div>
-                    <p><span th:text="${message}"></span><span th:if="${message} != null" th:text="${#dates.createNow()}"></span></p>
+                    <p><span th:text="${message}"></span>
+                        <span th:if="${message} != null" th:text="${#dates.createNow()}"></span>
+                    </p>
                     <br>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}" type="submit"
+                            class="btn btn-primary">Submit
+                    </button>
                 </div>
             </form>
             <div th:if="${#lists.isEmpty(catalogueFromStorage.products)}">
