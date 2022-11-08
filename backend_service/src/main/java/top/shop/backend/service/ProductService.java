@@ -43,10 +43,6 @@ public class ProductService {
                 () -> new ProductException(HttpStatus.NOT_FOUND, "Product with name " + productName + " not found!"));
     }
 
-    public double getTotalPrice(int amount, String productName) {
-        return getProduct(productName).getPrice() * (double) amount;
-    }
-
     public void changeAmountProducts(int amount, String productName) {
         Product product = getProduct(productName);
         product.setAmount(product.getAmount() - amount);

@@ -12,5 +12,6 @@ public class OrderDto {
     private String customerName;
     private LocalDateTime orderDate;
     private int amount;
+    private double price;
 
 }

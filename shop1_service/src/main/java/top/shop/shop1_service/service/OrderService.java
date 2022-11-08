@@ -18,10 +18,12 @@ public class OrderService {
     @Value("${shop.name}")
     private String shopName;
     private final OrderProducer orderProducer;
+    private final ProductService productService;
 
-    public String createOrder(OrderDto orderDto)  {
+    public String createOrder(OrderDto orderDto) {
         orderDto.setShopName(shopName);
         orderDto.setOrderDate(LocalDateTime.now());
+        orderDto.setPrice(productService.getProduct(orderDto.getProductName()).getPrice());
 
         try {
             return orderProducer.sendMessage(orderDto);

@@ -91,7 +91,9 @@ public class MainController {
 
     @GetMapping("/shops")
     public String shops(Model model) {
-        model.addAttribute(shopService.getShops());
+        List<ShopDto> shops = shopService.getShops();
+        model.addAttribute("totalBalance", shopService.getTotalBalance(shops));
+        model.addAttribute(shops);
         return "shops";
     }
 

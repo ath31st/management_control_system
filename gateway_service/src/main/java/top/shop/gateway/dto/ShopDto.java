@@ -9,4 +9,5 @@ import java.io.Serializable;
 public class ShopDto implements Serializable {
     @Size(min = 1, max = 100)
     private String name;
+    private double balance;
 }

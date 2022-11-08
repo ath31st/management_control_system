@@ -21,19 +21,23 @@
         <!-- END PAGE TITLE -->
         <div class="column">
 
+            <p><span style="font-size: 22px !important"> List of shops </span></p>
             <table th:if="${not #lists.isEmpty(shopDtoList)}">
                 <tr>
-                    <th>Shop name</th>
+                    <th> Name </th>
+                    <th> Balance </th>
                 </tr>
                 <tr th:each="shop: ${shopDtoList}">
                     <td th:text="${shop.name}">shop name</td>
+                    <td th:text="${shop.balance}">shop balance</td>
                 </tr>
             </table>
+            <p><span th:if="${not #lists.isEmpty(shopDtoList)}" >Total balance: </span><span th:text="${totalBalance}"></span></p>
             <div th:if="${#lists.isEmpty(shopDtoList)}">
                 <h4>No data found</h4>
             </div>
             <div>
-                <button><a th:href="@{/new-shop}">Create new shop</a></button>
+                <button class="btn btn-primary"><a th:href="@{/new-shop}">Create new shop</a></button>
             </div>
         </div>
     </div>

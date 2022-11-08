@@ -25,6 +25,12 @@ public class ShopService {
         return new ArrayList<>(List.of(shops));
     }
 
+    public double getTotalBalance(List<ShopDto> shops) {
+        return shops.stream()
+                .mapToDouble(ShopDto::getBalance)
+                .sum();
+    }
+
     public void createShop(ShopDto shopDto) {
         String url = backendUrl + "/api/new-shop";
         restTemplate.postForObject(url, shopDto, ShopDto.class);

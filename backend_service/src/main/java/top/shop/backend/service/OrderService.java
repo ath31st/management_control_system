@@ -13,6 +13,7 @@ import top.shop.backend.dto.OrderDto;
 import top.shop.backend.entity.Order;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
+import top.shop.backend.service.event.BalanceEvent;
 import top.shop.backend.service.event.CatalogueEvent;
 import top.shop.backend.service.event.OrderEvent;
 
@@ -31,7 +32,7 @@ public class OrderService {
 
     public void persistOrder(OrderDto orderDto) {
         Order order = Order.builder()
-                .totalPrice(productService.getTotalPrice(orderDto.getAmount(), orderDto.getProductName()))
+                .totalPrice(orderDto.getAmount() * orderDto.getPrice())
                 .amount(orderDto.getAmount())
                 .isExecuted(false)
                 .orderDate(orderDto.getOrderDate())
@@ -40,7 +41,9 @@ public class OrderService {
                 .shop(shopService.getShop(orderDto.getShopName()))
                 .build();
         Order persistedOrder = orderRepository.save(order);
+
         eventPublisher.publishEvent(new OrderEvent(persistedOrder));
+        eventPublisher.publishEvent(new BalanceEvent(persistedOrder));
 
         log.info("order received and persisted {}", persistedOrder);
     }
@@ -59,7 +62,7 @@ public class OrderService {
 
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopName());
 
-        productService.changeAmountProducts(order.getAmount(),order.getProductName());
+        productService.changeAmountProducts(order.getAmount(), order.getProductName());
         setExecutedStatusOrder(order);
     }
 
