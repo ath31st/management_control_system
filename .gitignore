@@ -31,8 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
-
-
-.idea
 .gitignore
 .db
