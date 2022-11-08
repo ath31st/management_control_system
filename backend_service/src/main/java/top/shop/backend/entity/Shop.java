@@ -8,6 +8,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -23,7 +24,5 @@ public class Shop {
     @Column(unique = true)
     @Size(min = 1, max = 100)
     private String name;
-    @PositiveOrZero
-    @Column(nullable = false)
-    private double balance;
+    private BigDecimal balance;
 }

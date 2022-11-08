@@ -18,6 +18,7 @@ import top.shop.backend.service.event.CatalogueEvent;
 import top.shop.backend.service.event.OrderEvent;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -32,7 +33,8 @@ public class OrderService {
 
     public void persistOrder(OrderDto orderDto) {
         Order order = Order.builder()
-                .totalPrice(orderDto.getAmount() * orderDto.getPrice())
+                .totalPrice(BigDecimal.valueOf(orderDto.getAmount())
+                        .multiply(BigDecimal.valueOf(orderDto.getPrice())))
                 .amount(orderDto.getAmount())
                 .isExecuted(false)
                 .orderDate(orderDto.getOrderDate())
@@ -72,7 +74,7 @@ public class OrderService {
                 .customerName(order.getCustomerName())
                 .shopName(order.getShop().getName())
                 .productName(order.getProductName())
-                .totalPrice(order.getTotalPrice())
+                .totalPrice(order.getTotalPrice().doubleValue())
                 .build();
     }
 
