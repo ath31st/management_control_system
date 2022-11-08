@@ -82,6 +82,7 @@ public class MainController {
             model.addAttribute("catalogueFromShop", catalogueDto);
             return "catalogue";
         }
+        model.addAttribute("message", "Prices updated ");
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogue());
         catalogueService.sendPricesToShop(catalogueDto);
         return "catalogue";
