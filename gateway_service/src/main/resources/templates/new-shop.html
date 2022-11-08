@@ -11,7 +11,7 @@
 <div class="wrapper">
     <!-- START PAGE CONTAINER -->
     <div class="container-fluid">
-        <!-- PAGE TITLE -->
+        <div lang="en" th:replace="fragments/header :: header"></div>
         <div class="page-title">
             <h3>
                 <span class="fa fa-arrow-circle-o-left"></span> Register a new shop
@@ -26,7 +26,14 @@
                         <td><input type="text" th:field="*{name}"></td>
                         <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Shop name Error</td>
                     </tr>
+                    <tr>
+                        <td>Shop URL:</td>
+                        <td><input type="text" th:field="*{url}"></td>
+                        <td th:if="${#fields.hasErrors('url')}" th:errors="*{url}">Shop URL Error</td>
+                    </tr>
+
                 </table>
+                <span>Example: http://localhost:28880</span>
                 <br/>
                 <input type="submit" value="Create"/>
             </form>
@@ -35,7 +42,7 @@
         <!-- END PAGE CONTENT -->
         <!-- END PAGE CONTAINER -->
     </div>
-
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
 </div>
 </body>
 </html>

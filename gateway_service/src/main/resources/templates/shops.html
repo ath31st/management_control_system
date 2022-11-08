@@ -25,10 +25,12 @@
             <table th:if="${not #lists.isEmpty(shopDtoList)}">
                 <tr>
                     <th> Name </th>
+                    <th> URL </th>
                     <th> Balance </th>
                 </tr>
                 <tr th:each="shop: ${shopDtoList}">
                     <td th:text="${shop.name}">shop name</td>
+                    <td th:text="${shop.url}">shop URL</td>
                     <td th:text="${shop.balance}">shop balance</td>
                 </tr>
             </table>

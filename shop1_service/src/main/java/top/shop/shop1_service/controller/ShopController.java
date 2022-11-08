@@ -11,7 +11,7 @@ import top.shop.shop1_service.service.OrderService;
 
 @Slf4j
 @RestController
-@RequestMapping("/shop1/api")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ShopController {
 

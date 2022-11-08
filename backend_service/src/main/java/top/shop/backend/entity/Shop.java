@@ -24,5 +24,6 @@ public class Shop {
     @Column(unique = true)
     @Size(min = 1, max = 100)
     private String name;
+    private String url;
     private BigDecimal balance;
 }
