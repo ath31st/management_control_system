@@ -30,15 +30,17 @@ public class UserDto implements Serializable {
     private String email;
 
     @NotEmpty(message = "Password cannot be empty.")
-    @Size(min = 3, max = 25, message = "Password must be minimum 3 and maximum 25 characters.")
+    @Size(min = 3, max = 100, message = "Password must be minimum 3 and maximum 25 characters.")
     private String password;
 
     @NotEmpty(message = "Username cannot be empty.")
     @Size(min = 3, max = 25, message = "Username must be minimum 3 and maximum 25 characters.")
     private String username;
 
+   // @NotEmpty(message = "Shop name cannot be empty.")
     private String shopName;
 
+   // @NotEmpty(message = "Shop URL cannot be empty.")
     private String shopUrl;
 
     private LocalDateTime registerDate;

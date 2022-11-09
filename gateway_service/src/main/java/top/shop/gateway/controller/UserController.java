@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
@@ -62,4 +63,22 @@ public class UserController {
         return "users";
     }
 
+    @GetMapping("/edit-user/{username}")
+    public String userHandler(@PathVariable String username, Model model) {
+        UserDto userDto = userService.getUserDto(username);
+        model.addAttribute("userDto", userDto);
+        return "edit-user";
+    }
+
+    @PostMapping("/edit-user")
+    public String userHandler(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userDto", userDto);
+            return "edit-user";
+        }
+        model.addAttribute("userDto", userDto);
+
+        userService.saveUserChanges(userDto);
+        return "redirect:/users";
+    }
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit-user</title>
+
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Edit user
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/edit-user}" th:object="${userDto}" method="post">
+                <table>
+                    <tr>
+                        <td>Username:</td>
+                        <td><input type="text" th:field="*{username}"></td>
+                        <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</td>
+                    </tr>
+                    <tr>
+                        <td>First name:</td>
+                        <td><input type="text" th:field="*{firstname}"></td>
+                        <td th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Firstname Error</td>
+                    </tr>
+                    <tr>
+                        <td>Last name:</td>
+                        <td><input type="text" th:field="*{lastname}"></td>
+                        <td th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Lastname Error</td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td><input type="text" th:field="*{email}"></td>
+                        <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
+                    </tr>
+                    <tr hidden>
+                        <td>Password:</td>
+                        <td><input type="text" th:field="*{password}"></td>
+                        <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
+                    </tr>
+                    <tr>
+                        <td>Shop name:</td>
+                        <td><input type="text" th:field="*{shopName}"></td>
+                        <td th:if="${#fields.hasErrors('shopName')}" th:errors="*{shopName}">Shop name Error</td>
+                    </tr>
+                    <tr>
+                        <td>Shop URL:</td>
+                        <td><input type="text" th:field="*{shopUrl}"></td>
+                        <td th:if="${#fields.hasErrors('shopUrl')}" th:errors="*{shopUrl}">Shop URL Error</td>
+                    </tr>
+                </table>
+                <div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

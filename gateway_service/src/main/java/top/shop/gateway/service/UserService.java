@@ -69,4 +69,20 @@ public class UserService implements UserDetailsService {
                 .toList();
     }
 
+    public UserDto getUserDto(String username) {
+        User user = getUserByUsername(username);
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    public User saveUserChanges(UserDto userDto) {
+        User user = getUserByUsername(userDto.getUsername());
+        user.setFirstname(userDto.getFirstname());
+        user.setLastname(userDto.getLastname());
+        user.setEmail(userDto.getEmail());
+        user.setShopName(userDto.getShopName());
+        user.setShopUrl(userDto.getShopUrl());
+
+        return userRepository.save(user);
+    }
+
 }
