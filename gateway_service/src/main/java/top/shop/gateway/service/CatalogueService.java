@@ -34,13 +34,13 @@ public class CatalogueService {
         catalogueFromStorage = catalogueDto;
     }
 
-    public CatalogueDto getCatalogueFromShop() {
-        String url = shop1Url + "/api/manager/catalogue";
+    public CatalogueDto getCatalogueFromShop(String shopUrl) {
+        String url = shopUrl + "/api/manager/catalogue";
         return restTemplate.getForObject(url, CatalogueDto.class);
     }
 
-    public void sendPricesToShop(CatalogueDto catalogueDto) {
-        String url = shop1Url + "/api/manager/catalogue";
+    public void sendPricesToShop(CatalogueDto catalogueDto, String shopUrl) {
+        String url = shopUrl + "/api/manager/catalogue";
         restTemplate.postForObject(url, catalogueDto, CatalogueDto.class);
     }
 

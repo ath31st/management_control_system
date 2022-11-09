@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.CatalogueDto;
 import top.shop.gateway.dto.ShopDto;
+import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.ShopService;
 import top.shop.gateway.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 
@@ -33,22 +35,29 @@ public class MainController {
     }
 
     @GetMapping("/catalogue")
-    public String catalogue(Model model) {
+    public String catalogue(Model model, Principal principal) {
+        UserDto user = userService.getUserDto(principal.getName());
+
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        model.addAttribute("catalogueFromShop", catalogueService.getCatalogueFromShop());
+        model.addAttribute("catalogueFromShop", catalogueService.getCatalogueFromShop(user.getShopUrl()));
         return "catalogue";
     }
 
     @PostMapping("/catalogue")
-    public String catalogue(@Valid @ModelAttribute("catalogueFromShop") CatalogueDto catalogueDto, BindingResult bindingResult, Model model) {
+    public String catalogue(@Valid @ModelAttribute("catalogueFromShop") CatalogueDto catalogueDto,
+                            BindingResult bindingResult,
+                            Model model,
+                            Principal principal) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
             model.addAttribute("catalogueFromShop", catalogueDto);
             return "catalogue";
         }
+
+        UserDto user = userService.getUserDto(principal.getName());
         model.addAttribute("message", "Prices updated ");
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        catalogueService.sendPricesToShop(catalogueDto);
+        catalogueService.sendPricesToShop(catalogueDto, user.getShopUrl());
         return "catalogue";
     }
 
