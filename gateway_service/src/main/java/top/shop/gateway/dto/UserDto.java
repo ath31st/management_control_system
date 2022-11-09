@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * A DTO for the {@link User} entity
@@ -36,4 +37,9 @@ public class UserDto implements Serializable {
     @Size(min = 3, max = 25, message = "Username must be minimum 3 and maximum 25 characters.")
     private String username;
 
+    private String shopName;
+
+    private String shopUrl;
+
+    private LocalDateTime registerDate;
 }

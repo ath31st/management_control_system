@@ -2,10 +2,7 @@ package top.shop.gateway.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +22,8 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -49,6 +48,10 @@ public class User implements UserDetails {
 
     @Size(min = 1, max = 25)
     private String username;
+
+    private String shopName;
+
+    private String shopUrl;
 
     private LocalDateTime registerDate;
 

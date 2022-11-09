@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Users
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+
+            <p><span style="font-size: 22px !important"> List of users </span></p>
+            <table th:if="${not #lists.isEmpty(userDtoList)}">
+                <tr>
+                    <th> First name </th>
+                    <th> Last name </th>
+                    <th> Username </th>
+                    <th> Email </th>
+                    <th> Register date </th>
+                    <th> Shop name </th>
+                    <th> Shop url </th>
+                    <th> Password </th>
+                    <th>  </th>
+                </tr>
+                <tr th:each="user: ${userDtoList}">
+                    <td th:text="${user.firstname}">first name</td>
+                    <td th:text="${user.lastname}">last name</td>
+                    <td th:text="${user.username}">username</td>
+                    <td th:text="${user.email}">email</td>
+                    <td th:text="${user.registerDate}">register date</td>
+                    <td th:text="${user.shopName}">shop name</td>
+                    <td th:text="${user.shopUrl}">shop url</td>
+                    <td th:text="${user.password}">password</td>
+                    <td><button class="btn btn-primary"><a th:href="@{/edit-user}">Edit user</a></button></td>
+                </tr>
+            </table>
+            <div th:if="${#lists.isEmpty(userDtoList)}">
+                <h4>No data found</h4>
+            </div>
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>
