@@ -10,5 +10,6 @@ public class ShopDto implements Serializable {
     @Size(min = 1, max = 100)
     private String name;
     private String url;
+    private String serviceName;
     private double balance;
 }

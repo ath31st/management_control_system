@@ -17,7 +17,8 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     @Override
     public void run(String... args) {
         ShopDto shop1 = new ShopDto();
-        shop1.setName("shop1");
+        shop1.setServiceName("shop1");
+        shop1.setName("DEFAULT");
         shop1.setUrl("http://localhost:28880");
 
         shopService.saveNewShop(shop1);

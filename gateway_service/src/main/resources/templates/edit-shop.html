@@ -3,29 +3,25 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New shop</title>
+    <title>Edit-shop</title>
+
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
 </head>
 <body>
 <div class="wrapper">
-    <!-- START PAGE CONTAINER -->
+    <div lang="en" th:replace="fragments/header :: header"></div>
     <div class="container-fluid">
-        <div lang="en" th:replace="fragments/header :: header"></div>
+        <!-- PAGE TITLE -->
         <div class="page-title">
             <h3>
-                <span class="fa fa-arrow-circle-o-left"></span> Register a new shop
+                <span class="fa fa-arrow-circle-o-left"></span> Edit shop
             </h3>
         </div>
         <!-- END PAGE TITLE -->
         <div class="column">
-            <form th:action="@{/new-shop}" th:object="${shopData}" method="post">
+            <form th:action="@{/edit-shop}" th:object="${shopDto}" method="post">
                 <table>
-                    <tr>
-                        <td>Shop service name:</td>
-                        <td><input type="text" th:field="*{serviceName}"></td>
-                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Shop service name Error</td>
-                    </tr>
                     <tr>
                         <td>Shop name:</td>
                         <td><input type="text" th:field="*{name}"></td>
@@ -34,18 +30,24 @@
                     <tr>
                         <td>Shop URL:</td>
                         <td><input type="text" th:field="*{url}"></td>
-                        <td th:if="${#fields.hasErrors('url')}" th:errors="*{url}">Shop URL Error</td>
+                        <td th:if="${#fields.hasErrors('url')}" th:errors="*{url}">URL Error</td>
                     </tr>
-
+                    <tr hidden>
+                        <td>Balance:</td>
+                        <td><input type="text" th:field="*{balance}"></td>
+                        <td th:if="${#fields.hasErrors('balance')}" th:errors="*{balance}">Balance Error</td>
+                    </tr>
+                    <tr hidden>
+                        <td>Service name:</td>
+                        <td><input type="text" th:field="*{serviceName}"></td>
+                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Service name Error</td>
+                    </tr>
                 </table>
-                <span>Example: http://localhost:28880</span>
-                <br/>
-                <input type="submit" value="Create"/>
+                <div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
             </form>
-
         </div>
-        <!-- END PAGE CONTENT -->
-        <!-- END PAGE CONTAINER -->
     </div>
     <div lang="en" th:replace="fragments/footer :: footer"></div>
 </div>

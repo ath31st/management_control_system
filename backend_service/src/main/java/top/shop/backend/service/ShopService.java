@@ -25,15 +25,15 @@ public class ShopService {
     private final ShopRepository shopRepository;
     private final ModelMapper modelMapper;
 
-    public Shop getShop(String shopName) {
-        return shopRepository.getShop(shopName).orElseThrow(
-                () -> new ShopException(HttpStatus.NOT_FOUND, "Shop with name " + shopName + " not found!"));
+    public Shop getShop(String shopServiceName) {
+        return shopRepository.getShop(shopServiceName).orElseThrow(
+                () -> new ShopException(HttpStatus.NOT_FOUND, "Shop with name " + shopServiceName + " not found!"));
     }
 
     @EventListener
     public void changeBalance(BalanceEvent event) {
         Order order = (Order) event.getSource();
-        Shop shop = getShop(order.getShop().getName());
+        Shop shop = getShop(order.getShop().getServiceName());
         shop.setBalance(shop.getBalance().add(order.getTotalPrice()));
         shopRepository.save(shop);
     }
@@ -51,16 +51,21 @@ public class ShopService {
     }
 
     public ResponseEntity<HttpStatus> saveNewShop(ShopDto shopDto) {
-        if (shopRepository.getShop(shopDto.getName()).isPresent())
+        if (shopRepository.getShop(shopDto.getServiceName()).isPresent())
             throw new ShopException(HttpStatus.CONFLICT, "Shop with name " + shopDto.getName() + " already exists!");
 
         Shop shop = modelMapper.map(shopDto, Shop.class);
         shop.setBalance(BigDecimal.ZERO);
 
         shopRepository.save(shop);
-        log.info("Shop with name {} created", shop.getName());
+        log.info("Shop with name {} created", shop.getServiceName());
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ShopDto getShopDto(String shopServiceName) {
+        Shop shop = getShop(shopServiceName);
+        return modelMapper.map(shop, ShopDto.class);
     }
 
     public List<ShopDto> getShopDtoList() {
@@ -68,6 +73,16 @@ public class ShopService {
                 .stream()
                 .map(s -> modelMapper.map(s, ShopDto.class))
                 .toList();
+    }
+
+    public ResponseEntity<HttpStatus> saveShopChanges(ShopDto shopDto) {
+        Shop shop = getShop(shopDto.getServiceName());
+        shop.setName(shopDto.getName());
+        shop.setUrl(shopDto.getUrl());
+
+        shopRepository.save(shop);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

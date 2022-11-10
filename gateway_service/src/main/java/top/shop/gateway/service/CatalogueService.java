@@ -15,9 +15,6 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class CatalogueService {
 
-    @Value("${shop1.url}")
-    private String shop1Url;
-
     private CatalogueDto catalogueFromStorage;
     private final RestTemplate restTemplate;
 

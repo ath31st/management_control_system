@@ -10,7 +10,7 @@ topic:
     name: t.catalogue
 
 shop:
-  name: shop1
+  service-name: shop1
 
 spring:
   kafka:

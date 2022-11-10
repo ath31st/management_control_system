@@ -25,6 +25,11 @@ public class ShopService {
         return new ArrayList<>(List.of(shops));
     }
 
+    public ShopDto getShop(String shopServiceName) {
+        String url = backendUrl + "/api/shops/" + shopServiceName;
+       return restTemplate.getForObject(url, ShopDto.class);
+    }
+
     public double getTotalBalance(List<ShopDto> shops) {
         return shops.stream()
                 .mapToDouble(ShopDto::getBalance)
@@ -35,4 +40,10 @@ public class ShopService {
         String url = backendUrl + "/api/new-shop";
         restTemplate.postForObject(url, shopDto, ShopDto.class);
     }
+
+    public void sendShopChanges(ShopDto shopDto) {
+        String url = backendUrl + "/api/edit-shop";
+        restTemplate.postForObject(url, shopDto, ShopDto.class);
+    }
+
 }

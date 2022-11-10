@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
-import top.shop.gateway.service.ShopService;
 import top.shop.gateway.service.UserService;
 
 import javax.validation.Valid;
@@ -21,7 +20,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final ShopService shopService;
 
     @GetMapping("/login")
     public String login() {

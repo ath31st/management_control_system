@@ -21,8 +21,18 @@ public class ShopController {
         return ResponseEntity.ok(shopService.getShopDtoList());
     }
 
+    @GetMapping("/shops/{shopServiceName}")
+    public ResponseEntity<ShopDto> shop(@PathVariable String shopServiceName) {
+        return ResponseEntity.ok(shopService.getShopDto(shopServiceName));
+    }
+
     @PostMapping("/new-shop")
     public ResponseEntity<HttpStatus> shopHandler(@RequestBody ShopDto shopDto) {
         return shopService.saveNewShop(shopDto);
+    }
+
+    @PostMapping("/edit-shop")
+    public ResponseEntity<HttpStatus> shopChanges(@RequestBody ShopDto shopDto) {
+        return shopService.saveShopChanges(shopDto);
     }
 }

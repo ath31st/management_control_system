@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ShopRepository extends JpaRepository<Shop, Long> {
 
-    @Query("select s from Shop s where s.name = :shopName")
-    Optional<Shop> getShop(String shopName);
+    @Query("select s from Shop s where s.serviceName = :serviceName")
+    Optional<Shop> getShop(String serviceName);
 }

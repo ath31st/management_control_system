@@ -40,7 +40,7 @@ public class OrderService {
                 .orderDate(orderDto.getOrderDate())
                 .customerName(orderDto.getCustomerName())
                 .productName(orderDto.getProductName())
-                .shop(shopService.getShop(orderDto.getShopName()))
+                .shop(shopService.getShop(orderDto.getShopServiceName()))
                 .build();
         Order persistedOrder = orderRepository.save(order);
 
@@ -62,7 +62,7 @@ public class OrderService {
             throw new OrderServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
-        log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopName());
+        log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopServiceName());
 
         productService.changeAmountProducts(order.getAmount(), order.getProductName());
         setExecutedStatusOrder(order);
@@ -72,6 +72,7 @@ public class OrderService {
         return DeliveryOrderDto.builder()
                 .amount(order.getAmount())
                 .customerName(order.getCustomerName())
+                .shopServiceName(order.getShop().getServiceName())
                 .shopName(order.getShop().getName())
                 .productName(order.getProductName())
                 .totalPrice(order.getTotalPrice().doubleValue())

@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class OrderService {
 
-    @Value("${shop.name}")
-    private String shopName;
+    @Value("${shop.service-name}")
+    private String serviceName;
     private final OrderProducer orderProducer;
     private final ProductService productService;
 
     public String createOrder(OrderDto orderDto) {
-        orderDto.setShopName(shopName);
+        orderDto.setShopServiceName(serviceName);
         orderDto.setOrderDate(LocalDateTime.now());
         orderDto.setPrice(productService.getProduct(orderDto.getProductName()).getPrice());
 
