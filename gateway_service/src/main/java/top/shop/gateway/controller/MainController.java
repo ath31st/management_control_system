@@ -7,13 +7,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import top.shop.gateway.dto.CatalogueDto;
+import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
-import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.UserService;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 
 @Controller
@@ -21,7 +19,6 @@ import java.security.Principal;
 public class MainController {
 
     private final UserService userService;
-    private final CatalogueService catalogueService;
 
     @GetMapping("/index")
     public String index(Model model) {
@@ -29,31 +26,37 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/catalogue")
-    public String catalogue(Model model, Principal principal) {
-        UserDto user = userService.getUserDto(principal.getName());
-
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        model.addAttribute("catalogueFromShop", catalogueService.getCatalogueFromShop(user.getShopUrl()));
-        return "catalogue";
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
-    @PostMapping("/catalogue")
-    public String catalogue(@Valid @ModelAttribute("catalogueFromShop") CatalogueDto catalogueDto,
-                            BindingResult bindingResult,
-                            Model model,
-                            Principal principal) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-            model.addAttribute("catalogueFromShop", catalogueDto);
-            return "catalogue";
-        }
+    @GetMapping("/login-error")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "login";
+    }
 
-        UserDto user = userService.getUserDto(principal.getName());
-        model.addAttribute("message", "Prices updated ");
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        catalogueService.sendPricesToShop(catalogueDto, user.getShopUrl());
-        return "catalogue";
+    @GetMapping("/register")
+    public String register(Model model) {
+        model.addAttribute("userData", new UserDto());
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String userRegistration(@Valid @ModelAttribute("userData") UserDto userData, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userData", userData);
+            return "register";
+        }
+        try {
+            userService.registerUser(userData);
+        } catch (ResponseStatusException e) {
+            bindingResult.rejectValue("username", "userData.username", "An account already exists for this username.");
+            model.addAttribute("userData", userData);
+            return "register";
+        }
+        return "redirect:/index";
     }
 
 }
