@@ -1,3 +1,4 @@
+#for every new shop-service change this field
 server:
   port: 28880
 
@@ -9,6 +10,7 @@ topic:
   catalogue:
     name: t.catalogue
 
+#for every new shop-service change this field
 shop:
   service-name: shop1
 
@@ -18,9 +20,11 @@ spring:
     bootstrap-servers: "localhost:9093"
     consumer:
       auto-offset-reset: earliest
+      #for every new shop-service change this field
       group-id: "shop1"
 
   datasource:
+    #for every new shop-service change this field
     url: jdbc:sqlite:../shop1.db
     driver-class-name: org.sqlite.JDBC
     username: admin

@@ -29,7 +29,7 @@
                     <th> Username </th>
                     <th> Email </th>
                     <th> Register date </th>
-                    <th> Shop name </th>
+                    <th> Shop service name </th>
                     <th> Shop url </th>
                     <th hidden> Password </th>
                     <th>  </th>
@@ -40,7 +40,7 @@
                     <td th:text="${user.username}">username</td>
                     <td th:text="${user.email}">email</td>
                     <td th:text="${user.registerDate}">register date</td>
-                    <td th:text="${user.shopName}">shop name</td>
+                    <td th:text="${user.shopServiceName}">shop service name</td>
                     <td th:text="${user.shopUrl}">shop url</td>
                     <td hidden th:text="${user.password}">password</td>
                     <td><button class="btn btn-primary"><a th:href="@{|/edit-user/${user.username}|}">Edit user</a></button></td>

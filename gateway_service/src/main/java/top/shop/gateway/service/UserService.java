@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
                 .lastname(userDto.getLastname())
                 .username(userDto.getUsername())
                 .email(userDto.getEmail())
-                .shopName(Value.DEFAULT.name()) //TODO administrator must change this field
+                .shopServiceName(Value.DEFAULT.name()) //TODO administrator must change this field
                 .shopUrl(Value.DEFAULT.name()) //TODO administrator must change this field
                 .registerDate(LocalDateTime.now())
                 .password(bCryptPasswordEncoder.encode(userDto.getPassword()))
@@ -79,7 +79,7 @@ public class UserService implements UserDetailsService {
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());
         user.setEmail(userDto.getEmail());
-        user.setShopName(userDto.getShopName());
+        user.setShopServiceName(userDto.getShopServiceName());
         user.setShopUrl(userDto.getShopUrl());
 
         return userRepository.save(user);

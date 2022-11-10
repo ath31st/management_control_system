@@ -38,7 +38,7 @@ public class UserDto implements Serializable {
     private String username;
 
    // @NotEmpty(message = "Shop name cannot be empty.")
-    private String shopName;
+    private String shopServiceName;
 
    // @NotEmpty(message = "Shop URL cannot be empty.")
     private String shopUrl;

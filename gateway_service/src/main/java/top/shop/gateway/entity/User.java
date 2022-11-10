@@ -49,7 +49,7 @@ public class User implements UserDetails {
     @Size(min = 1, max = 25)
     private String username;
 
-    private String shopName;
+    private String shopServiceName;
 
     private String shopUrl;
 
