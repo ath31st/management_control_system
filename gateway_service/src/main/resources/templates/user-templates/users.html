@@ -7,6 +7,21 @@
 
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <style>
+        table {
+            width: 100%; /* Ширина таблицы */
+            border-collapse: collapse; /* Убираем двойные линии */
+            text-align: justify;
+        }
+
+        td, th {
+            padding: 5px; /* Поля в ячейках */
+            border: 1px solid #333; /* Параметры рамки */
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f0f0; /* Зебра */
+        }</style>
 </head>
 <body>
 <div class="wrapper">
@@ -24,15 +39,15 @@
             <p><span style="font-size: 22px !important"> List of users </span></p>
             <table th:if="${not #lists.isEmpty(userDtoList)}">
                 <tr>
-                    <th> First name </th>
-                    <th> Last name </th>
-                    <th> Username </th>
-                    <th> Email </th>
-                    <th> Register date </th>
-                    <th> Shop service name </th>
-                    <th> Shop url </th>
-                    <th hidden> Password </th>
-                    <th>  </th>
+                    <th> First name</th>
+                    <th> Last name</th>
+                    <th> Username</th>
+                    <th> Email</th>
+                    <th> Register date</th>
+                    <th> Shop service name</th>
+                    <th> Shop url</th>
+                    <th hidden> Password</th>
+                    <th></th>
                 </tr>
                 <tr th:each="user: ${userDtoList}">
                     <td th:text="${user.firstname}">first name</td>
@@ -43,7 +58,11 @@
                     <td th:text="${user.shopServiceName}">shop service name</td>
                     <td th:text="${user.shopUrl}">shop url</td>
                     <td hidden th:text="${user.password}">password</td>
-                    <td><button class="btn btn-primary"><a th:href="@{|/edit-user/${user.username}|}">Edit user</a></button></td>
+                    <td>
+                        <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                           th:href="@{|/edit-user/${user.username}|}">Edit user</a>
+                        </button>
+                    </td>
                 </tr>
             </table>
             <div th:if="${#lists.isEmpty(userDtoList)}">

@@ -7,6 +7,22 @@
 
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <style>
+        table {
+            width: 100%; /* Ширина таблицы */
+            border-collapse: collapse; /* Убираем двойные линии */
+            text-align: justify;
+        }
+
+        td, th {
+            padding: 5px; /* Поля в ячейках */
+            border: 1px solid #333; /* Параметры рамки */
+            empty-cells: hide;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f0f0; /* Зебра */
+        }</style>
 </head>
 <body>
 <div class="wrapper">
@@ -21,32 +37,41 @@
         <!-- END PAGE TITLE -->
         <div class="column">
             <form th:action="@{/catalogue}" th:object="${catalogueFromShop}" method="post">
-                <table style="float: left" th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}">
-                    <tr>
-                        <th> Product name</th>
-                        <th> Category</th>
-                        <th> Amount</th>
-                        <th> Price from storage</th>
-                    </tr>
-                    <tr th:each="product: ${catalogueFromStorage.products}">
-                        <td th:text="${product.name}">product name</td>
-                        <td th:text="${product.category}">category</td>
-                        <td th:text="${product.amount}">amount</td>
-                        <td th:text="${product.price}">price</td>
-                    </tr>
-                </table>
-                <table th:if="${not #lists.isEmpty(catalogueFromShop.getProducts())}">
-                    <tr>
-                        <th> Price from shop</th>
-                    </tr>
-                    <tr th:each="product, itemStat : ${catalogueFromShop.products}">
-                        <td><input th:name="|products[${itemStat.index}].price|" th:value="${product.price}"/></td>
-                        <td><input hidden th:name="|products[${itemStat.index}].name|" th:value="${product.name}"/></td>
-                        <td><input hidden th:name="|products[${itemStat.index}].category|"
-                                   th:value="${product.category}"/></td>
-                        <td><input hidden th:name="|products[${itemStat.index}].amount|" th:value="${product.amount}"/>
-                        </td>
-                    </tr>
+                <table>
+                    <td>
+                        <table style="float: left" th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}">
+                            <tr>
+                                <th> Product name</th>
+                                <th> Category</th>
+                                <th> Amount</th>
+                                <th> Price from storage</th>
+                            </tr>
+                            <tr th:each="product: ${catalogueFromStorage.products}">
+                                <td th:text="${product.name}">product name</td>
+                                <td th:text="${product.category}">category</td>
+                                <td th:text="${product.amount}">amount</td>
+                                <td th:text="${product.price}">price</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table th:if="${not #lists.isEmpty(catalogueFromShop.getProducts())}">
+                            <tr>
+                                <th> Price from shop</th>
+                            </tr>
+                            <tr th:each="product, itemStat : ${catalogueFromShop.products}">
+                                <td style="padding: 2.8px" ><input th:name="|products[${itemStat.index}].price|" th:value="${product.price}"/>
+                                </td>
+                                <td style="display:none"><input th:name="|products[${itemStat.index}].name|"
+                                                                th:value="${product.name}"/></td>
+                                <td style="display:none"><input th:name="|products[${itemStat.index}].category|"
+                                                                th:value="${product.category}"/></td>
+                                <td style="display:none"><input th:name="|products[${itemStat.index}].amount|"
+                                                                th:value="${product.amount}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 </table>
                 <div>
                     <p><span th:text="${message}"></span>
