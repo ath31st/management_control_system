@@ -53,5 +53,8 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    public boolean categoryExists(String categoryName) {
+        return categoryRepository.existsByName(categoryName);
+    }
 
 }

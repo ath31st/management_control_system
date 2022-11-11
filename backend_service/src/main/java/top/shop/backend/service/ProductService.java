@@ -6,8 +6,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import top.shop.backend.dto.ProductDto;
+import top.shop.backend.entity.Category;
 import top.shop.backend.entity.Product;
+import top.shop.backend.dto.ProductDto;
 import top.shop.backend.exceptionhandler.exception.ProductException;
 import top.shop.backend.repository.ProductRepository;
 import top.shop.backend.service.event.CatalogueEvent;
@@ -32,12 +33,19 @@ public class ProductService {
 
                 productRepository.save(product);
             } else {
+                Category category;
+                if (categoryService.categoryExists(p.getCategory().getName())) {
+                    category = categoryService.getCategory(p.getCategory().getName());
+                } else {
+                    category = categoryService.saveCategory(p.getCategory());
+                }
+
                 Product product = Product.builder()
                         .name(p.getName())
                         .description(p.getDescription())
                         .price(p.getPrice())
                         .amount(p.getAmount())
-                        .category(categoryService.getCategory(p.getCategoryName()))
+                        .category(category)
                         .build();
 
                 productRepository.save(product);

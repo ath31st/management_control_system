@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.shop.backend.dto.ProductDto;
-import top.shop.backend.entity.Product;
 import top.shop.backend.service.ProductService;
 import java.util.List;
 
