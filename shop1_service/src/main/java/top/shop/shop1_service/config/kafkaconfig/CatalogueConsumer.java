@@ -25,7 +25,7 @@ public class CatalogueConsumer {
         log.info("message consumed {}", message);
 
         CatalogueDto catalogueDto = objectMapper.readValue(message, CatalogueDto.class);
-        catalogueService.receiveCatalogueFromBackend(catalogueDto);
+        catalogueService.setCatalogueFromStorage(catalogueDto);
 
         log.info("catalogue {} has been successfully received", catalogueDto.getCatalogueOnDate());
     }

@@ -5,9 +5,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.ProductDto;
-import top.shop.shop1_service.entity.Product;
-import top.shop.shop1_service.exceptionhandler.exception.ProductException;
-import top.shop.shop1_service.repository.ProductRepository;
+import top.shop.shop1_service.dto.ProductPriceDto;
+import top.shop.shop1_service.entity.ProductPrice;
+import top.shop.shop1_service.exceptionhandler.exception.ProductPriceException;
+import top.shop.shop1_service.repository.ProductPriceRepository;
 
 import java.util.List;
 
@@ -15,49 +16,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private final ProductPriceRepository productPriceRepository;
     private final ModelMapper modelMapper;
 
-    public Product getProduct(String productName) {
-        return productRepository.getProduct(productName).orElseThrow(
-                () -> new ProductException(HttpStatus.NOT_FOUND, "Product with name " + productName + " not found!"));
+    public void receiveProductPriceFromGateway(List<ProductPriceDto> productPriceDtoList) {
+        productPriceDtoList.forEach(p -> {
+                    if (productPriceExists(p.getProductName())) {
+                        updateProductPrice(p);
+                    } else {
+                        productPriceRepository.save(ProductPrice.builder()
+                                .productName(p.getProductName())
+                                .price(p.getPrice())
+                                .build());
+                    }
+                }
+        );
     }
 
-    public Product saveNewProduct(ProductDto productDto) {
-        Product p = new Product();
-        p.setAmount(productDto.getAmount());
-        p.setCategory(productDto.getCategory());
-        p.setName(productDto.getName());
-        p.setPrice(0);
-        return productRepository.save(p);
+    private ProductPrice getProductPrice(String productName) {
+        return productPriceRepository.findByProductName(productName).orElseThrow(
+                () -> new ProductPriceException(HttpStatus.NOT_FOUND, "Product price with " + productName + " not found!"));
     }
 
-    public Product updateAmountProduct(ProductDto productDto) {
-        Product p = getProduct(productDto.getName());
-        p.setAmount(productDto.getAmount());
-        return productRepository.save(p);
+    public ProductPrice updateProductPrice(ProductPriceDto productPriceDto) {
+        ProductPrice p = getProductPrice(productPriceDto.getProductName());
+        p.setPrice(productPriceDto.getPrice());
+
+        return productPriceRepository.save(p);
     }
 
-    public Product updatePriceProduct(ProductDto productDto) {
-        Product p = getProduct(productDto.getName());
-        p.setPrice(productDto.getPrice());
-        return productRepository.save(p);
-    }
-
-    public List<ProductDto> getProductsWithPrice() {
-        return productRepository.getProductWithPrice().stream()
-                .map(p -> modelMapper.map(p, ProductDto.class))
+    public List<ProductPriceDto> getProductPriceDtoList() {
+        return productPriceRepository.findAll().stream()
+                .map(p -> modelMapper.map(p, ProductPriceDto.class))
                 .toList();
     }
 
-    public List<ProductDto> getProducts() {
-        return productRepository.findAll().stream()
-                .map(p -> modelMapper.map(p, ProductDto.class))
-                .toList();
-    }
-
-    public boolean productExists(String productName) {
-        return productRepository.existsByName(productName);
+    public boolean productPriceExists(String productName) {
+        return productPriceRepository.existsByProductName(productName);
     }
 
 }

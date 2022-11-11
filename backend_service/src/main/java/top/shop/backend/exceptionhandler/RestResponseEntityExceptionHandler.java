@@ -12,22 +12,27 @@ import java.time.LocalDateTime;
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ShopException.class)
-    protected ResponseEntity<Response> handlePayloadException(ShopException e) {
+    protected ResponseEntity<Response> handleException(ShopException e) {
         return new ResponseEntity<>(buildResponse(e), e.getStatus());
     }
 
     @ExceptionHandler(ProductException.class)
-    protected ResponseEntity<Response> handlePayloadException(ProductException e) {
+    protected ResponseEntity<Response> handleException(ProductException e) {
         return new ResponseEntity<>(buildResponse(e), e.getStatus());
     }
 
     @ExceptionHandler(OrderServiceException.class)
-    protected ResponseEntity<Response> handlePayloadException(OrderServiceException e) {
+    protected ResponseEntity<Response> handleException(OrderServiceException e) {
         return new ResponseEntity<>(buildResponse(e), e.getStatus());
     }
 
     @ExceptionHandler(CatalogueException.class)
-    protected ResponseEntity<Response> handlePayloadException(CatalogueException e) {
+    protected ResponseEntity<Response> handleException(CatalogueException e) {
+        return new ResponseEntity<>(buildResponse(e), e.getStatus());
+    }
+
+    @ExceptionHandler(CategoryException.class)
+    protected ResponseEntity<Response> handleException(CategoryException e) {
         return new ResponseEntity<>(buildResponse(e), e.getStatus());
     }
 

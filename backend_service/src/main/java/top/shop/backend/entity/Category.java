@@ -3,7 +3,7 @@ package top.shop.backend.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -12,26 +12,21 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "products")
-public class Product {
+@Table(name = "categories")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Size(min = 1, max = 100)
+    @Column(unique = true)
     private String name;
 
     private String description;
 
-    private double price;
-
-    private long amount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private Category category;
+    private Set<Product> products;
 
 }

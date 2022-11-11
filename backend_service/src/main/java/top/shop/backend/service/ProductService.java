@@ -20,17 +20,27 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
 
-    public String receiveProducts(List<Product> products) {
+    public String receiveProducts(List<ProductDto> products) {
         products.forEach(p -> {
             if (productRepository.getProduct(p.getName()).isPresent()) {
                 Product product = getProduct(p.getName());
                 product.setAmount(product.getAmount() + p.getAmount());
+
                 productRepository.save(product);
             } else {
-                productRepository.save(p);
+                Product product = Product.builder()
+                        .name(p.getName())
+                        .description(p.getDescription())
+                        .price(p.getPrice())
+                        .amount(p.getAmount())
+                        .category(categoryService.getCategory(p.getCategoryName()))
+                        .build();
+
+                productRepository.save(product);
             }
         });
 
