@@ -19,8 +19,8 @@ public class ProductPricingService {
     private final ProductPricingRepository productPricingRepository;
     private final ModelMapper modelMapper;
 
-    public void receiveProductPricingFromGateway(List<ProductPricingDto> productPricingDtoList) {
-        productPricingDtoList.forEach(p -> {
+    public void receiveProductPricingFromGateway(List<ProductPricingDto> ppDtoList) {
+        ppDtoList.forEach(p -> {
                     if (productPricingExists(p.getProductName())) {
                         updateProductPricing(p);
                     } else {
@@ -42,9 +42,9 @@ public class ProductPricingService {
         return modelMapper.map(getProductPricing(productName), ProductPricingDto.class);
     }
 
-    public ProductPricing updateProductPricing(ProductPricingDto productPricingDto) {
-        ProductPricing p = getProductPricing(productPricingDto.getProductName());
-        p.setPrice(productPricingDto.getPrice());
+    public ProductPricing updateProductPricing(ProductPricingDto ppDto) {
+        ProductPricing p = getProductPricing(ppDto.getProductName());
+        p.setPrice(ppDto.getPrice());
 
         return productPricingRepository.save(p);
     }
