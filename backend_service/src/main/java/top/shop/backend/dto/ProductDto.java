@@ -19,6 +19,7 @@ import java.io.Serializable;
 public class ProductDto implements Serializable {
     @Size(min = 1, max = 100)
     private String name;
+    private String serviceName;
     private String description;
     private double price;
     private long amount;

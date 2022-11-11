@@ -19,13 +19,13 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
-    public Category getCategory(String categoryName) {
-        return categoryRepository.findByName(categoryName).orElseThrow(
-                () -> new CategoryException(HttpStatus.NOT_FOUND, "Category with name " + categoryName + " not found!"));
+    public Category getCategory(String categoryServiceName) {
+        return categoryRepository.findByServiceName(categoryServiceName).orElseThrow(
+                () -> new CategoryException(HttpStatus.NOT_FOUND, "Category with name " + categoryServiceName + " not found!"));
     }
 
-    public CategoryDto getCategoryDto(String categoryName) {
-        Category category = getCategory(categoryName);
+    public CategoryDto getCategoryDto(String categoryServiceName) {
+        Category category = getCategory(categoryServiceName);
         return modelMapper.map(category, CategoryDto.class);
     }
 
@@ -53,8 +53,8 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public boolean categoryExists(String categoryName) {
-        return categoryRepository.existsByName(categoryName);
+    public boolean categoryExists(String categoryServiceName) {
+        return categoryRepository.existsByServiceName(categoryServiceName);
     }
 
 }

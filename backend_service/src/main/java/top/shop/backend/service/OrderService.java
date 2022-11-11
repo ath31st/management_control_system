@@ -64,7 +64,7 @@ public class OrderService {
 
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopServiceName());
 
-        productService.changeAmountProducts(order.getAmount(), order.getProductName());
+        productService.changeAmountProduct(order.getAmount(), order.getProductName());
         setExecutedStatusOrder(order);
     }
 

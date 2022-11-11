@@ -18,6 +18,7 @@ import java.util.Set;
 public class CategoryDto implements Serializable {
 
     private String name;
+    private String serviceName;
     private String description;
 
 }

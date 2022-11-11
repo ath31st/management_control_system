@@ -17,20 +17,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Table(name = "shops")
 public class Shop {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(unique = true)
     @Size(min = 1, max = 100)
     private String name;
-
     private String serviceName;
-
     private String url;
-
     private BigDecimal balance;
-
 }

@@ -27,21 +27,22 @@ public class ProductService {
 
     public String receiveProducts(List<ProductDto> products) {
         products.forEach(p -> {
-            if (productRepository.getProduct(p.getName()).isPresent()) {
-                Product product = getProduct(p.getName());
+            if (productRepository.getProduct(p.getServiceName()).isPresent()) {
+                Product product = getProduct(p.getServiceName());
                 product.setAmount(product.getAmount() + p.getAmount());
 
                 productRepository.save(product);
             } else {
                 Category category;
-                if (categoryService.categoryExists(p.getCategory().getName())) {
-                    category = categoryService.getCategory(p.getCategory().getName());
+                if (categoryService.categoryExists(p.getCategory().getServiceName())) {
+                    category = categoryService.getCategory(p.getCategory().getServiceName());
                 } else {
                     category = categoryService.saveCategory(p.getCategory());
                 }
 
                 Product product = Product.builder()
                         .name(p.getName())
+                        .serviceName(p.getServiceName())
                         .description(p.getDescription())
                         .price(p.getPrice())
                         .amount(p.getAmount())
@@ -56,13 +57,13 @@ public class ProductService {
         return "products received";
     }
 
-    public Product getProduct(String productName) {
-        return productRepository.getProduct(productName).orElseThrow(
-                () -> new ProductException(HttpStatus.NOT_FOUND, "Product with name " + productName + " not found!"));
+    public Product getProduct(String productServiceName) {
+        return productRepository.getProduct(productServiceName).orElseThrow(
+                () -> new ProductException(HttpStatus.NOT_FOUND, "Product with name " + productServiceName + " not found!"));
     }
 
-    public void changeAmountProducts(int amount, String productName) {
-        Product product = getProduct(productName);
+    public void changeAmountProduct(int amount, String productServiceName) {
+        Product product = getProduct(productServiceName);
         product.setAmount(product.getAmount() - amount);
 
         productRepository.save(product);

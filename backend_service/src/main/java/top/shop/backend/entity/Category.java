@@ -14,19 +14,15 @@ import java.util.Set;
 @Builder
 @Table(name = "categories")
 public class Category {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @Column(unique = true)
     private String name;
-
+    @Column(unique = true)
+    private String serviceName;
     private String description;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<Product> products;
-
 }
