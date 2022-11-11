@@ -39,6 +39,7 @@ public class CategoryService {
     public Category saveCategory(CategoryDto categoryDto) {
         Category category = Category.builder()
                 .name(categoryDto.getName())
+                .serviceName(categoryDto.getServiceName())
                 .description(categoryDto.getDescription())
                 .products(new HashSet<>())
                 .build();
@@ -47,7 +48,8 @@ public class CategoryService {
     }
 
     public Category saveChangesCategory(CategoryDto categoryDto) {
-        Category category = getCategory(categoryDto.getName());
+        Category category = getCategory(categoryDto.getServiceName());
+        category.setName(categoryDto.getName());
         category.setDescription(categoryDto.getDescription());
 
         return categoryRepository.save(category);
