@@ -16,7 +16,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/products")
-    public String productsHandler(@RequestBody List<Product> products) {
+    public String productsHandler(@RequestBody List<ProductDto> products) {
         return productService.receiveProducts(products);
     }
 

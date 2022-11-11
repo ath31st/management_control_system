@@ -4,9 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
+import top.shop.shop1_service.dto.ProductDto;
+import top.shop.shop1_service.dto.ProductPricingDto;
+import top.shop.shop1_service.entity.ProductPricing;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -14,19 +19,18 @@ import java.util.Collections;
 public class CatalogueService {
 
     private CatalogueDto catalogueFromStorage;
-    private final ProductService productService;
+    private final ProductPricingService productPricingService;
 
     public CatalogueDto getCatalogueForCustomers() {
-        return CatalogueDto.builder()
-                .catalogueOnDate(LocalDateTime.now())
-                .products(productService.getProductsWithPrice())
-                .build();
-    }
+        List<ProductDto> updatedProducts = getCatalogueFromStorage().getProducts()
+                .stream()
+                .filter(p -> productPricingService.productPricingExists(p.getName()))
+                .map(productPricingService::updatePriceOfProductDto)
+                .toList();
 
-    public CatalogueDto getCatalogueForManagers() {
         return CatalogueDto.builder()
                 .catalogueOnDate(LocalDateTime.now())
-                .products(productService.getProducts())
+                .products(updatedProducts)
                 .build();
     }
 
@@ -35,11 +39,12 @@ public class CatalogueService {
     }
 
     public CatalogueDto getCatalogueFromStorage() {
-        if (catalogueFromStorage == null) {
-            catalogueFromStorage = new CatalogueDto();
-            catalogueFromStorage.setCatalogueOnDate(LocalDateTime.now());
-            catalogueFromStorage.setProducts(Collections.emptyList());
-        }
+        if (catalogueFromStorage == null)
+            catalogueFromStorage = CatalogueDto.builder()
+                    .products(Collections.emptyList())
+                    .catalogueOnDate(LocalDateTime.now())
+                    .build();
+
         return catalogueFromStorage;
     }
 

@@ -8,7 +8,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.service.CatalogueService;
-import top.shop.shop1_service.service.ProductService;
 
 @Slf4j
 @Component
