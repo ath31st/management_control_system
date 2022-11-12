@@ -21,8 +21,8 @@ public class CatalogueService {
     public CatalogueDto getCatalogueForCustomers() {
         List<ProductDto> updatedProducts = getCatalogueFromStorage().getProducts()
                 .stream()
-                .filter(p -> productPricingService.productPricingExists(p.getName()) &&
-                        productPricingService.getProductPricingDto(p.getName()).getPrice() != 0)
+                .filter(p -> productPricingService.productPricingExists(p.getServiceName()) &&
+                        productPricingService.getProductPricingDto(p.getServiceName()).getPrice() != 0)
                 .map(productPricingService::updatePriceOfProductDto)
                 .toList();
 

@@ -37,12 +37,12 @@
         <!-- END PAGE TITLE -->
         <div class="column">
             <form th:action="@{/catalogue}" th:object="${wrapper}" method="post">
-                <table>
+                <table th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}">
                     <td>
-                        <table style="float: left" th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}">
+                        <table style="float: left">
                             <tr>
                                 <th> Product name</th>
-                                <th> Description </th>
+                                <th> Description</th>
                                 <th> Category</th>
                                 <th> Amount</th>
                                 <th> Price from storage</th>
@@ -60,12 +60,13 @@
                         <table th:if="${not #lists.isEmpty(wrapper.pricingDtoList)}">
                             <tr>
                                 <th> Price from shop</th>
-                                <th> Product service name </th>
                             </tr>
                             <tr th:each="pricing, itemStat : ${wrapper.pricingDtoList}">
-                                <td><input th:name="|pricingDtoList[${itemStat.index}].price|" th:value="${pricing.price}"/></td>
-<!--                                <td style="display:none"><input th:name="|productPricing[${itemStat.index}].productServiceName|" th:value="${pricing.productServiceName}"/></td>-->
-                                <td><input th:name="|pricingDtoList[${itemStat.index}].productServiceName|" th:value="${pricing.productServiceName}"/></td>
+                                <td><input th:name="|pricingDtoList[${itemStat.index}].price|"
+                                           th:value="${pricing.price}"/></td>
+                                <td style="display:none"><input
+                                        th:name="|pricingDtoList[${itemStat.index}].productServiceName|"
+                                        th:value="${pricing.productServiceName}"/></td>
                             </tr>
                         </table>
                     </td>
@@ -81,7 +82,10 @@
                 </div>
             </form>
             <div th:if="${#lists.isEmpty(catalogueFromStorage.products)}">
-                <h4>No data found</h4>
+                <h4>No storage data found</h4>
+            </div>
+            <div th:if="${#lists.isEmpty(wrapper.pricingDtoList)}">
+                <h4>No shop data found</h4>
             </div>
         </div>
     </div>
