@@ -21,11 +21,11 @@ public class ProductPricingService {
 
     public void receiveProductPricingFromGateway(List<ProductPricingDto> ppDtoList) {
         ppDtoList.forEach(p -> {
-                    if (productPricingExists(p.getProductName())) {
+                    if (productPricingExists(p.getProductServiceName())) {
                         updateProductPricing(p);
                     } else {
                         productPricingRepository.save(ProductPricing.builder()
-                                .productName(p.getProductName())
+                                .productServiceName(p.getProductServiceName())
                                 .price(p.getPrice())
                                 .build());
                     }
@@ -33,24 +33,24 @@ public class ProductPricingService {
         );
     }
 
-    public ProductPricing getProductPricing(String productName) {
-        return productPricingRepository.findByProductName(productName).orElseThrow(
-                () -> new ProductPricingException(HttpStatus.NOT_FOUND, "Product price with " + productName + " not found!"));
+    public ProductPricing getProductPricing(String productServiceName) {
+        return productPricingRepository.findByProductServiceName(productServiceName).orElseThrow(
+                () -> new ProductPricingException(HttpStatus.NOT_FOUND, "Product price with " + productServiceName + " not found!"));
     }
 
-    public ProductPricingDto getProductPricingDto(String productName) {
-        return modelMapper.map(getProductPricing(productName), ProductPricingDto.class);
+    public ProductPricingDto getProductPricingDto(String productServiceName) {
+        return modelMapper.map(getProductPricing(productServiceName), ProductPricingDto.class);
     }
 
     public ProductPricing updateProductPricing(ProductPricingDto ppDto) {
-        ProductPricing p = getProductPricing(ppDto.getProductName());
+        ProductPricing p = getProductPricing(ppDto.getProductServiceName());
         p.setPrice(ppDto.getPrice());
 
         return productPricingRepository.save(p);
     }
 
     public ProductDto updatePriceOfProductDto(ProductDto productDto) {
-        productDto.setPrice(getProductPricingDto(productDto.getName()).getPrice());
+        productDto.setPrice(getProductPricingDto(productDto.getServiceName()).getPrice());
         return productDto;
     }
 
@@ -60,8 +60,8 @@ public class ProductPricingService {
                 .toList();
     }
 
-    public boolean productPricingExists(String productName) {
-        return productPricingRepository.existsByProductName(productName);
+    public boolean productPricingExists(String productServiceName) {
+        return productPricingRepository.existsByProductServiceName(productServiceName);
     }
 
 }

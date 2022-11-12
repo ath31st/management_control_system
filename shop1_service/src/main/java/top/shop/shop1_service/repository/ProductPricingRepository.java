@@ -8,8 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProductPricingRepository extends JpaRepository<ProductPricing, Long> {
-    Optional<ProductPricing> findByProductName(String productName);
+    Optional<ProductPricing> findByProductServiceName(String productServiceName);
 
-    boolean existsByProductName(String productName);
+    boolean existsByProductServiceName(String productServiceName);
 
 }

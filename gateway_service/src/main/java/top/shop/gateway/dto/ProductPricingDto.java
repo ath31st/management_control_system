@@ -12,6 +12,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class ProductPricingDto implements Serializable {
-    private String productName;
+    private String productServiceName;
     private double price;
 }

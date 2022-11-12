@@ -36,7 +36,7 @@
         </div>
         <!-- END PAGE TITLE -->
         <div class="column">
-            <form th:action="@{/catalogue}" th:object="${catalogueFromShop}" method="post">
+            <form th:action="@{/catalogue}" th:object="${productPricing}" method="post">
                 <table>
                     <td>
                         <table style="float: left" th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}">
@@ -60,12 +60,12 @@
                         <table th:if="${not #lists.isEmpty(productPricing)}">
                             <tr>
                                 <th> Price from shop</th>
-                                <th> Product name </th>
+                                <th> Product service name </th>
                             </tr>
                             <tr th:each="pricing, itemStat : ${productPricing}">
                                 <td style="padding: 2.8px" ><input th:name="|productPricing[${itemStat.index}].price|" th:value="${pricing.price}"/></td>
-<!--                                <td style="display:none"><input th:name="|productPricing[${itemStat.index}].productName|" th:value="${pricing.productName}"/></td>-->
-                                <td style="padding: 2.8px"><input th:name="|productPricing[${itemStat.index}].productName|" th:value="${pricing.productName}"/></td>
+<!--                                <td style="display:none"><input th:name="|productPricing[${itemStat.index}].productServiceName|" th:value="${pricing.productServiceName}"/></td>-->
+                                <td style="padding: 2.8px"><input th:name="|productPricing[${itemStat.index}].productServiceName|" th:value="${pricing.productServiceName}"/></td>
                             </tr>
                         </table>
                     </td>
