@@ -34,12 +34,11 @@ public class CatalogueService {
         catalogueFromStorage = catalogueDto;
     }
 
-    public ProductPricingDto[] getProductPricingListFromShop(String shopUrl) {
-        // public List<ProductPricingDto> getProductPricingListFromShop(String shopUrl) {
+
+    public List<ProductPricingDto> getProductPricingListFromShop(String shopUrl) {
         String url = shopUrl + "/api/manager/prices";
 
-        return restTemplate.getForObject(url, ProductPricingDto[].class);
-        //  return List.of(Objects.requireNonNull(restTemplate.getForObject(url, ProductPricingDto[].class)));
+        return List.of(Objects.requireNonNull(restTemplate.getForObject(url, ProductPricingDto[].class)));
     }
 
     public void sendProductPricingListToShop(List<ProductPricingDto> pricingDtoList, String shopUrl) {
