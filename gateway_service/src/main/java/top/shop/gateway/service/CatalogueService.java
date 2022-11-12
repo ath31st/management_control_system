@@ -2,13 +2,15 @@ package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.CatalogueDto;
+import top.shop.gateway.dto.ProductPricingDto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -19,11 +21,12 @@ public class CatalogueService {
     private final RestTemplate restTemplate;
 
     public CatalogueDto getCatalogueFromStorage() {
-        if (catalogueFromStorage == null) {
-            catalogueFromStorage = new CatalogueDto();
-            catalogueFromStorage.setCatalogueOnDate(LocalDateTime.now());
-            catalogueFromStorage.setProducts(Collections.emptyList());
-        }
+        if (catalogueFromStorage == null)
+            catalogueFromStorage = CatalogueDto.builder()
+                    .products(Collections.emptyList())
+                    .catalogueOnDate(LocalDateTime.now())
+                    .build();
+
         return catalogueFromStorage;
     }
 
@@ -31,14 +34,17 @@ public class CatalogueService {
         catalogueFromStorage = catalogueDto;
     }
 
-    public CatalogueDto getCatalogueFromShop(String shopUrl) {
-        String url = shopUrl + "/api/manager/catalogue";
-        return restTemplate.getForObject(url, CatalogueDto.class);
+    public ProductPricingDto[] getProductPricingListFromShop(String shopUrl) {
+        // public List<ProductPricingDto> getProductPricingListFromShop(String shopUrl) {
+        String url = shopUrl + "/api/manager/prices";
+
+        return restTemplate.getForObject(url, ProductPricingDto[].class);
+        //  return List.of(Objects.requireNonNull(restTemplate.getForObject(url, ProductPricingDto[].class)));
     }
 
-    public void sendPricesToShop(CatalogueDto catalogueDto, String shopUrl) {
-        String url = shopUrl + "/api/manager/catalogue";
-        restTemplate.postForObject(url, catalogueDto, CatalogueDto.class);
+    public void sendProductPricingListToShop(List<ProductPricingDto> pricingDtoList, String shopUrl) {
+        String url = shopUrl + "/api/manager/prices";
+        restTemplate.postForObject(url, pricingDtoList, ProductPricingDto[].class);
     }
 
 }

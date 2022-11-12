@@ -27,7 +27,7 @@ public class CatalogueController {
         UserDto user = userService.getUserDto(principal.getName());
 
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        model.addAttribute("catalogueFromShop", catalogueService.getCatalogueFromShop(user.getShopUrl()));
+        model.addAttribute("catalogueFromShop", catalogueService.getProductPricingListFromShop(user.getShopUrl()));
         return "catalogue-templates/catalogue";
     }
 
@@ -45,7 +45,7 @@ public class CatalogueController {
         UserDto user = userService.getUserDto(principal.getName());
         model.addAttribute("message", "Prices updated ");
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        catalogueService.sendPricesToShop(catalogueDto, user.getShopUrl());
+        catalogueService.sendProductPricingListToShop(catalogueDto, user.getShopUrl());
         return "catalogue-templates/catalogue";
     }
 

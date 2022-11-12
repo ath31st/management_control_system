@@ -1,4 +1,4 @@
-package top.shop.shop1_service.dto;
+package top.shop.gateway.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CategoryDto implements Serializable {
-    private String name;
-    private String serviceName;
-    private String description;
+public class ProductPricingDto implements Serializable {
+    private String productName;
+    private double price;
 }

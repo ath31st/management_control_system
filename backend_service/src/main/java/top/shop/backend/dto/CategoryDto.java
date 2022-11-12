@@ -16,9 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class CategoryDto implements Serializable {
-
     private String name;
     private String serviceName;
     private String description;
-
 }

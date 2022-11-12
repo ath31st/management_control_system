@@ -1,4 +1,4 @@
-package top.shop.shop1_service.dto;
+package top.shop.gateway.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
