@@ -34,6 +34,7 @@ public class CatalogueService {
 
     public void setCatalogueFromStorage(CatalogueDto catalogueDto) {
         catalogueFromStorage = catalogueDto;
+        productPricingService.addMockProductPricing(catalogueDto);
     }
 
     public CatalogueDto getCatalogueFromStorage() {

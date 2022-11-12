@@ -7,15 +7,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import top.shop.gateway.dto.CatalogueDto;
-import top.shop.gateway.dto.ProductPricingDto;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.UserService;
+import top.shop.gateway.util.wrapper.ProductPricingWrapper;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,25 +27,25 @@ public class CatalogueController {
         UserDto user = userService.getUserDto(principal.getName());
 
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        model.addAttribute("productPricing", catalogueService.getProductPricingListFromShop(user.getShopUrl()));
+        model.addAttribute("wrapper", catalogueService.getProductPricingWrapperFromShop(user.getShopUrl()));
         return "catalogue-templates/catalogue";
     }
 
     @PostMapping("/catalogue")
-    public String catalogue(@Valid @ModelAttribute("productPricing") List<ProductPricingDto> ppDtoList,
+    public String catalogue(@Valid @ModelAttribute("wrapper")ProductPricingWrapper wrapper,
                             BindingResult bindingResult,
                             Model model,
                             Principal principal) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-            model.addAttribute("productPricing", ppDtoList);
+            model.addAttribute("wrapper", wrapper);
             return "catalogue-templates/catalogue";
         }
 
         UserDto user = userService.getUserDto(principal.getName());
         model.addAttribute("message", "Prices updated ");
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
-        catalogueService.sendProductPricingListToShop(ppDtoList, user.getShopUrl());
+        catalogueService.sendProductPricingWrapperToShop(wrapper, user.getShopUrl());
         return "catalogue-templates/catalogue";
     }
 

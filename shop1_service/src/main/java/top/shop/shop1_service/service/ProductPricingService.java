@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.ProductDto;
 import top.shop.shop1_service.dto.ProductPricingDto;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException;
 import top.shop.shop1_service.repository.ProductPricingRepository;
+import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
 import java.util.List;
 
@@ -19,8 +21,8 @@ public class ProductPricingService {
     private final ProductPricingRepository productPricingRepository;
     private final ModelMapper modelMapper;
 
-    public void receiveProductPricingFromGateway(List<ProductPricingDto> ppDtoList) {
-        ppDtoList.forEach(p -> {
+    public void receiveProductPricingWrapperFromGateway(ProductPricingWrapper wrapper) {
+        wrapper.getPricingDtoList().forEach(p -> {
                     if (productPricingExists(p.getProductServiceName())) {
                         updateProductPricing(p);
                     } else {
@@ -58,6 +60,18 @@ public class ProductPricingService {
         return productPricingRepository.findAll().stream()
                 .map(p -> modelMapper.map(p, ProductPricingDto.class))
                 .toList();
+    }
+
+    public void addMockProductPricing(CatalogueDto catalogueDto) {
+        catalogueDto.getProducts()
+                .stream()
+                .filter(p -> !productPricingExists(p.getServiceName()))
+                .forEach(p -> {
+                    ProductPricing pp = new ProductPricing();
+                    pp.setProductServiceName(p.getServiceName());
+                    pp.setPrice(0);
+                    productPricingRepository.save(pp);
+                });
     }
 
     public boolean productPricingExists(String productServiceName) {

@@ -6,12 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.OrderDto;
-import top.shop.shop1_service.dto.ProductPricingDto;
 import top.shop.shop1_service.service.CatalogueService;
 import top.shop.shop1_service.service.OrderService;
 import top.shop.shop1_service.service.ProductPricingService;
-
-import java.util.List;
+import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
 @Slf4j
 @RestController
@@ -35,13 +33,13 @@ public class ShopController {
     }
 
     @GetMapping("/manager/prices")
-    public ResponseEntity<List<ProductPricingDto>> catalogueForGatewayHandler() {
-        return ResponseEntity.ok(productPricingService.getProductPricingDtoList());
+    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler() {
+        return ResponseEntity.ok(new ProductPricingWrapper(productPricingService.getProductPricingDtoList()));
     }
 
     @PostMapping("/manager/prices")
-    public ResponseEntity<List<ProductPricingDto>> catalogueForGatewayHandler(@RequestBody List<ProductPricingDto> ppDto) {
-        productPricingService.receiveProductPricingFromGateway(ppDto);
+    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler(@RequestBody ProductPricingWrapper wrapper) {
+        productPricingService.receiveProductPricingWrapperFromGateway(wrapper);
         return ResponseEntity.ok().build();
     }
 
