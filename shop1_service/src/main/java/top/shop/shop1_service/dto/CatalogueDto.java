@@ -13,8 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CatalogueDto {
-
     private LocalDateTime catalogueOnDate;
     private List<ProductDto> products;
-
 }
