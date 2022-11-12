@@ -17,7 +17,7 @@ public class ShopController {
     private final ShopService shopService;
 
     @GetMapping("/shops")
-    public ResponseEntity<List<ShopDto>> productsHandler() {
+    public ResponseEntity<List<ShopDto>> shopsHandler() {
         return ResponseEntity.ok(shopService.getShopDtoList());
     }
 

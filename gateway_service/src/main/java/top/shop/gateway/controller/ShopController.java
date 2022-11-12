@@ -63,7 +63,7 @@ public class ShopController {
         try {
             shopService.createShop(shopData);
         } catch (HttpClientErrorException e) {
-            bindingResult.rejectValue("name", "shopData.name", "Shop already exists for this name.");
+            bindingResult.rejectValue("serviceName", "shopData.serviceName", "Shop already exists for this service name.");
             model.addAttribute("shopData", shopData);
             return "shop-templates/new-shop";
         }
