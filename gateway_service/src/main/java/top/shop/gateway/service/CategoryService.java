@@ -17,7 +17,7 @@ public class CategoryService {
     private final RestTemplate restTemplate;
 
     public List<CategoryDto> getCategories() {
-        String url = backendUrl + "/api/shops";
+        String url = backendUrl + "/api/categories";
         CategoryDto[] categories = restTemplate.getForObject(url, CategoryDto[].class);
 
         if (categories == null) return new ArrayList<>();

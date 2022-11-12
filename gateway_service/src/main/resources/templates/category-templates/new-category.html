@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New-shop</title>
+    <title>New category</title>
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
 </head>
@@ -14,27 +14,27 @@
         <div lang="en" th:replace="fragments/header :: header"></div>
         <div class="page-title">
             <h3>
-                <span class="fa fa-arrow-circle-o-left"></span> Register a new shop
+                <span class="fa fa-arrow-circle-o-left"></span> Register a new category
             </h3>
         </div>
         <!-- END PAGE TITLE -->
         <div class="column">
-            <form th:action="@{/new-shop}" th:object="${shopData}" method="post">
+            <form th:action="@{/new-category}" th:object="${categoryDto}" method="post">
                 <table>
                     <tr>
-                        <td>Shop service name:</td>
+                        <td>Category service name:</td>
                         <td><input type="text" th:field="*{serviceName}"></td>
-                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Shop service name Error</td>
+                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Category service name Error</td>
                     </tr>
                     <tr>
-                        <td>Shop name:</td>
+                        <td>Category name:</td>
                         <td><input type="text" th:field="*{name}"></td>
-                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Shop name Error</td>
+                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Category name Error</td>
                     </tr>
                     <tr>
-                        <td>Shop URL:</td>
-                        <td><input type="text" th:field="*{url}"></td>
-                        <td th:if="${#fields.hasErrors('url')}" th:errors="*{url}">Shop URL Error</td>
+                        <td>Category description:</td>
+                        <td><input type="text" th:field="*{description}"></td>
+                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Category description Error</td>
                     </tr>
 
                 </table>

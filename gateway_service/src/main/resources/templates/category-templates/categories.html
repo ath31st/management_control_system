@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <style>
+        table {
+            width: 100%; /* Ширина таблицы */
+            border-collapse: collapse; /* Убираем двойные линии */
+            text-align: justify;
+        }
+
+        td, th {
+            padding: 5px; /* Поля в ячейках */
+            border: 1px solid #333; /* Параметры рамки */
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f0f0; /* Зебра */
+        }</style>
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Categories
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+
+            <p><span style="font-size: 22px !important"> List of categories </span></p>
+            <table th:if="${not #lists.isEmpty(categories)}">
+                <tr>
+                    <th> Service name </th>
+                    <th> Name </th>
+                    <th> Description </th>
+                    <th></th>
+                </tr>
+                <tr th:each="category: ${categories}">
+                    <td th:text="${category.serviceName}">category service name</td>
+                    <td th:text="${category.name}">category name</td>
+                    <td th:text="${category.description}">category description</td>
+                    <td>
+                        <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                           th:href="@{|/edit-category/${category.serviceName}|}">Edit category</a>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <div th:if="${#lists.isEmpty(categories)}">
+                <h4>No data found</h4>
+            </div>
+            <div>
+                <button class="btn btn-primary"><a style="color: white;text-decoration: none" th:href="@{/new-category}">Create
+                    new category</a></button>
+            </div>
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

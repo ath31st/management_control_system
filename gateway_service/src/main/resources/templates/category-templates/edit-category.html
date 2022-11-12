@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit-category</title>
+
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Edit category
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/edit-category}" th:object="${categoryDto}" method="post">
+                <table>
+                    <tr>
+                        <td>Category name:</td>
+                        <td><input type="text" th:field="*{name}"></td>
+                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Category name Error</td>
+                    </tr>
+                    <tr>
+                        <td>Category description:</td>
+                        <td><input type="text" th:field="*{description}"></td>
+                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Category description Error</td>
+                    </tr>
+                    <tr hidden>
+                        <td>Service name:</td>
+                        <td><input type="text" th:field="*{serviceName}"></td>
+                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Category service name Error</td>
+                    </tr>
+                </table>
+                <div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>
