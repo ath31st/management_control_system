@@ -22,7 +22,7 @@ public class CatalogueService {
     public CatalogueDto createCatalogue() {
         CatalogueDto catalogue = new CatalogueDto();
         catalogue.setCatalogueOnDate(LocalDateTime.now());
-        catalogue.setProducts(productService.getListProductDto());
+        catalogue.setProducts(productService.getProductDtoList());
         return catalogue;
     }
 

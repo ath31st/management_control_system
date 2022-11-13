@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Storage</title>
+
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <style>
+        table {
+            width: 100%; /* Ширина таблицы */
+            border-collapse: collapse; /* Убираем двойные линии */
+            text-align: justify;
+        }
+
+        td, th {
+            padding: 5px; /* Поля в ячейках */
+            border: 1px solid #333; /* Параметры рамки */
+            empty-cells: hide;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f0f0; /* Зебра */
+        }</style>
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Storage
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/storage}" th:object="${wrapper}" method="post">
+                <table th:if="${not #lists.isEmpty(wrapper.productDtoList)}">
+                    <td>
+                        <table style="float: left">
+                            <tr>
+                                <th>Product service name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                            </tr>
+                            <tr th:each="product: ${wrapper.productDtoList}">
+                                <td th:text="${product.serviceName}">product service name</td>
+                                <td th:text="${product.category.serviceName}">category service name</td>
+                                <td th:text="${product.price}">price</td>
+                                <td th:text="${product.amount}">amount</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table th:if="${not #lists.isEmpty(wrapper.productDtoList)}">
+                            <tr>
+                                <th>Increase amount</th>
+                            </tr>
+                            <tr th:each="product, itemStat : ${wrapper.productDtoList}">
+                                <td><input th:name="|productDtoList[${itemStat.index}].amount|" th:value="0"/></td>
+                                <td style="display:none"><input th:name="|productDtoList[${itemStat.index}].serviceName|" th:value="${product.serviceName}"/></td>
+                                <td style="display:none"><input th:name="|productDtoList[${itemStat.index}].category|" th:value="${product.category}"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </table>
+                <div>
+                    <p><span th:text="${message}"></span>
+                        <span th:if="${message} != null" th:text="${#dates.createNow()}"></span>
+                    </p>
+                    <br>
+                    <button th:if="${not #lists.isEmpty(wrapper.productDtoList)}" type="submit"
+                            class="btn btn-primary">Submit
+                    </button>
+                </div>
+            </form>
+            <div th:if="${#lists.isEmpty(wrapper.productDtoList)}">
+                <h4>No storage data found</h4>
+            </div>
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

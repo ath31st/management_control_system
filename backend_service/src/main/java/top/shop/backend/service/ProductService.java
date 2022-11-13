@@ -12,6 +12,7 @@ import top.shop.backend.dto.ProductDto;
 import top.shop.backend.exceptionhandler.exception.ProductException;
 import top.shop.backend.repository.ProductRepository;
 import top.shop.backend.service.event.CatalogueEvent;
+import top.shop.backend.util.wrapper.ProductWrapper;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class ProductService {
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
 
-    public String receiveProducts(List<ProductDto> products) {
-        products.forEach(p -> {
+    public String receiveProducts(ProductWrapper productWrapper) {
+        productWrapper.getProductDtoList().forEach(p -> {
             if (productRepository.getProduct(p.getServiceName()).isPresent()) {
                 Product product = getProduct(p.getServiceName());
                 product.setAmount(product.getAmount() + p.getAmount());
@@ -69,11 +70,14 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public List<ProductDto> getListProductDto() {
+    public List<ProductDto> getProductDtoList() {
         List<Product> products = productRepository.findAll();
         return products.stream()
                 .map(p -> modelMapper.map(p, ProductDto.class))
                 .toList();
     }
 
+    public ProductWrapper getProductWrapper() {
+        return new ProductWrapper(getProductDtoList());
+    }
 }
