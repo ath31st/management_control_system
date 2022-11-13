@@ -26,16 +26,16 @@ public class StorageController {
     }
 
     @PostMapping("/storage")
-    public String storageHandler(@Valid @ModelAttribute("wrapper") ProductWrapper wrapper, BindingResult bindingResult, Model model) {
+    public String storageHandler(@Valid ProductWrapper productWrapper, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("wrapper", storageService.getProductWrapper());
             return "storage-templates/storage";
         }
 
+        storageService.sendProductWrapperToBackend(productWrapper);
         model.addAttribute("message", "Amount updated ");
         model.addAttribute("wrapper", storageService.getProductWrapper());
-        storageService.sendProductWrapperToBackend(wrapper);
 
-        return "redirect:/storage";
+        return "storage-templates/storage";
     }
 }
