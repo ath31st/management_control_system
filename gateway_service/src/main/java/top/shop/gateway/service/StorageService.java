@@ -32,7 +32,9 @@ public class StorageService {
     }
 
     public void createProduct(ProductDto productDto) {
-        sendProductWrapperToBackend(new ProductWrapper(Collections.singletonList(productDto)));
+        String url = backendUrl + "/api/products";
+
+        restTemplate.postForObject(url, new ProductWrapper(Collections.singletonList(productDto)), ProductWrapper.class);
     }
 
     private List<ProductDto> filterUnchangedProducts(List<ProductDto> productDtoList) {

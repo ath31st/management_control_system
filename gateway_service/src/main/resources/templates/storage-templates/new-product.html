@@ -24,7 +24,9 @@
                     <tr>
                         <td>Product service name:</td>
                         <td><input type="text" th:field="*{serviceName}"></td>
-                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Product service name Error</td>
+                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Product service name
+                            Error
+                        </td>
                     </tr>
                     <tr>
                         <td>Product name:</td>
@@ -34,7 +36,8 @@
                     <tr>
                         <td>Description</td>
                         <td><input type="text" th:field="*{description}"></td>
-                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</td>
+                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error
+                        </td>
                     </tr>
                     <tr>
                         <td>Price</td>
@@ -48,10 +51,13 @@
                     </tr>
                     <tr>
                         <td>Category</td>
-                        <td><input type="text" th:field="*{category}"></td>
+                        <td><select type="text" th:list="${categoryList}" th:field="*{category.serviceName}">
+                            <option th:each="category : ${categoryList}"
+                                    th:value="${category.serviceName}"
+                                    th:label="${category.serviceName}">
+                        </select></td>
                         <td th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Category Error</td>
                     </tr>
-
                 </table>
                 <br/>
                 <input type="submit" value="Create"/>

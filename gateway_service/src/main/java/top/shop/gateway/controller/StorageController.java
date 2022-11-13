@@ -46,6 +46,7 @@ public class StorageController {
     @GetMapping("new-product")
     public String productHandler(Model model) {
         model.addAttribute("productDto", new ProductDto());
+        model.addAttribute("categoryList", categoryService.getCategories());
         return "storage-templates/new-product";
     }
 
