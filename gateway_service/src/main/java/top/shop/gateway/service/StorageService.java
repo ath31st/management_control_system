@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.ProductDto;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,6 +29,10 @@ public class StorageService {
         wrapper.setProductDtoList(filterUnchangedProducts(wrapper.getProductDtoList()));
 
         restTemplate.postForObject(url, wrapper, ProductWrapper.class);
+    }
+
+    public void createProduct(ProductDto productDto) {
+        sendProductWrapperToBackend(new ProductWrapper(Collections.singletonList(productDto)));
     }
 
     private List<ProductDto> filterUnchangedProducts(List<ProductDto> productDtoList) {

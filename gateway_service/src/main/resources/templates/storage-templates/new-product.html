@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New-product</title>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div class="wrapper">
+    <!-- START PAGE CONTAINER -->
+    <div class="container-fluid">
+        <div lang="en" th:replace="fragments/header :: header"></div>
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Create a new product
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/new-product}" th:object="${productDto}" method="post">
+                <table>
+                    <tr>
+                        <td>Product service name:</td>
+                        <td><input type="text" th:field="*{serviceName}"></td>
+                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Product service name Error</td>
+                    </tr>
+                    <tr>
+                        <td>Product name:</td>
+                        <td><input type="text" th:field="*{name}"></td>
+                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Product name Error</td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><input type="text" th:field="*{description}"></td>
+                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</td>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <td><input type="text" th:field="*{price}"></td>
+                        <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td><input type="text" th:field="*{amount}"></td>
+                        <td th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount Error</td>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <td><input type="text" th:field="*{category}"></td>
+                        <td th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Category Error</td>
+                    </tr>
+
+                </table>
+                <br/>
+                <input type="submit" value="Create"/>
+            </form>
+
+        </div>
+        <!-- END PAGE CONTENT -->
+        <!-- END PAGE CONTAINER -->
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

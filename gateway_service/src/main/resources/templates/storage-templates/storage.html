@@ -79,6 +79,11 @@
             <div th:if="${#lists.isEmpty(wrapper.productDtoList)}">
                 <h4>No storage data found</h4>
             </div>
+            <br>
+            <div>
+                <button class="btn btn-primary"><a style="color: white;text-decoration: none" th:href="@{/new-product}">Create
+                    new product</a></button>
+            </div>
         </div>
     </div>
     <div lang="en" th:replace="fragments/footer :: footer"></div>
