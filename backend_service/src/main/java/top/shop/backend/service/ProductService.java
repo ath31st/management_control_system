@@ -26,7 +26,7 @@ public class ProductService {
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
 
-    public String receiveProducts(ProductWrapper productWrapper) {
+    public void receiveProducts(ProductWrapper productWrapper) {
         productWrapper.getProductDtoList().forEach(p -> {
             if (productRepository.getProduct(p.getServiceName()).isPresent()) {
                 Product product = getProduct(p.getServiceName());
@@ -55,7 +55,6 @@ public class ProductService {
         });
 
         eventPublisher.publishEvent(new CatalogueEvent(true));
-        return "products received";
     }
 
     public Product getProduct(String productServiceName) {

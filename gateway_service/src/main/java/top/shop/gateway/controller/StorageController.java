@@ -36,6 +36,6 @@ public class StorageController {
         model.addAttribute("wrapper", storageService.getProductWrapper());
         storageService.sendProductWrapperToBackend(wrapper);
 
-        return "storage-templates/storage";
+        return "redirect:/storage";
     }
 }

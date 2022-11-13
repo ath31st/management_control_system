@@ -62,7 +62,6 @@
                             <tr th:each="product, itemStat : ${wrapper.productDtoList}">
                                 <td><input th:name="|productDtoList[${itemStat.index}].amount|" th:value="0"/></td>
                                 <td style="display:none"><input th:name="|productDtoList[${itemStat.index}].serviceName|" th:value="${product.serviceName}"/></td>
-                                <td style="display:none"><input th:name="|productDtoList[${itemStat.index}].category|" th:value="${product.category}"/></td>
                             </tr>
                         </table>
                     </td>
