@@ -26,7 +26,7 @@ public class CatalogueController {
     public String catalogue(Model model, Principal principal) {
         UserDto user = userService.getUserDto(principal.getName());
 
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(user.getShopServiceName()));
         model.addAttribute("wrapper", catalogueService.getProductPricingWrapperFromShop(user.getShopUrl()));
         return "catalogue-templates/catalogue";
     }
@@ -36,16 +36,17 @@ public class CatalogueController {
                             BindingResult bindingResult,
                             Model model,
                             Principal principal) {
+        UserDto user = userService.getUserDto(principal.getName());
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
+            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(user.getShopServiceName()));
             model.addAttribute("wrapper", wrapper);
             return "catalogue-templates/catalogue";
         }
 
-        UserDto user = userService.getUserDto(principal.getName());
         catalogueService.sendProductPricingWrapperToShop(wrapper, user.getShopUrl());
         model.addAttribute("message", "Prices updated ");
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage());
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(user.getShopServiceName()));
 
         return "catalogue-templates/catalogue";
     }

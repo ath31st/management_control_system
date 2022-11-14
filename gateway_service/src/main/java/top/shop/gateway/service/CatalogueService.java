@@ -2,6 +2,7 @@ package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.CatalogueDto;
@@ -15,23 +16,24 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class CatalogueService {
 
-    private CatalogueDto catalogueFromStorage;
+    @Value("${backend.url}")
+    private String backendUrl;
     private final RestTemplate restTemplate;
 
-    public CatalogueDto getCatalogueFromStorage() {
+    public CatalogueDto getCatalogueFromStorage(String shopNameService) {
+        String url = backendUrl + "/api/catalogue/" + shopNameService;
+
+        CatalogueDto catalogueFromStorage = restTemplate.getForObject(url, CatalogueDto.class);
+
         if (catalogueFromStorage == null)
-            catalogueFromStorage = CatalogueDto.builder()
-                    .products(Collections.emptyList())
+            return CatalogueDto.builder()
+                    .products(Collections.emptySet())
                     .catalogueOnDate(LocalDateTime.now())
+                    .shopServiceName(shopNameService)
                     .build();
 
         return catalogueFromStorage;
     }
-
-    public void setCatalogueFromStorage(CatalogueDto catalogueDto) {
-        catalogueFromStorage = catalogueDto;
-    }
-
 
     public ProductPricingWrapper getProductPricingWrapperFromShop(String shopUrl) {
         String url = shopUrl + "/api/manager/prices";
