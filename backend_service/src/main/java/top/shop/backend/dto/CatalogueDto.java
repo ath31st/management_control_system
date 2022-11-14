@@ -1,14 +1,24 @@
 package top.shop.backend.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import top.shop.backend.entity.Catalogue;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-@Data
-public class CatalogueDto {
-
+/**
+ * A DTO for the {@link Catalogue} entity
+ */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class CatalogueDto implements Serializable {
     private LocalDateTime catalogueOnDate;
-    private List<ProductDto> products;
-
+    private ShopDto shop;
+    private Set<ProductDto> products;
 }

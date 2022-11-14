@@ -15,6 +15,8 @@ import top.shop.backend.service.event.CatalogueEvent;
 import top.shop.backend.util.wrapper.ProductWrapper;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -74,6 +76,12 @@ public class ProductService {
         return products.stream()
                 .map(p -> modelMapper.map(p, ProductDto.class))
                 .toList();
+    }
+
+    public Set<Product> convertProductListFromDto(Set<ProductDto> productDtoList) {
+        return productDtoList.stream()
+                .map(pDto -> getProduct(pDto.getServiceName()))
+                .collect(Collectors.toSet());
     }
 
     public ProductWrapper getProductWrapper() {

@@ -27,18 +27,12 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         shopService.saveNewShop(shop1);
         log.info("shop with name {} added!", shop1.getName());
 
-        CategoryDto categoryDto1 = new CategoryDto();
-        categoryDto1.setServiceName("first_category");
-        categoryDto1.setName("First category");
-        categoryDto1.setDescription("This is first category");
+        CategoryDto defaultCategory = new CategoryDto();
+        defaultCategory.setServiceName("default_category");
+        defaultCategory.setName("DEFAULT");
+        defaultCategory.setDescription("This is default category");
 
-        CategoryDto categoryDto2 = new CategoryDto();
-        categoryDto2.setServiceName("second_category");
-        categoryDto2.setName("Second category");
-        categoryDto2.setDescription("This is second category");
-
-        categoryService.saveCategory(categoryDto1);
-        categoryService.saveCategory(categoryDto2);
+        categoryService.saveCategory(defaultCategory);
     }
 
 }

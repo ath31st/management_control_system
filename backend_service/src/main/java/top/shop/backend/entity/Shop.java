@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
@@ -27,4 +26,8 @@ public class Shop {
     private String serviceName;
     private String url;
     private BigDecimal balance;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "catalogue_id")
+    private Catalogue catalogue;
+
 }
