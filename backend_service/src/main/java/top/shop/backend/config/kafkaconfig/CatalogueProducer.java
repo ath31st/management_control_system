@@ -13,18 +13,18 @@ import top.shop.backend.dto.CatalogueDto;
 @Component
 @RequiredArgsConstructor
 public class CatalogueProducer {
-//
-//    @Value("${topic.catalogue.name}")
-//    private String catalogueTopic;
-//
-//    private final ObjectMapper objectMapper;
-//    private final KafkaTemplate<String, String> kafkaTemplate;
-//
-//    public void sendMessage(CatalogueDto catalogueDto) throws JsonProcessingException {
-//        String catalogueAsMessage = objectMapper.writeValueAsString(catalogueDto);
-//        kafkaTemplate.send(catalogueTopic, catalogueAsMessage);
-//
-//        log.info("catalogue produced {}", catalogueAsMessage);
-//
-//    }
+
+    @Value("${topic.catalogue.name}")
+    private String catalogueTopic;
+
+    private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public void sendMessage(CatalogueDto catalogueDto) throws JsonProcessingException {
+        String catalogueAsMessage = objectMapper.writeValueAsString(catalogueDto);
+        kafkaTemplate.send(catalogueTopic, catalogueAsMessage);
+
+        log.info("catalogue produced {}", catalogueAsMessage);
+
+    }
 }

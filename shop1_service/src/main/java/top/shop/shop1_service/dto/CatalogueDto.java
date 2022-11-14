@@ -1,18 +1,18 @@
 package top.shop.shop1_service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-@Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CatalogueDto {
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class CatalogueDto implements Serializable {
     private LocalDateTime catalogueOnDate;
-    private List<ProductDto> products;
+    private String shopServiceName;
+    private Set<ProductDto> products;
 }

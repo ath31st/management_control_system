@@ -23,7 +23,7 @@ public class ShopController {
 
     @PostMapping("/order")
     public String orderHandler(@RequestBody OrderDto orderDto) {
-        log.info("create food order request received");
+        log.info("order request received");
         return orderService.createOrder(orderDto);
     }
 

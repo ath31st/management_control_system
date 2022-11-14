@@ -17,6 +17,6 @@ import java.util.Set;
 @Builder
 public class CatalogueDto implements Serializable {
     private LocalDateTime catalogueOnDate;
-    private ShopDto shop;
+    private String shopServiceName;
     private Set<ProductDto> products;
 }
