@@ -55,8 +55,6 @@ public class ProductService {
                 productRepository.save(product);
             }
         });
-
-        eventPublisher.publishEvent(new CatalogueEvent(true));
     }
 
     public Product getProduct(String productServiceName) {

@@ -85,7 +85,6 @@ public class OrderService {
             order.setExecutionDate(LocalDateTime.now());
 
             orderRepository.save(order);
-            eventPublisher.publishEvent(new CatalogueEvent(true));
         }
     }
 

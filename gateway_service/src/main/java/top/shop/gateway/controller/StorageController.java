@@ -40,7 +40,7 @@ public class StorageController {
         model.addAttribute("message", "Amount updated ");
         model.addAttribute("wrapper", storageService.getProductWrapper());
 
-        return "storage-templates/storage";
+        return "redirect:/storage";
     }
 
     @GetMapping("new-product")

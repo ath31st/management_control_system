@@ -3,12 +3,16 @@ package top.shop.gateway.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.CatalogueDto;
 import top.shop.gateway.dto.CategoryDto;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
 
+import javax.xml.catalog.CatalogException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -24,16 +28,18 @@ public class CatalogueService {
     public CatalogueDto getCatalogueFromStorage(String shopNameService) {
         String url = backendUrl + "/api/catalogue/" + shopNameService;
 
-        CatalogueDto catalogueFromStorage = restTemplate.getForObject(url, CatalogueDto.class);
+        try {
+            return restTemplate.getForObject(url, CatalogueDto.class);
+        } catch (HttpClientErrorException e) {
+            if (e.getRawStatusCode() == 404)
+                return CatalogueDto.builder()
+                        .products(Collections.emptySet())
+                        .catalogueOnDate(LocalDateTime.now())
+                        .shopServiceName(shopNameService)
+                        .build();
 
-        if (catalogueFromStorage == null)
-            return CatalogueDto.builder()
-                    .products(Collections.emptySet())
-                    .catalogueOnDate(LocalDateTime.now())
-                    .shopServiceName(shopNameService)
-                    .build();
-
-        return catalogueFromStorage;
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public void sendCatalogueToStorage(CatalogueDto catalogueDto) {

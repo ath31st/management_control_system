@@ -73,7 +73,8 @@
                 </table>
                 <br>
                 <div>
-                    <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                    <button th:if="${not #sets.isEmpty(catalogueFromStorage.getProducts())}"
+                            class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                        th:href="@{|/edit-catalogue/${shopServiceName}|}">Edit catalogue</a>
                     </button>
                 </div>
@@ -95,6 +96,7 @@
                     <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                        th:href="@{/new-catalogue}">Create new catalogue</a></button>
                 </div>
+                <br>
             </div>
             <div th:if="${#lists.isEmpty(wrapper.pricingDtoList)}">
                 <h4>No shop data found</h4>

@@ -12,9 +12,4 @@ public class BeanConfig {
         return new ModelMapper();
     }
 
-    @Bean
-    public CatalogueDto catalogueDto() {
-        return new CatalogueDto();
-    }
-
 }
