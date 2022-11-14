@@ -1,9 +1,6 @@
 package top.shop.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import top.shop.backend.entity.Catalogue;
 
 import java.io.Serializable;
@@ -17,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CatalogueDto implements Serializable {
     private LocalDateTime catalogueOnDate;
     private ShopDto shop;

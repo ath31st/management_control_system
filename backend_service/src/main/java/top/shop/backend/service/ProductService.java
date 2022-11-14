@@ -78,9 +78,15 @@ public class ProductService {
                 .toList();
     }
 
-    public Set<Product> convertProductListFromDto(Set<ProductDto> productDtoList) {
+    public Set<Product> convertProductSetFromDto(Set<ProductDto> productDtoList) {
         return productDtoList.stream()
                 .map(pDto -> getProduct(pDto.getServiceName()))
+                .collect(Collectors.toSet());
+    }
+
+    public Set<ProductDto> convertProductDtoSetFromProducts(Set<Product> products) {
+        return products.stream()
+                .map(p -> modelMapper.map(p, ProductDto.class))
                 .collect(Collectors.toSet());
     }
 
