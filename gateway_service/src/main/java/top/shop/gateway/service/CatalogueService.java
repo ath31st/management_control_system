@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.CatalogueDto;
+import top.shop.gateway.dto.CategoryDto;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,11 @@ public class CatalogueService {
                     .build();
 
         return catalogueFromStorage;
+    }
+
+    public void sendCatalogueToStorage(CatalogueDto catalogueDto) {
+        String url = backendUrl + "/api/catalogue";
+        restTemplate.postForObject(url, catalogueDto, CatalogueDto.class);
     }
 
     public ProductPricingWrapper getProductPricingWrapperFromShop(String shopUrl) {
