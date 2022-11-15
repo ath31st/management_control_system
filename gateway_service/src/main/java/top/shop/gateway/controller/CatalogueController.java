@@ -90,7 +90,7 @@ public class CatalogueController {
     @GetMapping("/edit-catalogue/{shopServiceName}")
     public String updateCatalogue(@PathVariable String shopServiceName, Model model) {
         CatalogueDto catalogueDto = catalogueService.getCatalogueFromStorage(shopServiceName);
-        ProductWrapper productWrapper = storageService.getProductWrapper();
+        ProductWrapper productWrapper = storageService.getProductWrapperWithoutCatalogue(catalogueDto);
 
         model.addAttribute("productWrapper", productWrapper);
         model.addAttribute("catalogueDto", catalogueDto);

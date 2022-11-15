@@ -91,4 +91,14 @@ public class ProductService {
     public ProductWrapper getProductWrapper() {
         return new ProductWrapper(getProductDtoList());
     }
+
+    public ProductWrapper getProductWrapperWithoutCatalogue(List<String> catalogueProductNames) {
+        List<Product> products = productRepository.findAll();
+
+        return new ProductWrapper(products.stream()
+                .filter(p -> !catalogueProductNames.contains(p.getServiceName()))
+                .map(p -> modelMapper.map(p, ProductDto.class))
+                .toList());
+    }
+
 }

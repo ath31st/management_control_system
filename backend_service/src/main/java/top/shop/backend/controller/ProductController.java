@@ -24,6 +24,12 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/products-without-catalogue")
+    public ResponseEntity<ProductWrapper> productsHandler(@RequestBody List<String> catalogueProductNames) {
+
+        return ResponseEntity.ok(productService.getProductWrapperWithoutCatalogue(catalogueProductNames));
+    }
+
     @GetMapping("/products")
     public ResponseEntity<ProductWrapper> productsHandler() {
         return ResponseEntity.ok(productService.getProductWrapper());

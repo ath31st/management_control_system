@@ -37,7 +37,7 @@
         <!-- END PAGE TITLE -->
         <div class="column">
             <form th:action="@{/edit-catalogue}" th:object="${catalogueDto}" method="post">
-                <table style="float: left">
+                <table>
                     <tr>
                         <th> Product name</th>
                         <th> Description</th>
@@ -52,10 +52,16 @@
                         <td th:text="${product.category.name}">category</td>
                         <td th:text="${product.amount}">amount</td>
                         <td th:text="${product.price}">price</td>
-                        <td><input type="checkbox" name="deleteProductServiceNames" th:value="${product.serviceName}"></td>
+                        <td><input type="checkbox" name="deleteProductServiceNames" th:value="${product.serviceName}">
+                        </td>
                     </tr>
                 </table>
+                <br>
+
                 <table th:if="${not #lists.isEmpty(productWrapper.productDtoList)}">
+                    <span>
+                        List of products from storage
+                    </span>
                     <tr>
                         <th> Product name</th>
                         <th> Description</th>
