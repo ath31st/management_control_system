@@ -9,13 +9,16 @@ import org.springframework.stereotype.Service;
 import top.shop.backend.config.kafkaconfig.CatalogueProducer;
 import top.shop.backend.dto.CatalogueDto;
 import top.shop.backend.dto.ProductDto;
+import top.shop.backend.dto.ProductServiceNameDto;
 import top.shop.backend.entity.Catalogue;
+import top.shop.backend.entity.Product;
 import top.shop.backend.exceptionhandler.exception.CatalogueException;
 import top.shop.backend.repository.CatalogueRepository;
 import top.shop.backend.service.event.CatalogueEvent;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,24 +56,30 @@ public class CatalogueService {
         return catalogueRepository.save(catalogue);
     }
 
-    public Catalogue updateCatalogue(CatalogueDto catalogueDto) {
-        Catalogue catalogue = getCatalogue(catalogueDto.getShopServiceName());
-        catalogue.setProducts(productService.convertProductSetFromDto(catalogueDto.getProducts()));
+    public Catalogue updateCatalogue(ProductServiceNameDto productServiceNameDto) {
+        Catalogue catalogue = getCatalogue(productServiceNameDto.getShopServiceName());
+
+        Set<Product> products = catalogue.getProducts()
+                .stream()
+                .filter(p -> !productServiceNameDto.getDeleteProductServiceNames().contains(p.getServiceName()))
+                .collect(Collectors.toSet());
+        products.addAll(productService.getProductsByListServiceNames(productServiceNameDto.getAddProductServiceNames()));
+
+        catalogue.setProducts(products);
+
+        CatalogueDto catalogueDto = getCatalogueDto(productServiceNameDto.getShopServiceName());
+        eventPublisher.publishEvent(new CatalogueEvent(catalogueDto));
 
         return catalogueRepository.save(catalogue);
     }
 
     public void catalogueHandler(CatalogueDto catalogueDto) {
-        CatalogueDto catalogue;
-
-        if (catalogueRepository.existsByShop_ServiceName(catalogueDto.getShopServiceName())) {
-            updateCatalogue(catalogueDto);
-        } else {
+        if (!catalogueRepository.existsByShop_ServiceName(catalogueDto.getShopServiceName())) {
             createCatalogue(catalogueDto);
-        }
 
-        catalogue = getCatalogueDto(catalogueDto.getShopServiceName());
-        eventPublisher.publishEvent(new CatalogueEvent(catalogue));
+            CatalogueDto catalogue = getCatalogueDto(catalogueDto.getShopServiceName());
+            eventPublisher.publishEvent(new CatalogueEvent(catalogue));
+        }
     }
 
     @EventListener

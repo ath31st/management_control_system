@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.CatalogueDto;
+import top.shop.gateway.dto.ProductServiceNameDto;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.StorageService;
@@ -16,6 +17,7 @@ import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -101,14 +103,14 @@ public class CatalogueController {
     public String updateCatalogue(@Valid @ModelAttribute("catalogueDto") CatalogueDto catalogueDto,
                                   @RequestParam(value = "addProductServiceNames", required = false) String[] addProductServiceNames,
                                   @RequestParam(value = "deleteProductServiceNames", required = false) String[] deleteProductServiceNames,
-                                  BindingResult bindingResult, Model model) {
+                                  BindingResult bindingResult, Model model, Principal principal) {
+        UserDto user = userService.getUserDto(principal.getName());
         if (bindingResult.hasErrors()) {
             model.addAttribute("catalogueDto", catalogueDto);
             return "catalogue-templates/edit-catalogue";
         }
         model.addAttribute("catalogueDto", catalogueDto);
-
-        catalogueService.sendCatalogueToStorage(catalogueDto);
+        catalogueService.sendCatalogueChangesToStorage(user.getShopServiceName(), addProductServiceNames, deleteProductServiceNames);
         return "redirect:/catalogue";
     }
 

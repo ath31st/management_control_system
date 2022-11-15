@@ -92,6 +92,13 @@ public class ProductService {
         return new ProductWrapper(getProductDtoList());
     }
 
+    public Set<Product> getProductsByListServiceNames(List<String> productServiceNames) {
+        return productRepository.findAll()
+                .stream()
+                .filter(p -> productServiceNames.contains(p.getServiceName()))
+                .collect(Collectors.toSet());
+    }
+
     public ProductWrapper getProductWrapperWithoutCatalogue(List<String> catalogueProductNames) {
         List<Product> products = productRepository.findAll();
 

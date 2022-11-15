@@ -9,12 +9,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.CatalogueDto;
+import top.shop.gateway.dto.ProductServiceNameDto;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -59,9 +61,28 @@ public class CatalogueService {
         restTemplate.postForObject(url, catalogueDto, CatalogueDto.class);
     }
 
+    public void sendCatalogueChangesToStorage(String shopServiceName, String[] add, String[] delete) {
+        ProductServiceNameDto productServiceNameDto = new ProductServiceNameDto();
+        productServiceNameDto.setShopServiceName(shopServiceName);
+
+        if (add != null) {
+            productServiceNameDto.setAddProductServiceNames(List.of(add));
+        } else {
+            productServiceNameDto.setAddProductServiceNames(Collections.emptyList());
+        }
+
+        if (delete != null) {
+            productServiceNameDto.setDeleteProductServiceNames(List.of(delete));
+        } else {
+            productServiceNameDto.setDeleteProductServiceNames(Collections.emptyList());
+        }
+
+        String url = backendUrl + "/api/catalogue-changes";
+        restTemplate.postForObject(url, productServiceNameDto, ProductServiceNameDto.class);
+    }
+
     public ProductPricingWrapper getProductPricingWrapperFromShop(String shopUrl) {
         String url = shopUrl + "/api/manager/prices";
-
         return restTemplate.getForObject(url, ProductPricingWrapper.class);
     }
 
