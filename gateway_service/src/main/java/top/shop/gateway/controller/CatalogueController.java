@@ -90,13 +90,17 @@ public class CatalogueController {
     @GetMapping("/edit-catalogue/{shopServiceName}")
     public String updateCatalogue(@PathVariable String shopServiceName, Model model) {
         CatalogueDto catalogueDto = catalogueService.getCatalogueFromStorage(shopServiceName);
+        ProductWrapper productWrapper = storageService.getProductWrapper();
+
+        model.addAttribute("productWrapper", productWrapper);
         model.addAttribute("catalogueDto", catalogueDto);
         return "catalogue-templates/edit-catalogue";
     }
 
-    @PostMapping("/edit-catalogue/")
+    @PostMapping("/edit-catalogue")
     public String updateCatalogue(@Valid @ModelAttribute("catalogueDto") CatalogueDto catalogueDto,
-                                  @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
+                                  @RequestParam(value = "addProductServiceNames", required = false) String[] addProductServiceNames,
+                                  @RequestParam(value = "deleteProductServiceNames", required = false) String[] deleteProductServiceNames,
                                   BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("catalogueDto", catalogueDto);

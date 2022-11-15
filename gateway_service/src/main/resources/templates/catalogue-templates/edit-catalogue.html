@@ -3,7 +3,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New-catalogue</title>
+    <title>Edit-catalogue</title>
+
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
     <style>
@@ -16,6 +17,7 @@
         td, th {
             padding: 5px; /* Поля в ячейках */
             border: 1px solid #333; /* Параметры рамки */
+            empty-cells: hide;
         }
 
         tbody tr:nth-child(even) {
@@ -24,17 +26,35 @@
 </head>
 <body>
 <div class="wrapper">
-    <!-- START PAGE CONTAINER -->
+    <div lang="en" th:replace="fragments/header :: header"></div>
     <div class="container-fluid">
-        <div lang="en" th:replace="fragments/header :: header"></div>
+        <!-- PAGE TITLE -->
         <div class="page-title">
             <h3>
-                <span class="fa fa-arrow-circle-o-left"></span> Create a new catalogue
+                <span class="fa fa-arrow-circle-o-left"></span> Edit catalogue
             </h3>
         </div>
         <!-- END PAGE TITLE -->
         <div class="column">
-            <form th:action="@{/new-catalogue}" th:object="${catalogueDto}" method="post">
+            <form th:action="@{/edit-catalogue}" th:object="${catalogueDto}" method="post">
+                <table style="float: left">
+                    <tr>
+                        <th> Product name</th>
+                        <th> Description</th>
+                        <th> Category</th>
+                        <th> Amount</th>
+                        <th> Price from storage</th>
+                        <th>Delete from catalogue</th>
+                    </tr>
+                    <tr th:each="product: ${catalogueDto.products}">
+                        <td th:text="${product.name}">product name</td>
+                        <td th:text="${product.description}">description</td>
+                        <td th:text="${product.category.name}">category</td>
+                        <td th:text="${product.amount}">amount</td>
+                        <td th:text="${product.price}">price</td>
+                        <td><input type="checkbox" name="deleteProductServiceNames" th:value="${product.serviceName}"></td>
+                    </tr>
+                </table>
                 <table th:if="${not #lists.isEmpty(productWrapper.productDtoList)}">
                     <tr>
                         <th> Product name</th>
@@ -50,19 +70,15 @@
                         <td th:text="${product.category.name}">category</td>
                         <td th:text="${product.amount}">amount</td>
                         <td th:text="${product.price}">price</td>
-                        <td><input type="checkbox" name="productServiceNames" th:value="${product.serviceName}"></td>
+                        <td><input type="checkbox" name="addProductServiceNames" th:value="${product.serviceName}"></td>
                     </tr>
                 </table>
-                <br/>
-                <div th:if="${#lists.isEmpty(productWrapper.productDtoList)}"><h4>No storage data found</h4></div>
+                <br>
                 <div>
-                    <input th:if="${not #lists.isEmpty(productWrapper.productDtoList)}" type="submit" value="Create"/>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
-
         </div>
-        <!-- END PAGE CONTENT -->
-        <!-- END PAGE CONTAINER -->
     </div>
     <div lang="en" th:replace="fragments/footer :: footer"></div>
 </div>
