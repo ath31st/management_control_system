@@ -6,6 +6,21 @@
     <title>New-catalogue</title>
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <style>
+        table {
+            width: 100%; /* Ширина таблицы */
+            border-collapse: collapse; /* Убираем двойные линии */
+            text-align: justify;
+        }
+
+        td, th {
+            padding: 5px; /* Поля в ячейках */
+            border: 1px solid #333; /* Параметры рамки */
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f0f0; /* Зебра */
+        }</style>
 </head>
 <body>
 <div class="wrapper">
@@ -20,25 +35,27 @@
         <!-- END PAGE TITLE -->
         <div class="column">
             <form th:action="@{/new-catalogue}" th:object="${catalogueDto}" method="post">
-<!--                <table>-->
-<!--                    <tr>-->
-<!--                        <td>Category service name:</td>-->
-<!--                        <td><input type="text" th:field="*{serviceName}"></td>-->
-<!--                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Category service name Error</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Category name:</td>-->
-<!--                        <td><input type="text" th:field="*{name}"></td>-->
-<!--                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Category name Error</td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Category description:</td>-->
-<!--                        <td><input type="text" th:field="*{description}"></td>-->
-<!--                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Category description Error</td>-->
-<!--                    </tr>-->
-<!--                </table>-->
+                <table th:if="${not #lists.isEmpty(productWrapper.productDtoList)}">
+                    <tr>
+                        <th>Product service name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                        <th>Add to catalogue</th>
+                    </tr>
+                    <tr th:each="product: ${productWrapper.productDtoList}">
+                        <td th:text="${product.serviceName}">product service name</td>
+                        <td th:text="${product.category.serviceName}">category service name</td>
+                        <td th:text="${product.price}">price</td>
+                        <td th:text="${product.amount}">amount</td>
+                        <td><input type="checkbox" name="productServiceNames" th:value="${product.serviceName}"></td>
+                    </tr>
+                </table>
                 <br/>
-                <input type="submit" value="Create"/>
+                <div th:if="${#lists.isEmpty(productWrapper.productDtoList)}"><h4>No storage data found</h4></div>
+                <div>
+                    <input th:if="${not #lists.isEmpty(productWrapper.productDtoList)}" type="submit" value="Create"/>
+                </div>
             </form>
 
         </div>
