@@ -9,12 +9,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.CatalogueDto;
-import top.shop.gateway.dto.CategoryDto;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
+import top.shop.gateway.util.wrapper.ProductWrapper;
 
-import javax.xml.catalog.CatalogException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -40,6 +41,17 @@ public class CatalogueService {
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public CatalogueDto prepareCatalogue(String shopServiceName, String[] productServiceName, ProductWrapper productWrapper) {
+        return CatalogueDto.builder()
+                .shopServiceName(shopServiceName)
+                .catalogueOnDate(LocalDateTime.now())
+                .products(productWrapper.getProductDtoList()
+                        .stream()
+                        .filter(p -> Arrays.stream(productServiceName).anyMatch(n -> p.getServiceName().equals(n)))
+                        .collect(Collectors.toSet()))
+                .build();
     }
 
     public void sendCatalogueToStorage(CatalogueDto catalogueDto) {

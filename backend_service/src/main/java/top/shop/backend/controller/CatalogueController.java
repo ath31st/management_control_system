@@ -1,6 +1,7 @@
 package top.shop.backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.shop.backend.dto.CatalogueDto;
@@ -19,7 +20,8 @@ public class CatalogueController {
     }
 
     @PostMapping("/catalogue")
-    public ResponseEntity<CatalogueDto> catalogueHandler(@RequestBody CatalogueDto catalogueDto) {
-        return ResponseEntity.ok(catalogueService.catalogueHandler(catalogueDto));
+    public ResponseEntity<HttpStatus> catalogueHandler(@RequestBody CatalogueDto catalogueDto) {
+        catalogueService.catalogueHandler(catalogueDto);
+        return ResponseEntity.ok().build();
     }
 }

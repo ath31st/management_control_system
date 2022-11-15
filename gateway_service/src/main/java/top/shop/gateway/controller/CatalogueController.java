@@ -12,10 +12,10 @@ import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.StorageService;
 import top.shop.gateway.service.UserService;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
+import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Arrays;
 
 @Controller
 @RequiredArgsConstructor
@@ -56,27 +56,30 @@ public class CatalogueController {
     }
 
     @GetMapping("/new-catalogue")
-    public String createCatalogue(Model model, Principal principal) {
-        UserDto user = userService.getUserDto(principal.getName());
-
+    public String createCatalogue(Model model) {
         model.addAttribute("productWrapper", storageService.getProductWrapper());
         model.addAttribute("catalogueDto", new CatalogueDto());
-        model.addAttribute("shopServiceName", user.getShopServiceName());
+
         return "catalogue-templates/new-catalogue";
     }
 
     @PostMapping("/new-catalogue")
     public String createCatalogue(@Valid @ModelAttribute("catalogueDto") CatalogueDto catalogueDto,
                                   @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
-                                  BindingResult bindingResult, Model model) {
+                                  BindingResult bindingResult, Model model, Principal principal) {
+        UserDto user = userService.getUserDto(principal.getName());
+        ProductWrapper productWrapper = storageService.getProductWrapper();
+
         if (bindingResult.hasErrors()) {
+            model.addAttribute("productWrapper", productWrapper);
             model.addAttribute("catalogueDto", catalogueDto);
             return "catalogue-templates/new-catalogue";
         }
         try {
-
+            catalogueDto = catalogueService.prepareCatalogue(user.getShopServiceName(), productServiceNames, productWrapper);
             catalogueService.sendCatalogueToStorage(catalogueDto);
         } catch (HttpClientErrorException e) {
+            model.addAttribute("productWrapper", productWrapper);
             model.addAttribute("catalogueDto", catalogueDto);
             return "catalogue-templates/new-catalogue";
         }

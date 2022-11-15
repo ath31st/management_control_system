@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,9 +30,8 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     @ToString.Exclude
     private Category category;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalogue_id")
+    @ManyToMany(mappedBy = "products")
     @ToString.Exclude
-    private Catalogue catalogue;
+    private Set<Catalogue> catalogs;
 
 }

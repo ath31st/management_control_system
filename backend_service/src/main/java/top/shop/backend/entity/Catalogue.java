@@ -24,7 +24,11 @@ public class Catalogue {
     @OneToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "catalogue")
+    @ManyToMany
+    @JoinTable(
+            name = "catalogue_product",
+            joinColumns = @JoinColumn(name = "catalogue_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     @ToString.Exclude
     private Set<Product> products;
 }

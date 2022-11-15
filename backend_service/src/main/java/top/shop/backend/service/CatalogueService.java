@@ -8,12 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.config.kafkaconfig.CatalogueProducer;
 import top.shop.backend.dto.CatalogueDto;
+import top.shop.backend.dto.ProductDto;
 import top.shop.backend.entity.Catalogue;
 import top.shop.backend.exceptionhandler.exception.CatalogueException;
 import top.shop.backend.repository.CatalogueRepository;
 import top.shop.backend.service.event.CatalogueEvent;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +35,11 @@ public class CatalogueService {
 
     public CatalogueDto getCatalogueDto(String shopServiceName) {
         Catalogue catalogue = getCatalogue(shopServiceName);
+        Set<ProductDto> productDtoSet = productService.convertProductDtoSetFromProducts(catalogue.getProducts());
 
         return CatalogueDto.builder()
                 .catalogueOnDate(LocalDateTime.now())
-                .products(productService.convertProductDtoSetFromProducts(catalogue.getProducts()))
+                .products(productDtoSet)
                 .shopServiceName(catalogue.getShop().getServiceName())
                 .build();
     }
@@ -57,7 +60,7 @@ public class CatalogueService {
         return catalogueRepository.save(catalogue);
     }
 
-    public CatalogueDto catalogueHandler(CatalogueDto catalogueDto) {
+    public void catalogueHandler(CatalogueDto catalogueDto) {
         CatalogueDto catalogue;
 
         if (catalogueRepository.existsByShop_ServiceName(catalogueDto.getShopServiceName())) {
@@ -68,8 +71,6 @@ public class CatalogueService {
 
         catalogue = getCatalogueDto(catalogueDto.getShopServiceName());
         eventPublisher.publishEvent(new CatalogueEvent(catalogue));
-
-        return catalogue;
     }
 
     @EventListener
