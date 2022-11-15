@@ -9,6 +9,7 @@ import top.shop.shop1_service.dto.ProductDto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,13 @@ public class CatalogueService {
     public void setCatalogueFromStorage(CatalogueDto catalogueDto) {
         catalogueFromStorage = catalogueDto;
         productPricingService.addMockProductPricing(catalogueDto);
+    }
+
+    public List<String> getProductServiceNameList() {
+        return catalogueFromStorage.getProducts()
+                .stream()
+                .map(ProductDto::getServiceName)
+                .toList();
     }
 
     public CatalogueDto getCatalogueFromStorage() {

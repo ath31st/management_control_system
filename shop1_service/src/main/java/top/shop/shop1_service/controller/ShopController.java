@@ -34,7 +34,8 @@ public class ShopController {
 
     @GetMapping("/manager/prices")
     public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler() {
-        return ResponseEntity.ok(new ProductPricingWrapper(productPricingService.getProductPricingDtoList()));
+        return ResponseEntity.ok(new ProductPricingWrapper(
+                productPricingService.getProductPricingDtoList(catalogueService.getProductServiceNameList())));
     }
 
     @PostMapping("/manager/prices")

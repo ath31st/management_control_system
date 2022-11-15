@@ -56,9 +56,10 @@ public class ProductPricingService {
         return productDto;
     }
 
-    public List<ProductPricingDto> getProductPricingDtoList() {
+    public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
         return productPricingRepository.findAll().stream()
-                .map(p -> modelMapper.map(p, ProductPricingDto.class))
+                .filter(pp -> productServiceName.contains(pp.getProductServiceName()))
+                .map(pp -> modelMapper.map(pp, ProductPricingDto.class))
                 .toList();
     }
 
