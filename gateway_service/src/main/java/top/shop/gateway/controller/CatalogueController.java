@@ -52,7 +52,7 @@ public class CatalogueController {
         model.addAttribute("message", "Prices updated ");
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(user.getShopServiceName()));
 
-        return "catalogue-templates/catalogue";
+        return "redirect:/catalogue";
     }
 
     @GetMapping("/new-catalogue")
