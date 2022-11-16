@@ -78,7 +78,7 @@ services:
 
   mongodb-shop1:
     image: mongo:latest
-    container_name: mongo-container-shop
+    container_name: mongo-container-shop1
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo

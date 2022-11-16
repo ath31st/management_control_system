@@ -35,16 +35,3 @@ spring:
       username: mongo
       password: mongo
       authentication-database: admin
-
-#  datasource:
-#    #for every new shop-service change this field
-#    url: jdbc:sqlite:../shop1.db
-#    driver-class-name: org.sqlite.JDBC
-#    username: admin
-#    password: admin
-#
-#  jpa:
-#    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
-#    hibernate:
-#      ddl-auto: create
-#    show-sql: false
