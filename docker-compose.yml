@@ -76,6 +76,19 @@ services:
     networks:
       - kafka-net
 
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-container-shop
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: mongoDBshop1
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
 #  gateway-service:
 #    container_name: gateway-service
 #    build: .
@@ -103,3 +116,5 @@ services:
 #      - "28880:28880"
 #    networks:
 #      - kafka-net
+#    depends_on:
+#      - mongodb

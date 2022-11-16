@@ -1,22 +1,19 @@
 package top.shop.shop1_service.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "prices")
+@Document("prices")
 public class ProductPricing {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
     private String productServiceName;
     private double price;
 }

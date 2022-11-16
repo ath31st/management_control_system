@@ -29,7 +29,7 @@ public class CatalogueConsumer {
 
         CatalogueDto catalogueDto = objectMapper.readValue(message, CatalogueDto.class);
         if (catalogueDto.getShopServiceName().equals(serviceName)) {
-            catalogueService.setCatalogueFromStorage(catalogueDto);
+            catalogueService.saveCatalogueFromStorage(catalogueDto);
 
             log.info("catalogue {} has been successfully received", catalogueDto.getCatalogueOnDate());
         }

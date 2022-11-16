@@ -25,15 +25,26 @@ spring:
       #for every new shop-service change this field
       group-id: "shop1"
 
-  datasource:
-    #for every new shop-service change this field
-    url: jdbc:sqlite:../shop1.db
-    driver-class-name: org.sqlite.JDBC
-    username: admin
-    password: admin
+  data:
+    mongodb:
+      #for every new shop-service change this field
+      database: mongoDBshop1
+      #host: mongo-container-shop
+      host: localhost
+      port: 27017
+      username: mongo
+      password: mongo
+      authentication-database: admin
 
-  jpa:
-    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
-    hibernate:
-      ddl-auto: create
-    show-sql: false
+#  datasource:
+#    #for every new shop-service change this field
+#    url: jdbc:sqlite:../shop1.db
+#    driver-class-name: org.sqlite.JDBC
+#    username: admin
+#    password: admin
+#
+#  jpa:
+#    database-platform: org.sqlite.hibernate.dialect.SQLiteDialect
+#    hibernate:
+#      ddl-auto: create
+#    show-sql: false

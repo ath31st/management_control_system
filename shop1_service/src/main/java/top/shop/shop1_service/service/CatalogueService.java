@@ -2,10 +2,15 @@ package top.shop.shop1_service.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.product.ProductDto;
+import top.shop.shop1_service.entity.Catalogue;
+import top.shop.shop1_service.exceptionhandler.exception.CatalogueException;
+import top.shop.shop1_service.repository.CatalogueRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -20,12 +25,12 @@ public class CatalogueService {
 
     @Value("${shop.service-name}")
     private String serviceName;
-
-    private CatalogueDto catalogueFromStorage;
     private final ProductPricingService productPricingService;
+    private final CatalogueRepository catalogueRepository;
+    private final ModelMapper modelMapper;
 
     public CatalogueDto getCatalogueForCustomers() {
-        Set<ProductDto> updatedProducts = getCatalogueFromStorage().getProducts()
+        Set<ProductDto> updatedProducts = getCatalogueDto().getProducts()
                 .stream()
                 .filter(p -> productPricingService.productPricingExists(p.getServiceName()) &&
                         productPricingService.getProductPricingDto(p.getServiceName()).getPrice() != 0)
@@ -35,31 +40,39 @@ public class CatalogueService {
         return CatalogueDto.builder()
                 .catalogueOnDate(LocalDateTime.now())
                 .products(updatedProducts)
-                .shopServiceName(catalogueFromStorage.getShopServiceName())
+                .shopServiceName(serviceName)
                 .build();
     }
 
-    public void setCatalogueFromStorage(CatalogueDto catalogueDto) {
-        catalogueFromStorage = catalogueDto;
+    public void saveCatalogueFromStorage(CatalogueDto catalogueDto) {
+        Catalogue catalogue = Catalogue.builder()
+                .catalogueOnDate(catalogueDto.getCatalogueOnDate())
+                .shopServiceName(catalogueDto.getShopServiceName())
+                .products(catalogueDto.getProducts())
+                .build();
+
+        catalogueRepository.save(catalogue);
         productPricingService.addMockProductPricing(catalogueDto);
     }
 
+    public Catalogue getCatalogue() {
+        return catalogueRepository.findCatalogueByShopServiceName(serviceName)
+                .orElse(Catalogue.builder()
+                        .products(Collections.emptySet())
+                        .shopServiceName(serviceName)
+                        .catalogueOnDate(LocalDateTime.now())
+                        .build());
+    }
+
+    public CatalogueDto getCatalogueDto() {
+        return modelMapper.map(getCatalogue(), CatalogueDto.class);
+    }
+
     public List<String> getProductServiceNameList() {
-        return catalogueFromStorage.getProducts()
+        return getCatalogue().getProducts()
                 .stream()
                 .map(ProductDto::getServiceName)
                 .toList();
-    }
-
-    public CatalogueDto getCatalogueFromStorage() {
-        if (catalogueFromStorage == null)
-            catalogueFromStorage = CatalogueDto.builder()
-                    .products(Collections.emptySet())
-                    .catalogueOnDate(LocalDateTime.now())
-                    .shopServiceName(serviceName)
-                    .build();
-
-        return catalogueFromStorage;
     }
 
 }

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import top.shop.shop1_service.exceptionhandler.exception.AbstractException;
+import top.shop.shop1_service.exceptionhandler.exception.CatalogueException;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
 import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException;
 
@@ -14,12 +15,17 @@ import java.time.LocalDateTime;
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ProductPricingException.class)
-    protected ResponseEntity<Response> handlePayloadException(ProductPricingException e) {
+    protected ResponseEntity<Response> handleCustomException(ProductPricingException e) {
         return new ResponseEntity<>(buildResponse(e), e.getStatus());
     }
 
     @ExceptionHandler(OrderServiceException.class)
-    protected ResponseEntity<Response> handlePayloadException(OrderServiceException e) {
+    protected ResponseEntity<Response> handleCustomException(OrderServiceException e) {
+        return new ResponseEntity<>(buildResponse(e), e.getStatus());
+    }
+
+    @ExceptionHandler(CatalogueException.class)
+    protected ResponseEntity<Response> handleCustomException(CatalogueException e) {
         return new ResponseEntity<>(buildResponse(e), e.getStatus());
     }
 
