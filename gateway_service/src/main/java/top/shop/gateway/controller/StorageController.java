@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
-import top.shop.gateway.dto.ProductDto;
+import top.shop.gateway.dto.product.ProductDto;
 import top.shop.gateway.service.CategoryService;
 import top.shop.gateway.service.StorageService;
 import top.shop.gateway.util.wrapper.ProductWrapper;

@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.CatalogueDto;
-import top.shop.gateway.dto.ProductDto;
+import top.shop.gateway.dto.product.ProductDto;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

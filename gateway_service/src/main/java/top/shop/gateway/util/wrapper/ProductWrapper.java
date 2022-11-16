@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import top.shop.gateway.dto.ProductDto;
+import top.shop.gateway.dto.product.ProductDto;
 
 import java.util.List;
 

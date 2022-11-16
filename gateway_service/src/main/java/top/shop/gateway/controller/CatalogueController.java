@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.CatalogueDto;
-import top.shop.gateway.dto.ProductServiceNameDto;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.StorageService;
@@ -17,7 +16,6 @@ import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

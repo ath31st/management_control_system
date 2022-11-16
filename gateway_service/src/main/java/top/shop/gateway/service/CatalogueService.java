@@ -9,7 +9,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.CatalogueDto;
-import top.shop.gateway.dto.ProductServiceNameDto;
+import top.shop.gateway.dto.product.ProductServiceNameDto;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 

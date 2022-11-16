@@ -1,9 +1,10 @@
-package top.shop.gateway.dto;
+package top.shop.gateway.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import top.shop.gateway.dto.CategoryDto;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;

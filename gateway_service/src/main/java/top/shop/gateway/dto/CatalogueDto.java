@@ -1,6 +1,7 @@
 package top.shop.gateway.dto;
 
 import lombok.*;
+import top.shop.gateway.dto.product.ProductDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
