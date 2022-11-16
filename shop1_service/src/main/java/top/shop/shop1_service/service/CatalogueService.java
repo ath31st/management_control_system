@@ -4,17 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
+import top.shop.shop1_service.dto.product.ProductAmountDto;
 import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.entity.Catalogue;
-import top.shop.shop1_service.exceptionhandler.exception.CatalogueException;
 import top.shop.shop1_service.repository.CatalogueRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,6 +73,24 @@ public class CatalogueService {
                 .stream()
                 .map(ProductDto::getServiceName)
                 .toList();
+    }
+
+    public void updateAmountProductInCatalogue(ProductAmountDto productAmountDto) {
+        Catalogue catalogue = getCatalogue();
+        if(catalogue.getProducts().isEmpty()) return;
+        Set<ProductDto> products = catalogue.getProducts();
+        Optional<ProductDto> product = products
+                .stream()
+                .filter(p-> p.getServiceName().equals(productAmountDto.getProductServiceName()))
+                .findFirst();
+        if (product.isPresent()) {
+            product.get().setAmount(productAmountDto.getAmount());
+            products.add(product.get());
+
+            catalogue.setProducts(products);
+
+            catalogueRepository.save(catalogue);
+        }
     }
 
 }

@@ -76,7 +76,7 @@ services:
     networks:
       - kafka-net
 
-  mongodb:
+  mongodb-shop1:
     image: mongo:latest
     container_name: mongo-container-shop
     restart: always
@@ -117,4 +117,4 @@ services:
 #    networks:
 #      - kafka-net
 #    depends_on:
-#      - mongodb
+#      - mongodb-shop1

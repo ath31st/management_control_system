@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
+import top.shop.shop1_service.dto.product.ProductAmountDto;
 import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.dto.product.ProductPricingDto;
 import top.shop.shop1_service.entity.ProductPricing;
