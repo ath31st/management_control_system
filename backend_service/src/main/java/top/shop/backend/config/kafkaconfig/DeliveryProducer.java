@@ -20,12 +20,11 @@ public class DeliveryProducer {
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public String sendMessage(DeliveryOrderDto deliveryOrderDto) throws JsonProcessingException {
+    public void sendMessage(DeliveryOrderDto deliveryOrderDto) throws JsonProcessingException {
         String orderAsMessage = objectMapper.writeValueAsString(deliveryOrderDto);
         kafkaTemplate.send(deliveryTopic, orderAsMessage);
 
         log.info("delivery order produced {}", orderAsMessage);
 
-        return "message sent";
     }
 }

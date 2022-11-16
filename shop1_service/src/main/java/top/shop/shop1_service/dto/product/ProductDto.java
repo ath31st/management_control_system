@@ -1,17 +1,14 @@
-package top.shop.backend.dto;
+package top.shop.shop1_service.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import top.shop.backend.entity.Product;
+import top.shop.shop1_service.dto.CategoryDto;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-/**
- * A DTO for the {@link Product} entity
- */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

@@ -1,4 +1,4 @@
-package top.shop.backend.dto;
+package top.shop.backend.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

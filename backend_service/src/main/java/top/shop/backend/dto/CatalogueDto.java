@@ -1,6 +1,7 @@
 package top.shop.backend.dto;
 
 import lombok.*;
+import top.shop.backend.dto.product.ProductDto;
 import top.shop.backend.entity.Catalogue;
 
 import java.io.Serializable;

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
-import top.shop.shop1_service.dto.ProductDto;
+import top.shop.shop1_service.dto.product.ProductDto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

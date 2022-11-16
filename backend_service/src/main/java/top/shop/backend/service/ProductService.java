@@ -6,14 +6,17 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import top.shop.backend.config.kafkaconfig.ProductAmountProducer;
+import top.shop.backend.dto.product.ProductAmountDto;
 import top.shop.backend.entity.Category;
 import top.shop.backend.entity.Product;
-import top.shop.backend.dto.ProductDto;
+import top.shop.backend.dto.product.ProductDto;
 import top.shop.backend.exceptionhandler.exception.ProductException;
 import top.shop.backend.repository.ProductRepository;
-import top.shop.backend.service.event.CatalogueEvent;
+import top.shop.backend.service.event.ProductAmountEvent;
 import top.shop.backend.util.wrapper.ProductWrapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,16 +28,19 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final ProductAmountProducer productAmountProducer;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
 
     public void receiveProducts(ProductWrapper productWrapper) {
         productWrapper.getProductDtoList().forEach(p -> {
-            if (productRepository.getProduct(p.getServiceName()).isPresent()) {
+            if (productRepository.getProduct(p.getServiceName()).isPresent() && p.getAmount() != 0) {
                 Product product = getProduct(p.getServiceName());
                 product.setAmount(product.getAmount() + p.getAmount());
 
                 productRepository.save(product);
+                eventPublisher.publishEvent(new ProductAmountEvent(
+                        new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
             } else {
                 Category category;
                 if (categoryService.categoryExists(p.getCategory().getServiceName())) {
@@ -53,6 +59,8 @@ public class ProductService {
                         .build();
 
                 productRepository.save(product);
+                eventPublisher.publishEvent(new ProductAmountEvent(
+                        new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
             }
         });
     }
@@ -62,11 +70,13 @@ public class ProductService {
                 () -> new ProductException(HttpStatus.NOT_FOUND, "Product with name " + productServiceName + " not found!"));
     }
 
-    public void changeAmountProduct(int amount, String productServiceName) {
+    public void reduceAmountProduct(int amount, String productServiceName) {
         Product product = getProduct(productServiceName);
         product.setAmount(product.getAmount() - amount);
 
         productRepository.save(product);
+        eventPublisher.publishEvent(new ProductAmountEvent(
+                new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
     }
 
     public List<ProductDto> getProductDtoList() {

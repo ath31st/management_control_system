@@ -8,6 +8,8 @@ topic:
     name: t.order
   catalogue:
     name: t.catalogue
+  amount:
+    name: t.amount
 
 
 spring:

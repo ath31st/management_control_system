@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import top.shop.backend.dto.ProductDto;
 import top.shop.backend.service.ProductService;
 import top.shop.backend.util.wrapper.ProductWrapper;
 

@@ -14,7 +14,6 @@ import top.shop.backend.entity.Order;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.BalanceEvent;
-import top.shop.backend.service.event.CatalogueEvent;
 import top.shop.backend.service.event.OrderEvent;
 
 import javax.transaction.Transactional;
@@ -64,7 +63,7 @@ public class OrderService {
 
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopServiceName());
 
-        productService.changeAmountProduct(order.getAmount(), order.getProductName());
+        productService.reduceAmountProduct(order.getAmount(), order.getProductName());
         setExecutedStatusOrder(order);
     }
 

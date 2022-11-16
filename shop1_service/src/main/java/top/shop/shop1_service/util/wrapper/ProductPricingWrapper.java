@@ -1,7 +1,7 @@
 package top.shop.shop1_service.util.wrapper;
 
 import lombok.*;
-import top.shop.shop1_service.dto.ProductPricingDto;
+import top.shop.shop1_service.dto.product.ProductPricingDto;
 
 import java.util.List;
 

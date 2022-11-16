@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.shop.backend.dto.CatalogueDto;
-import top.shop.backend.dto.ProductServiceNameDto;
+import top.shop.backend.dto.product.ProductServiceNameDto;
 import top.shop.backend.service.CatalogueService;
 
 @RestController
