@@ -16,6 +16,7 @@ import top.shop.backend.service.event.ProductAmountEvent;
 import top.shop.backend.util.wrapper.ProductWrapper;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -79,18 +80,21 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         return products.stream()
                 .map(p -> modelMapper.map(p, ProductDto.class))
+                .sorted(Comparator.comparing(ProductDto::getServiceName))
                 .toList();
     }
 
     public List<Product> convertProductListFromDto(List<ProductDto> productDtoList) {
         return productDtoList.stream()
                 .map(pDto -> getProduct(pDto.getServiceName()))
+                .sorted(Comparator.comparing(Product::getServiceName))
                 .toList();
     }
 
     public List<ProductDto> convertProductDtoListFromProducts(List<Product> products) {
         return products.stream()
                 .map(p -> modelMapper.map(p, ProductDto.class))
+                .sorted(Comparator.comparing(ProductDto::getServiceName))
                 .toList();
     }
 
@@ -107,6 +111,7 @@ public class ProductService {
 
     public ProductWrapper getProductWrapperWithoutCatalogue(List<String> catalogueProductNames) {
         List<Product> products = productRepository.findAll();
+        products.sort(Comparator.comparing(Product::getServiceName));
 
         return new ProductWrapper(products.stream()
                 .filter(p -> !catalogueProductNames.contains(p.getServiceName()))

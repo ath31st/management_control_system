@@ -49,9 +49,11 @@ public class CatalogueService {
     }
 
     public Catalogue createCatalogue(CatalogueDto catalogueDto) {
+        List<Product> products = productService.convertProductListFromDto(catalogueDto.getProducts());
         Catalogue catalogue = new Catalogue();
+
         catalogue.setCatalogueOnDate(LocalDateTime.now());
-        catalogue.setProducts(productService.convertProductListFromDto(catalogueDto.getProducts()));
+        catalogue.setProducts(products);
         catalogue.setShop(shopService.getShop(catalogueDto.getShopServiceName()));
 
         return catalogueRepository.save(catalogue);
