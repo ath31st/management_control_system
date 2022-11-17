@@ -6,11 +6,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import top.shop.backend.config.kafkaconfig.ProductAmountProducer;
 import top.shop.backend.dto.product.ProductAmountDto;
+import top.shop.backend.dto.product.ProductDto;
 import top.shop.backend.entity.Category;
 import top.shop.backend.entity.Product;
-import top.shop.backend.dto.product.ProductDto;
 import top.shop.backend.exceptionhandler.exception.ProductException;
 import top.shop.backend.repository.ProductRepository;
 import top.shop.backend.service.event.ProductAmountEvent;
@@ -18,8 +17,6 @@ import top.shop.backend.util.wrapper.ProductWrapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,7 +25,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
-    private final ProductAmountProducer productAmountProducer;
     private final ModelMapper modelMapper;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -86,27 +82,27 @@ public class ProductService {
                 .toList();
     }
 
-    public Set<Product> convertProductSetFromDto(Set<ProductDto> productDtoList) {
+    public List<Product> convertProductListFromDto(List<ProductDto> productDtoList) {
         return productDtoList.stream()
                 .map(pDto -> getProduct(pDto.getServiceName()))
-                .collect(Collectors.toSet());
+                .toList();
     }
 
-    public Set<ProductDto> convertProductDtoSetFromProducts(Set<Product> products) {
+    public List<ProductDto> convertProductDtoListFromProducts(List<Product> products) {
         return products.stream()
                 .map(p -> modelMapper.map(p, ProductDto.class))
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     public ProductWrapper getProductWrapper() {
         return new ProductWrapper(getProductDtoList());
     }
 
-    public Set<Product> getProductsByListServiceNames(List<String> productServiceNames) {
+    public List<Product> getProductsByListServiceNames(List<String> productServiceNames) {
         return productRepository.findAll()
                 .stream()
                 .filter(p -> productServiceNames.contains(p.getServiceName()))
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     public ProductWrapper getProductWrapperWithoutCatalogue(List<String> catalogueProductNames) {

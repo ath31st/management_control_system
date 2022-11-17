@@ -36,7 +36,7 @@ public class CatalogueService {
         } catch (HttpClientErrorException e) {
             if (e.getRawStatusCode() == 404)
                 return CatalogueDto.builder()
-                        .products(Collections.emptySet())
+                        .products(Collections.emptyList())
                         .catalogueOnDate(LocalDateTime.now())
                         .shopServiceName(shopNameService)
                         .build();
@@ -52,7 +52,7 @@ public class CatalogueService {
                 .products(productWrapper.getProductDtoList()
                         .stream()
                         .filter(p -> Arrays.stream(productServiceName).anyMatch(n -> p.getServiceName().equals(n)))
-                        .collect(Collectors.toSet()))
+                        .toList())
                 .build();
     }
 

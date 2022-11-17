@@ -5,6 +5,7 @@ import top.shop.shop1_service.dto.product.ProductDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -15,5 +16,5 @@ import java.util.Set;
 public class CatalogueDto implements Serializable {
     private LocalDateTime catalogueOnDate;
     private String shopServiceName;
-    private Set<ProductDto> products;
+    private List<ProductDto> products;
 }

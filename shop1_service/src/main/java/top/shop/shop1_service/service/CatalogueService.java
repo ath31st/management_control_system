@@ -14,8 +14,8 @@ import top.shop.shop1_service.repository.CatalogueRepository;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,12 +30,12 @@ public class CatalogueService {
     private final ModelMapper modelMapper;
 
     public CatalogueDto getCatalogueForCustomers() {
-        Set<ProductDto> updatedProducts = getCatalogueDto().getProducts()
+        List<ProductDto> updatedProducts = getCatalogueDto().getProducts()
                 .stream()
                 .filter(p -> productPricingService.productPricingExists(p.getServiceName()) &&
                         productPricingService.getProductPricingDto(p.getServiceName()).getPrice() != 0)
                 .map(productPricingService::updatePriceOfProductDto)
-                .collect(Collectors.toSet());
+                .toList();
 
         return CatalogueDto.builder()
                 .catalogueOnDate(LocalDateTime.now())
@@ -48,7 +48,9 @@ public class CatalogueService {
         Catalogue catalogue = Catalogue.builder()
                 .catalogueOnDate(catalogueDto.getCatalogueOnDate())
                 .shopServiceName(catalogueDto.getShopServiceName())
-                .products(catalogueDto.getProducts())
+                .products(catalogueDto.getProducts()
+                        .stream()
+                        .collect(Collectors.toMap(ProductDto::getServiceName, Function.identity())))
                 .build();
 
         catalogueRepository.save(catalogue);
@@ -58,39 +60,43 @@ public class CatalogueService {
     public Catalogue getCatalogue() {
         return catalogueRepository.findCatalogueByShopServiceName(serviceName)
                 .orElse(Catalogue.builder()
-                        .products(Collections.emptySet())
+                        .products(Collections.emptyMap())
                         .shopServiceName(serviceName)
                         .catalogueOnDate(LocalDateTime.now())
                         .build());
     }
 
     public CatalogueDto getCatalogueDto() {
-        return modelMapper.map(getCatalogue(), CatalogueDto.class);
+        Catalogue catalogue = getCatalogue();
+        CatalogueDto catalogueDto = modelMapper.map(catalogue, CatalogueDto.class);
+        catalogueDto.setProducts(catalogue.getProducts()
+                .values()
+                .stream()
+                .toList());
+        return catalogueDto;
     }
 
     public List<String> getProductServiceNameList() {
         return getCatalogue().getProducts()
+                .values()
                 .stream()
                 .map(ProductDto::getServiceName)
                 .toList();
     }
 
-    public void updateAmountProductInCatalogue(ProductAmountDto productAmountDto) {
+    public void updateAmountProductInCatalogue(ProductAmountDto pAmountDto) {
         Catalogue catalogue = getCatalogue();
-        if(catalogue.getProducts().isEmpty()) return;
-        Set<ProductDto> products = catalogue.getProducts();
-        Optional<ProductDto> product = products
-                .stream()
-                .filter(p-> p.getServiceName().equals(productAmountDto.getProductServiceName()))
-                .findFirst();
-        if (product.isPresent()) {
-            product.get().setAmount(productAmountDto.getAmount());
-            products.add(product.get());
+        if (catalogue.getProducts().isEmpty()) return;
 
-            catalogue.setProducts(products);
+        Map<String, ProductDto> products = catalogue.getProducts();
+        products.computeIfPresent(pAmountDto.getProductServiceName(), (s, pDto) -> {
+            pDto.setAmount(pAmountDto.getAmount());
+            return pDto;
+        });
+        catalogue.setProducts(products);
 
-            catalogueRepository.save(catalogue);
-        }
+        catalogueRepository.save(catalogue);
     }
 
 }
+

@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,5 +30,5 @@ public class Catalogue {
             joinColumns = @JoinColumn(name = "catalogue_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     @ToString.Exclude
-    private Set<Product> products;
+    private List<Product> products;
 }

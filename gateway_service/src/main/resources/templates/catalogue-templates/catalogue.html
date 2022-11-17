@@ -37,7 +37,7 @@
         <!-- END PAGE TITLE -->
         <div class="column">
             <form th:action="@{/catalogue}" th:object="${wrapper}" method="post">
-                <table th:if="${not #sets.isEmpty(catalogueFromStorage.getProducts())}">
+                <table th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}">
                     <td>
                         <table style="float: left">
                             <tr>
@@ -73,7 +73,7 @@
                 </table>
                 <br>
                 <div>
-                    <button th:if="${not #sets.isEmpty(catalogueFromStorage.getProducts())}"
+                    <button th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}"
                             class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                        th:href="@{|/edit-catalogue/${shopServiceName}|}">Edit catalogue</a>
                     </button>
@@ -83,12 +83,12 @@
                         <span th:if="${message} != null" th:text="${#dates.createNow()}"></span>
                     </p>
                     <br>
-                    <button th:if="${not #sets.isEmpty(catalogueFromStorage.getProducts())}" type="submit"
+                    <button th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}" type="submit"
                             class="btn btn-primary">Submit
                     </button>
                 </div>
             </form>
-            <div th:if="${#sets.isEmpty(catalogueFromStorage.products)}">
+            <div th:if="${#lists.isEmpty(catalogueFromStorage.products)}">
                 <h4>No storage data found</h4>
                 <br>
                 <div>

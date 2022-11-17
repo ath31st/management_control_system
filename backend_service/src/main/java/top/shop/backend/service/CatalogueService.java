@@ -17,8 +17,9 @@ import top.shop.backend.repository.CatalogueRepository;
 import top.shop.backend.service.event.CatalogueEvent;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class CatalogueService {
 
     public CatalogueDto getCatalogueDto(String shopServiceName) {
         Catalogue catalogue = getCatalogue(shopServiceName);
-        Set<ProductDto> productDtoSet = productService.convertProductDtoSetFromProducts(catalogue.getProducts());
+        List<ProductDto> productDtoSet = productService.convertProductDtoListFromProducts(catalogue.getProducts());
 
         return CatalogueDto.builder()
                 .catalogueOnDate(LocalDateTime.now())
@@ -50,7 +51,7 @@ public class CatalogueService {
     public Catalogue createCatalogue(CatalogueDto catalogueDto) {
         Catalogue catalogue = new Catalogue();
         catalogue.setCatalogueOnDate(LocalDateTime.now());
-        catalogue.setProducts(productService.convertProductSetFromDto(catalogueDto.getProducts()));
+        catalogue.setProducts(productService.convertProductListFromDto(catalogueDto.getProducts()));
         catalogue.setShop(shopService.getShop(catalogueDto.getShopServiceName()));
 
         return catalogueRepository.save(catalogue);
@@ -59,11 +60,12 @@ public class CatalogueService {
     public Catalogue updateCatalogue(ProductServiceNameDto productServiceNameDto) {
         Catalogue catalogue = getCatalogue(productServiceNameDto.getShopServiceName());
 
-        Set<Product> products = catalogue.getProducts()
+        List<Product> products = new java.util.ArrayList<>(catalogue.getProducts()
                 .stream()
                 .filter(p -> !productServiceNameDto.getDeleteProductServiceNames().contains(p.getServiceName()))
-                .collect(Collectors.toSet());
+                .toList());
         products.addAll(productService.getProductsByListServiceNames(productServiceNameDto.getAddProductServiceNames()));
+        products.sort(Comparator.comparing(Product::getServiceName));
 
         catalogue.setProducts(products);
 

@@ -6,7 +6,7 @@ import top.shop.backend.entity.Catalogue;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 /**
  * A DTO for the {@link Catalogue} entity
@@ -19,5 +19,5 @@ import java.util.Set;
 public class CatalogueDto implements Serializable {
     private LocalDateTime catalogueOnDate;
     private String shopServiceName;
-    private Set<ProductDto> products;
+    private List<ProductDto> products;
 }
