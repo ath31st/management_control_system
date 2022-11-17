@@ -9,6 +9,7 @@
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
     <style>
         table {
+            font-size: 14px;
             width: 100%; /* Ширина таблицы */
             border-collapse: collapse; /* Убираем двойные линии */
             text-align: justify;
@@ -43,10 +44,11 @@
                     <th> Last name</th>
                     <th> Username</th>
                     <th> Email</th>
+                    <th> Role</th>
                     <th> Register date</th>
                     <th> Shop service name</th>
                     <th> Shop url</th>
-                    <th hidden> Password</th>
+<!--                    <th hidden> Password</th>-->
                     <th></th>
                 </tr>
                 <tr th:each="user: ${userDtoList}">
@@ -54,10 +56,11 @@
                     <td th:text="${user.lastname}">last name</td>
                     <td th:text="${user.username}">username</td>
                     <td th:text="${user.email}">email</td>
+                    <td th:text="${user.role}">role</td>
                     <td th:text="${user.registerDate}">register date</td>
                     <td th:text="${user.shopServiceName}">shop service name</td>
                     <td th:text="${user.shopUrl}">shop url</td>
-                    <td hidden th:text="${user.password}">password</td>
+<!--                    <td hidden th:text="${user.password}">password</td>-->
                     <td>
                         <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                            th:href="@{|/edit-user/${user.username}|}">Edit user</a>

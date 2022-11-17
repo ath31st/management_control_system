@@ -31,6 +31,7 @@ public class UserDto implements Serializable {
     @NotEmpty(message = "Username cannot be empty.")
     @Size(min = 3, max = 25, message = "Username must be minimum 3 and maximum 25 characters.")
     private String username;
+    private String role;
    // @NotEmpty(message = "Shop name cannot be empty.")
     private String shopServiceName;
    // @NotEmpty(message = "Shop URL cannot be empty.")

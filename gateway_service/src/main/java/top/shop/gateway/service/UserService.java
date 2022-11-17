@@ -37,6 +37,8 @@ public class UserService implements UserDetailsService {
     }
 
     public void registerUser(UserDto userDto) {
+        if (userRepository.getUser(userDto.getUsername()).isPresent() && userDto.getRole().equals(Role.ROLE_ADMINISTRATOR.name()))
+            return;
         if (userRepository.getUser(userDto.getUsername()).isPresent())
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists!");
 
@@ -49,12 +51,15 @@ public class UserService implements UserDetailsService {
                 .shopUrl(Value.DEFAULT.name()) //TODO administrator must change this field
                 .registerDate(LocalDateTime.now())
                 .password(bCryptPasswordEncoder.encode(userDto.getPassword()))
-                .roles(Collections.singletonList(Role.ROLE_MANAGER))
+                .roles(Collections.singletonList(Role.ROLE_USER))
                 .accountNonExpired(true)
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
                 .enabled(true)   //TODO set "false" by default and enable account through administrator
                 .build();
+
+        if (userRepository.findAll().isEmpty())
+            user.setRoles(Collections.singletonList(Role.ROLE_ADMINISTRATOR));
 
         userRepository.save(user);
     }
@@ -65,13 +70,15 @@ public class UserService implements UserDetailsService {
 
     public List<UserDto> getUserDtoList() {
         return getUsers().stream()
-                .map(u -> modelMapper.map(u, UserDto.class))
+                .map(u -> getUserDto(u.getUsername()))
                 .toList();
     }
 
     public UserDto getUserDto(String username) {
         User user = getUserByUsername(username);
-        return modelMapper.map(user, UserDto.class);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        userDto.setRole(user.getRoles().get(0).name());
+        return userDto;
     }
 
     public User saveUserChanges(UserDto userDto) {
@@ -82,7 +89,16 @@ public class UserService implements UserDetailsService {
         user.setShopServiceName(userDto.getShopServiceName());
         user.setShopUrl(userDto.getShopUrl());
 
+        List<Role> roles = user.getRoles();
+        roles.clear();
+        roles.add(Role.valueOf(userDto.getRole()));
+        user.setRoles(roles);
+
         return userRepository.save(user);
+    }
+
+    public List<Role> getRoles() {
+        return List.of(Role.values());
     }
 
 }

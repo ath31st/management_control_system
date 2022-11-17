@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import top.shop.gateway.dto.ShopDto;
 import top.shop.gateway.dto.UserDto;
+import top.shop.gateway.service.ShopService;
 import top.shop.gateway.service.UserService;
+import top.shop.gateway.util.Role;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final ShopService shopService;
 
     @GetMapping("/users")
     public String users(Model model) {
@@ -30,14 +34,24 @@ public class UserController {
     @GetMapping("/edit-user/{username}")
     public String userHandler(@PathVariable String username, Model model) {
         UserDto userDto = userService.getUserDto(username);
+        List<ShopDto> shopList = shopService.getShops();
+        List<Role> roles = userService.getRoles();
+
+        model.addAttribute("shopList", shopList);
+        model.addAttribute("roleList", roles);
         model.addAttribute("userDto", userDto);
         return "user-templates/edit-user";
     }
 
     @PostMapping("/edit-user")
     public String userHandler(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model) {
+        List<ShopDto> shopList = shopService.getShops();
+        List<Role> roles = userService.getRoles();
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("userDto", userDto);
+            model.addAttribute("shopList", shopList);
+            model.addAttribute("roleList", roles);
             return "user-templates/edit-user";
         }
         model.addAttribute("userDto", userDto);
