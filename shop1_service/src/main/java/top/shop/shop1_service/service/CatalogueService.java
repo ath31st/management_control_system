@@ -13,6 +13,7 @@ import top.shop.shop1_service.repository.CatalogueRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -35,6 +36,7 @@ public class CatalogueService {
                 .filter(p -> productPricingService.productPricingExists(p.getServiceName()) &&
                         productPricingService.getProductPricingDto(p.getServiceName()).getPrice() != 0)
                 .map(productPricingService::updatePriceOfProductDto)
+                .sorted(Comparator.comparing(ProductDto::getServiceName))
                 .toList();
 
         return CatalogueDto.builder()

@@ -13,6 +13,7 @@ import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException
 import top.shop.shop1_service.repository.ProductPricingRepository;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -61,6 +62,7 @@ public class ProductPricingService {
         return productPricingRepository.findAll().stream()
                 .filter(pp -> productServiceName.contains(pp.getProductServiceName()))
                 .map(pp -> modelMapper.map(pp, ProductPricingDto.class))
+                .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
                 .toList();
     }
 
