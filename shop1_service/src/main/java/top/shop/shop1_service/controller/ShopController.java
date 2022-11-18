@@ -11,6 +11,8 @@ import top.shop.shop1_service.service.OrderService;
 import top.shop.shop1_service.service.ProductPricingService;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -22,7 +24,7 @@ public class ShopController {
     private final ProductPricingService productPricingService;
 
     @PostMapping("/order")
-    public String orderHandler(@RequestBody OrderDto orderDto) {
+    public String orderHandler(@Valid @RequestBody OrderDto orderDto) {
         log.info("order request received");
         return orderService.createOrder(orderDto);
     }
