@@ -49,8 +49,6 @@ public class CatalogueController {
         }
 
         catalogueService.sendProductPricingWrapperToShop(wrapper, user.getShopUrl());
-        model.addAttribute("message", "Prices updated ");
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(user.getShopServiceName()));
 
         return "redirect:/catalogue";
     }

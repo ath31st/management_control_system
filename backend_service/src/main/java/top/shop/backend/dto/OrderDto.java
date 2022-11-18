@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 public class OrderDto {
     private String shopServiceName;
     @NotEmpty(message = "Product name cannot be empty.")
-    @Size(min = 3, max = 25, message = "Product name must be minimum 3 and maximum 25 characters.")
+    @Size(min = 3, max = 100, message = "Product name must be minimum 3 and maximum 100 characters.")
     private String productName;
     @NotEmpty(message = "Customer name cannot be empty.")
-    @Size(min = 3, max = 25, message = "Customer name must be minimum 3 and maximum 25 characters.")
+    @Size(min = 3, max = 100, message = "Customer name must be minimum 3 and maximum 100 characters.")
     private String customerName;
     private LocalDateTime orderDate;
     @Min(value = 1, message = "Amount must be minimum 1")
