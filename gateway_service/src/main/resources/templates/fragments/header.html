@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <header>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
@@ -18,19 +22,19 @@
                     <li class="nav-item active">
                         <a class="nav-link" aria-current="page" th:href="@{/index}">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li sec:authorize="hasRole('ROLE_ADMINISTRATOR')" class="nav-item">
                         <a class="nav-link" th:href="@{/shops}">Shops</a>
                     </li>
-                    <li class="nav-item">
+                    <li sec:authorize="hasRole('ROLE_MANAGER')" class="nav-item">
                         <a class="nav-link" th:href="@{/catalogue}">Catalogue</a>
                     </li>
-                    <li class="nav-item">
+                    <li sec:authorize="hasRole('ROLE_ADMINISTRATOR')" class="nav-item">
                         <a class="nav-link" th:href="@{/categories}">Categories</a>
                     </li>
-                    <li class="nav-item">
+                    <li sec:authorize="hasRole('ROLE_ADMINISTRATOR')" class="nav-item">
                         <a class="nav-link" th:href="@{/users}">Users</a>
                     </li>
-                    <li class="nav-item">
+                    <li sec:authorize="hasRole('ROLE_ADMINISTRATOR')" class="nav-item">
                         <a class="nav-link" th:href="@{/storage}">Storage</a>
                     </li>
                 </ul>
@@ -40,10 +44,10 @@
     <!-- Navbar -->
 
     <!-- Jumbotron -->
-<!--    <div class="p-5 text-center bg-white">-->
-<!--        <h3 class="mb-3">Heading</h3>-->
-<!--        <h4 class="mb-3">Subheading</h4>-->
-<!--        <a class="btn btn-primary" href="" role="button">Call to action</a>-->
-<!--    </div>-->
+    <!--    <div class="p-5 text-center bg-white">-->
+    <!--        <h3 class="mb-3">Heading</h3>-->
+    <!--        <h4 class="mb-3">Subheading</h4>-->
+    <!--        <a class="btn btn-primary" href="" role="button">Call to action</a>-->
+    <!--    </div>-->
     <!-- Jumbotron -->
 </header>

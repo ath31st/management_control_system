@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import top.shop.gateway.dto.ShopDto;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.ShopService;
@@ -57,6 +54,13 @@ public class UserController {
         model.addAttribute("userDto", userDto);
 
         userService.saveUserChanges(userDto);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/delete-user/{username}")
+    public String deleteUser(@PathVariable String username) {
+        userService.deleteUser(username);
+
         return "redirect:/users";
     }
 

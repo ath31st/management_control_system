@@ -97,6 +97,11 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    public void deleteUser(String username) {
+        User user = getUserByUsername(username);
+        userRepository.delete(user);
+    }
+
     public List<Role> getRoles() {
         return List.of(Role.values());
     }

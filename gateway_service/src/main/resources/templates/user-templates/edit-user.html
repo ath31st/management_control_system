@@ -82,6 +82,10 @@
                 </table>
                 <div>
                     <button type="submit" class="btn btn-primary">Save</button>
+                    <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                       onclick="return confirm('Are you sure?')"
+                                                       th:href="@{|/delete-user/${userDto.username}|}">Delete user</a>
+                    </button>
                 </div>
             </form>
         </div>
