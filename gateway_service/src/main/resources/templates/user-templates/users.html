@@ -58,7 +58,7 @@
                     <td th:text="${user.username}">username</td>
                     <td th:text="${user.email}">email</td>
                     <td th:text="${user.role}">role</td>
-                    <td th:text="${user.registerDate}">register date</td>
+                    <td th:text="${#temporals.format(user.registerDate, 'dd-MMM-yyyy')}">register date</td>
                     <td th:text="${user.shopServiceName}">shop service name</td>
                     <td th:text="${user.shopUrl}">shop url</td>
 <!--                    <td hidden th:text="${user.password}">password</td>-->

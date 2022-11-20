@@ -17,11 +17,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-//                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
-//                .and()
-//                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler)
-//                .and()
-
                 .authorizeRequests()
                 .antMatchers( "/css/**","/webjars/**", "/register", "/login", "/login-error").permitAll()
                 .anyRequest().authenticated()
