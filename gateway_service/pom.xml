@@ -49,6 +49,11 @@
             <artifactId>webjars-locator</artifactId>
             <version>0.45</version>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>20.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
