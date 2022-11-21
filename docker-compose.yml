@@ -49,15 +49,33 @@ services:
     depends_on:
       - kafka
 
-  postgres-gateway:
+  keycloak:
+    image: jboss/keycloak:latest
+    container_name: keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres-keycloak
+      DB_DATABASE: keycloakDB
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    networks:
+      - kafka-net
+    depends_on:
+      - postgres-keycloak
+
+  postgres-keycloak:
     image: postgres:15.0
-    container_name: postgres-container-gateway
+    container_name: postgres-container-keycloak
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgresDB
+      POSTGRES_DB: keycloakDB
     restart: always
     networks:
       - kafka-net
@@ -96,8 +114,6 @@ services:
 #      - "28888:28888"
 #    networks:
 #      - kafka-net
-#    depends_on:
-#      - postgres-gateway
 
 #  backend-service:
 #    container_name: backend-service

@@ -9,23 +9,32 @@ backend:
   url: http://localhost:28889
   #url: http://backend-service:28889
 
-shop1:
-  url: http://localhost:28880
-  #url: http://shop1-service:28880
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  #auth-server-url: http://keycloak:8080/auth
+  realm: "MCS"
+  resource: "gateway-client"
+  bearer-only: true
+  security-constraints:
+    - authRoles:
+        - uma_authorization
+      securityCollections:
+        - patterns:
+            - /*
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgresDB
-    #url: jdbc:postgresql://postgres-container-gateway:5432/postgresDB
-    username: postgres
-    password: postgres
-    driverClassName: org.postgresql.Driver
-
-  jpa:
-    database: POSTGRESQL
-    show-sql: true
-    hibernate:
-      ddl-auto: update
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/postgresDB
+#    #url: jdbc:postgresql://postgres-container-gateway:5432/postgresDB
+#    username: postgres
+#    password: postgres
+#    driverClassName: org.postgresql.Driver
+#
+#  jpa:
+#    database: POSTGRESQL
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
 
   kafka:
     #bootstrap-servers: "kafka:9092"

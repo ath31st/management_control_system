@@ -26,37 +26,37 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+//    @GetMapping("/login")
+//    public String login() {
+//        return "login";
+//    }
+//
+//    @GetMapping("/login-error")
+//    public String loginError(Model model) {
+//        model.addAttribute("loginError", true);
+//        return "login";
+//    }
 
-    @GetMapping("/login-error")
-    public String loginError(Model model) {
-        model.addAttribute("loginError", true);
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String register(Model model) {
-        model.addAttribute("userData", new UserDto());
-        return "register";
-    }
-
-    @PostMapping("/register")
-    public String userRegistration(@Valid @ModelAttribute("userData") UserDto userData, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("userData", userData);
-            return "register";
-        }
-        try {
-            userService.registerUser(userData);
-        } catch (ResponseStatusException e) {
-            bindingResult.rejectValue("username", "userData.username", "An account already exists for this username.");
-            model.addAttribute("userData", userData);
-            return "register";
-        }
-        return "redirect:/index";
-    }
+//    @GetMapping("/register")
+//    public String register(Model model) {
+//        model.addAttribute("userData", new UserDto());
+//        return "register";
+//    }
+//
+//    @PostMapping("/register")
+//    public String userRegistration(@Valid @ModelAttribute("userData") UserDto userData, BindingResult bindingResult, Model model) {
+//        if (bindingResult.hasErrors()) {
+//            model.addAttribute("userData", userData);
+//            return "register";
+//        }
+//        try {
+//            userService.registerUser(userData);
+//        } catch (ResponseStatusException e) {
+//            bindingResult.rejectValue("username", "userData.username", "An account already exists for this username.");
+//            model.addAttribute("userData", userData);
+//            return "register";
+//        }
+//        return "redirect:/index";
+//    }
 
 }

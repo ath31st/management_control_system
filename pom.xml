@@ -68,6 +68,11 @@
             <artifactId>modelmapper</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
+            <version>20.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
