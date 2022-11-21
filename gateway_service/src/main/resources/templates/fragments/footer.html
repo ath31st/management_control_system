@@ -32,7 +32,7 @@
     <div class="text-center text-dark p-3" style="background-color: rgba(0, 0, 0, 0.2);">
     <span sec:authorize="isAuthenticated()">
                 | Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
+<!--                Roles: <span sec:authentication="principal.authorities"></span> |-->
                 <a th:href="@{/logout}">Sign Out</a>
             </span>
         <br>

@@ -14,13 +14,10 @@ keycloak:
   #auth-server-url: http://keycloak:8080/auth
   realm: "MCS"
   resource: "gateway-client"
-  bearer-only: true
-  security-constraints:
-    - authRoles:
-        - uma_authorization
-      securityCollections:
-        - patterns:
-            - /*
+  public-client: true
+  principal-attribute: preferred_username
+#  use-resource-role-mappings: true
+#  bearer-only: true
 
 spring:
 #  datasource:

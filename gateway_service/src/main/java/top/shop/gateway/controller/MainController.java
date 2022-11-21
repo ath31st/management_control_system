@@ -1,6 +1,7 @@
 package top.shop.gateway.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 
 
 @Controller
