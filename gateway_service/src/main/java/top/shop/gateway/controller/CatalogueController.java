@@ -1,30 +1,30 @@
-package top.shop.gateway.controller;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import top.shop.gateway.dto.CatalogueDto;
-import top.shop.gateway.dto.UserDto;
-import top.shop.gateway.service.CatalogueService;
-import top.shop.gateway.service.StorageService;
-import top.shop.gateway.service.UserService;
-import top.shop.gateway.util.wrapper.ProductPricingWrapper;
-import top.shop.gateway.util.wrapper.ProductWrapper;
-
-import javax.validation.Valid;
-import java.security.Principal;
-
-@Controller
-@RequiredArgsConstructor
-public class CatalogueController {
-
-    private final CatalogueService catalogueService;
-    private final StorageService storageService;
-    private final UserService userService;
-
+//package top.shop.gateway.controller;
+//
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.ui.Model;
+//import org.springframework.validation.BindingResult;
+//import org.springframework.web.bind.annotation.*;
+//import org.springframework.web.client.HttpClientErrorException;
+//import top.shop.gateway.dto.CatalogueDto;
+//import top.shop.gateway.dto.UserDto;
+//import top.shop.gateway.service.CatalogueService;
+//import top.shop.gateway.service.StorageService;
+//import top.shop.gateway.service.UserService;
+//import top.shop.gateway.util.wrapper.ProductPricingWrapper;
+//import top.shop.gateway.util.wrapper.ProductWrapper;
+//
+//import javax.validation.Valid;
+//import java.security.Principal;
+//
+//@Controller
+//@RequiredArgsConstructor
+//public class CatalogueController {
+//
+//    private final CatalogueService catalogueService;
+//    private final StorageService storageService;
+//    private final UserService userService;
+//
 //    @GetMapping("/catalogue")
 //    public String catalogue(Model model, Principal principal) {
 //        UserDto user = userService.getUserDto(principal.getName());
@@ -109,5 +109,5 @@ public class CatalogueController {
 //        catalogueService.sendCatalogueChangesToStorage(user.getShopServiceName(), addProductServiceNames, deleteProductServiceNames);
 //        return "redirect:/catalogue";
 //    }
-
-}
+//
+//}

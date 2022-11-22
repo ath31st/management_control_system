@@ -1,7 +1,15 @@
 package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.keycloak.OAuth2Constants;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.representations.idm.ClientRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,18 +20,50 @@ import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.entity.User;
 import top.shop.gateway.util.Role;
-import top.shop.gateway.util.Value;
 
+import javax.ws.rs.client.ClientBuilder;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Value("${keycloak.realm}")
+    private String realm;
+    @Value("${keycloak.resource}")
+    private String clientId;
+    private final Keycloak keycloak;
 
-    private final ModelMapper modelMapper;
+    public List<String> getRoles() {
+        return keycloak
+                .realm(realm)
+                .roles()
+                .list()
+                .stream()
+                .map(RoleRepresentation::getName)
+                .toList();
+    }
+
+
+    public List<String> getAllRoles() {
+        ClientRepresentation clientRep = keycloak
+                .realm(realm)
+                .clients()
+                .findByClientId(clientId)
+                .get(0);
+        List<String> availableRoles = keycloak
+                .realm(realm)
+                .clients()
+                .get(clientRep.getId())
+                .roles()
+                .list()
+                .stream()
+                .map(RoleRepresentation::getName)
+                .collect(Collectors.toList());
+        return availableRoles;
+    }
 
 //    public User getUserByUsername(String username) {
 //        return userRepository.getUser(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -95,8 +135,23 @@ public class UserService {
 //        userRepository.delete(user);
 //    }
 
-    public List<Role> getRoles() {
-        return List.of(Role.values());
-    }
+
+//     if(keycloak == null){
+//
+//        keycloak = KeycloakBuilder.builder()
+//                .serverUrl(serverUrl)
+//                .realm(realm)
+//                .grantType(OAuth2Constants.PASSWORD)
+//                .username(userName)
+//                .password(password)
+//                .clientId(clientId)
+//                .clientSecret(clientSecret)
+//                .resteasyClient(new ResteasyClientBuilder()
+//                        .connectionPoolSize(10)
+//                        .build();
+//                                   )
+//                    .build();
+//    }
+
 
 }
