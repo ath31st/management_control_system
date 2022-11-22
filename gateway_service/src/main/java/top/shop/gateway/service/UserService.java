@@ -2,6 +2,7 @@ package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,30 @@ public class UserService {
         return mapperRepresentationToDto(ur);
     }
 
+    public void updateUser(UserDto userDto) {
+        UserResource userResource = keycloak
+                .realm(realm)
+                .users()
+                .get(userDto.getId());
+
+        // update user fields
+        UserRepresentation ur = userResource.toRepresentation();
+        ur.setEmail(userDto.getEmail());
+        ur.setFirstName(userDto.getFirstname());
+        ur.setLastName(userDto.getLastname());
+
+        userResource.update(ur);
+
+        // update user role
+        List<RoleRepresentation> list = userResource
+                .roles()
+                .realmLevel()
+                .listAll();
+
+        userResource.roles().realmLevel().remove(list);
+        userResource.roles().realmLevel().add(List.of(getRoleRepresentation(userDto.getRole())));
+    }
+
     public void deleteUser(String userId) {
         keycloak.realm(realm).users().delete(userId);
     }
@@ -55,6 +80,17 @@ public class UserService {
                 .realmLevel()
                 .listAll();
         return list.get(0).getName();
+    }
+
+    public RoleRepresentation getRoleRepresentation(String roleName) {
+        return keycloak
+                .realm(realm)
+                .roles()
+                .list()
+                .stream()
+                .filter(r -> r.getName().equals(roleName))
+                .findFirst()
+                .get();
     }
 
     public List<UserDto> getUserDtoList() {

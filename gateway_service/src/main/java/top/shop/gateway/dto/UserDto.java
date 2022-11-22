@@ -3,8 +3,6 @@ package top.shop.gateway.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import top.shop.gateway.entity.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -12,9 +10,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * A DTO for the {@link User} entity
- */
 @Data
 @Builder
 @AllArgsConstructor

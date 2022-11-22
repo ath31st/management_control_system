@@ -60,6 +60,9 @@ services:
       DB_PASSWORD: postgres
       KEYCLOAK_USER: keycloak
       KEYCLOAK_PASSWORD: keycloak
+      KEYCLOAK_IMPORT: "/keycloak-config/realm-export.json"
+    volumes:
+      - "./keycloak/realm-export.json:/keycloak-config/realm-export.json"
     ports:
       - "8080:8080"
     networks:

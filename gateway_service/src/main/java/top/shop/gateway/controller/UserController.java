@@ -52,6 +52,7 @@ public class UserController {
         }
         model.addAttribute("userDto", userDto);
 
+        userService.updateUser(userDto);
         return "redirect:/users";
     }
 
