@@ -31,6 +31,10 @@ public class UserService {
         return mapperRepresentationToDto(ur);
     }
 
+    public void deleteUser(String userId) {
+        keycloak.realm(realm).users().delete(userId);
+    }
+
     public List<String> getRoles() {
         return keycloak
                 .realm(realm)

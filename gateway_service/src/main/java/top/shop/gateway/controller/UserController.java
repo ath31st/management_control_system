@@ -9,7 +9,6 @@ import top.shop.gateway.dto.ShopDto;
 import top.shop.gateway.dto.UserDto;
 import top.shop.gateway.service.ShopService;
 import top.shop.gateway.service.UserService;
-import top.shop.gateway.util.Role;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -56,11 +55,11 @@ public class UserController {
         return "redirect:/users";
     }
 
-//    @GetMapping("/delete-user/{username}")
-//    public String deleteUser(@PathVariable String username) {
-//        userService.deleteUser(username);
-//
-//        return "redirect:/users";
-//    }
+    @GetMapping("/delete-user/{userId}")
+    public String deleteUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
+
+        return "redirect:/users";
+    }
 
 }
