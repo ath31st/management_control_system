@@ -20,7 +20,6 @@ public class BeanConfig {
     private String realm;
     @Value("${keycloak.resource}")
     private String clientId;
-    //  final static String clientSecret = "YOUR_CLIENT_SECRET_KEY";
     private String userName = "admin";
     private String password = "123";
 
@@ -33,7 +32,6 @@ public class BeanConfig {
                 .username(userName)
                 .password(password)
                 .clientId(clientId)
-                //   .clientSecret(clientSecret)
                 .build();
     }
 

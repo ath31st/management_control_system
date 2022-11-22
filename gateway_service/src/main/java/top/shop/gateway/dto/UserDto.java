@@ -1,5 +1,7 @@
 package top.shop.gateway.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import top.shop.gateway.entity.User;
@@ -14,7 +16,8 @@ import java.time.LocalDateTime;
  * A DTO for the {@link User} entity
  */
 @Data
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class UserDto implements Serializable {
     @NotEmpty(message = "Firstname cannot be empty.")
     @Size(min = 3, max = 25, message = "Firstname must be minimum 3 and maximum 25 characters.")
@@ -25,8 +28,8 @@ public class UserDto implements Serializable {
     @Email
     @Size(min = 1, max = 100)
     private String email;
-    @NotEmpty(message = "Password cannot be empty.")
-    @Size(min = 3, max = 100, message = "Password must be minimum 3 and maximum 25 characters.")
+//    @NotEmpty(message = "Password cannot be empty.")
+//    @Size(min = 3, max = 100, message = "Password must be minimum 3 and maximum 25 characters.")
     private String password;
     @NotEmpty(message = "Username cannot be empty.")
     @Size(min = 3, max = 25, message = "Username must be minimum 3 and maximum 25 characters.")

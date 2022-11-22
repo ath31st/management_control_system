@@ -21,12 +21,12 @@ public class UserController {
     private final UserService userService;
     private final ShopService shopService;
 
-//    @GetMapping("/users")
-//    public String users(Model model) {
-//        List<UserDto> userDtoList = userService.getUserDtoList();
-//        model.addAttribute("userDtoList", userDtoList);
-//        return "user-templates/users";
-//    }
+    @GetMapping("/users")
+    public String users(Model model) {
+        List<UserDto> userDtoList = userService.getUserDtoList();
+        model.addAttribute("userDtoList", userDtoList);
+        return "user-templates/users";
+    }
 //
 //    @GetMapping("/edit-user/{username}")
 //    public String userHandler(@PathVariable String username, Model model) {
