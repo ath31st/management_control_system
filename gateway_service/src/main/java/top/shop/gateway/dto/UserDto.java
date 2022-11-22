@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class UserDto implements Serializable {
+    private String id;
     @NotEmpty(message = "Firstname cannot be empty.")
     @Size(min = 3, max = 25, message = "Firstname must be minimum 3 and maximum 25 characters.")
     private String firstname;
@@ -28,9 +29,6 @@ public class UserDto implements Serializable {
     @Email
     @Size(min = 1, max = 100)
     private String email;
-//    @NotEmpty(message = "Password cannot be empty.")
-//    @Size(min = 3, max = 100, message = "Password must be minimum 3 and maximum 25 characters.")
-    private String password;
     @NotEmpty(message = "Username cannot be empty.")
     @Size(min = 3, max = 25, message = "Username must be minimum 3 and maximum 25 characters.")
     private String username;

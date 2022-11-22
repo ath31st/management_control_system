@@ -21,6 +21,16 @@ public class UserService {
     private String realm;
     private final Keycloak keycloak;
 
+
+    public UserDto getUserDto(String userId) {
+        UserRepresentation ur = keycloak
+                .realm(realm)
+                .users()
+                .get(userId)
+                .toRepresentation();
+        return mapperRepresentationToDto(ur);
+    }
+
     public List<String> getRoles() {
         return keycloak
                 .realm(realm)
@@ -33,14 +43,14 @@ public class UserService {
     }
 
     public String getRole(String userId) {
-       return keycloak
-               .realm(realm)
-               .users()
-               .get(userId)
-               .roles()
-               .realmLevel()
-               .listAll().get(0)
-               .getName();
+        List<RoleRepresentation> list = keycloak
+                .realm(realm)
+                .users()
+                .get(userId)
+                .roles()
+                .realmLevel()
+                .listAll();
+        return list.get(0).getName();
     }
 
     public List<UserDto> getUserDtoList() {
@@ -50,19 +60,20 @@ public class UserService {
                 .list();
 
         List<UserDto> userDtoList = new ArrayList<>();
-        userRepresentations.forEach(u -> {
-            UserDto userDto = UserDto.builder()
-                    .email(u.getEmail())
-                    .firstname(u.getFirstName())
-                    .lastname(u.getLastName())
-                    .username(u.getUsername())
-                    .registerDate(LocalDateTime.ofInstant(Instant.ofEpochMilli(u.getCreatedTimestamp()), TimeZone
-                            .getDefault().toZoneId()))
-                    .role(getRole(u.getId()))
-                    .build();
-            userDtoList.add(userDto);
-        });
+        userRepresentations.forEach(ur -> userDtoList.add(mapperRepresentationToDto(ur)));
         return userDtoList;
     }
 
+    private UserDto mapperRepresentationToDto(UserRepresentation ur) {
+        return UserDto.builder()
+                .id(ur.getId())
+                .email(ur.getEmail())
+                .firstname(ur.getFirstName())
+                .lastname(ur.getLastName())
+                .username(ur.getUsername())
+                .registerDate(LocalDateTime.ofInstant(Instant.ofEpochMilli(ur.getCreatedTimestamp()), TimeZone
+                        .getDefault().toZoneId()))
+                .role(getRole(ur.getId()))
+                .build();
+    }
 }

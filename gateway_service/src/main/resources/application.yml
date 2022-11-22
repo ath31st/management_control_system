@@ -16,7 +16,7 @@ keycloak:
   resource: "gateway-client"
   public-client: true
   principal-attribute: preferred_username
-  use-resource-role-mappings: true
+#  use-resource-role-mappings: true
 #  bearer-only: true
 
 spring:

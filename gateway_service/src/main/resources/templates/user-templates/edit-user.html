@@ -23,6 +23,11 @@
         <div class="column">
             <form th:action="@{/edit-user}" th:object="${userDto}" method="post">
                 <table>
+                    <tr hidden>
+                        <td>Password:</td>
+                        <td><input type="text" th:field="*{id}"></td>
+                        <td th:if="${#fields.hasErrors('id')}" th:errors="*{id}">Id Error</td>
+                    </tr>
                     <tr>
                         <td>Username:</td>
                         <td><input type="text" th:field="*{username}"></td>
@@ -43,17 +48,12 @@
                         <td><input type="text" th:field="*{email}"></td>
                         <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</td>
                     </tr>
-                    <tr hidden>
-                        <td>Password:</td>
-                        <td><input type="text" th:field="*{password}"></td>
-                        <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
-                    </tr>
                     <tr>
                         <td>Role:</td>
                         <td><select type="text" th:list="${roleList}" th:field="*{role}">
                             <option th:each="role : ${roleList}"
-                                    th:value="${role.name()}"
-                                    th:label="${role.name()}">
+                                    th:value="${role}"
+                                    th:label="${role}">
                         </select></td>
                         <td th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Role Error</td>
                     </tr>

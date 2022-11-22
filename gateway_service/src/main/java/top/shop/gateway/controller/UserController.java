@@ -27,36 +27,35 @@ public class UserController {
         model.addAttribute("userDtoList", userDtoList);
         return "user-templates/users";
     }
-//
-//    @GetMapping("/edit-user/{username}")
-//    public String userHandler(@PathVariable String username, Model model) {
-//        UserDto userDto = userService.getUserDto(username);
-//        List<ShopDto> shopList = shopService.getShops();
-//        List<Role> roles = userService.getRoles();
-//
-//        model.addAttribute("shopList", shopList);
-//        model.addAttribute("roleList", roles);
-//        model.addAttribute("userDto", userDto);
-//        return "user-templates/edit-user";
-//    }
-//
-//    @PostMapping("/edit-user")
-//    public String userHandler(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model) {
-//        List<ShopDto> shopList = shopService.getShops();
-//        List<Role> roles = userService.getRoles();
-//
-//        if (bindingResult.hasErrors()) {
-//            model.addAttribute("userDto", userDto);
-//            model.addAttribute("shopList", shopList);
-//            model.addAttribute("roleList", roles);
-//            return "user-templates/edit-user";
-//        }
-//        model.addAttribute("userDto", userDto);
-//
-//        userService.saveUserChanges(userDto);
-//        return "redirect:/users";
-//    }
-//
+
+    @GetMapping("/edit-user/{username}")
+    public String userHandler(@PathVariable String username, Model model) {
+        UserDto userDto = userService.getUserDto(username);
+        List<ShopDto> shopList = shopService.getShops();
+        List<String> roles = userService.getRoles();
+
+        model.addAttribute("shopList", shopList);
+        model.addAttribute("roleList", roles);
+        model.addAttribute("userDto", userDto);
+        return "user-templates/edit-user";
+    }
+
+    @PostMapping("/edit-user")
+    public String userHandler(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, Model model) {
+        List<ShopDto> shopList = shopService.getShops();
+        List<String> roles = userService.getRoles();
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userDto", userDto);
+            model.addAttribute("shopList", shopList);
+            model.addAttribute("roleList", roles);
+            return "user-templates/edit-user";
+        }
+        model.addAttribute("userDto", userDto);
+
+        return "redirect:/users";
+    }
+
 //    @GetMapping("/delete-user/{username}")
 //    public String deleteUser(@PathVariable String username) {
 //        userService.deleteUser(username);
