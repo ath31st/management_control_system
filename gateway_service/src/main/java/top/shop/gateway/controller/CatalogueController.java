@@ -30,12 +30,12 @@ public class CatalogueController {
 
         model.addAttribute("shopServiceName", shopServiceName);
         model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(shopServiceName));
-        model.addAttribute("wrapper", catalogueService.getProductPricingWrapperFromShop(shopUrl));
+        model.addAttribute("productPricingWrapper", catalogueService.getProductPricingWrapperFromShop(shopUrl));
         return "catalogue-templates/catalogue";
     }
 
     @PostMapping("/catalogue")
-    public String catalogue(@Valid @ModelAttribute("wrapper") ProductPricingWrapper wrapper,
+    public String catalogue(@Valid @ModelAttribute("productPricingWrapper") ProductPricingWrapper productPricingWrapper,
                             BindingResult bindingResult,
                             Model model) {
         String shopServiceName = userService.getUserAttribute("shopServiceName");
@@ -43,11 +43,11 @@ public class CatalogueController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(shopServiceName));
-            model.addAttribute("wrapper", wrapper);
+            model.addAttribute("productPricingWrapper", productPricingWrapper);
             return "catalogue-templates/catalogue";
         }
 
-        catalogueService.sendProductPricingWrapperToShop(wrapper, shopUrl);
+        catalogueService.sendProductPricingWrapperToShop(productPricingWrapper, shopUrl);
 
         return "redirect:/catalogue";
     }

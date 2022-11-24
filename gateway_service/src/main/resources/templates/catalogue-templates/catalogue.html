@@ -37,7 +37,7 @@
         </div>
         <!-- END PAGE TITLE -->
         <div class="column">
-            <form th:action="@{/catalogue}" th:object="${wrapper}" method="post">
+            <form th:action="@{/catalogue}" th:object="${productPricingWrapper}" method="post">
                 <table th:if="${not #lists.isEmpty(catalogueFromStorage.getProducts())}">
                     <td>
                         <table style="float: left">
@@ -58,11 +58,11 @@
                         </table>
                     </td>
                     <td>
-                        <table th:if="${not #lists.isEmpty(wrapper.pricingDtoList)}">
+                        <table th:if="${not #lists.isEmpty(productPricingWrapper.pricingDtoList)}">
                             <tr>
                                 <th> Price from shop</th>
                             </tr>
-                            <tr th:each="pricing, itemStat : ${wrapper.pricingDtoList}">
+                            <tr th:each="pricing, itemStat : ${productPricingWrapper.pricingDtoList}">
                                 <td><input th:name="|pricingDtoList[${itemStat.index}].price|"
                                            th:value="${pricing.price}"/></td>
                                 <td style="display:none"><input
@@ -98,7 +98,7 @@
                 </div>
                 <br>
             </div>
-            <div th:if="${#lists.isEmpty(wrapper.pricingDtoList)}">
+            <div th:if="${#lists.isEmpty(productPricingWrapper.pricingDtoList)}">
                 <h4>No shop data found</h4>
             </div>
         </div>
