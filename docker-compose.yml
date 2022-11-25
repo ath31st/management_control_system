@@ -112,7 +112,7 @@ services:
 
 #  gateway-service:
 #    container_name: gateway-service
-#    build: .
+#    build: ./gateway_service/
 #    ports:
 #      - "28888:28888"
 #    networks:
@@ -120,7 +120,7 @@ services:
 
 #  backend-service:
 #    container_name: backend-service
-#    build: .
+#    build: ./backend_service/
 #    ports:
 #      - "28889:28889"
 #    networks:
@@ -130,7 +130,7 @@ services:
 
 #  shop1-service:
 #    container_name: shop1-service
-#    build: .
+#    build: ./shop1_service/
 #    ports:
 #      - "28880:28880"
 #    networks:

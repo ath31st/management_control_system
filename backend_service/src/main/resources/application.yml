@@ -15,7 +15,7 @@ topic:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/postgresDB
-    #    url: jdbc:postgresql://postgres-container-backend:5433/postgresDB
+    #url: jdbc:postgresql://postgres-container-backend:5433/postgresDB
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
@@ -27,8 +27,17 @@ spring:
       ddl-auto: create
 
   kafka:
-    #    bootstrap-servers: "kafka:9092"
+    #bootstrap-servers: "kafka:9092"
     bootstrap-servers: "localhost:9093"
     consumer:
       auto-offset-reset: earliest
       group-id: "backend"
+
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  #auth-server-url: http://keycloak:8080/auth
+  realm: "MCS"
+  resource: "backend-client"
+  bearer-only: true
+  principal-attribute: preferred_username
+  #  use-resource-role-mappings: true
