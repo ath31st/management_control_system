@@ -39,5 +39,8 @@ keycloak:
   realm: "MCS"
   resource: "backend-client"
   bearer-only: true
-  principal-attribute: preferred_username
-  #  use-resource-role-mappings: true
+ # principal-attribute: preferred_username
+  use-resource-role-mappings: true
+  ssl-required: external
+  cors: true
+
