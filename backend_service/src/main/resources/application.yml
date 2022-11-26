@@ -34,13 +34,13 @@ spring:
       group-id: "backend"
 
 keycloak:
-  auth-server-url: http://localhost:8080/auth
+  auth-server-url: http://127.0.0.1:8080/auth
   #auth-server-url: http://keycloak:8080/auth
   realm: "MCS"
   resource: "backend-client"
   bearer-only: true
- # principal-attribute: preferred_username
-  use-resource-role-mappings: true
   ssl-required: external
-  cors: true
+  credentials:
+    secret: iaynxnyD7yrX8h30w7abGPar4rbGWMld
+  confidential-port: 0
 

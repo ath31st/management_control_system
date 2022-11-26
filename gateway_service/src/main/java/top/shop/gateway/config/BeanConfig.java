@@ -55,4 +55,25 @@ public class BeanConfig {
         return new RestTemplate();
     }
 
+//    @Bean
+//    @RequestScope
+//    public RestTemplate restTemplate(HttpServletRequest httpServletRequest) {
+//        // retrieve the auth header from incoming request
+//        final String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+//        final RestTemplate restTemplate = new RestTemplate();
+//        // add a token if an incoming auth header exists, only
+//        if (authHeader != null && !authHeader.isEmpty()) {
+//            // since the header should be added to each outgoing request,
+//            // add an interceptor that handles this.
+//            restTemplate.getInterceptors().add(
+//                    (outReq, bytes, clientHttpReqExec) -> {
+//                        outReq.getHeaders().set(
+//                                HttpHeaders.AUTHORIZATION, authHeader
+//                        );
+//                        return clientHttpReqExec.execute(outReq, bytes);
+//                    });
+//        }
+//        return restTemplate;
+//    }
+
 }
