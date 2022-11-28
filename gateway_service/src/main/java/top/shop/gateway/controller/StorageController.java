@@ -1,6 +1,8 @@
 package top.shop.gateway.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +16,7 @@ import top.shop.gateway.service.StorageService;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,22 +26,30 @@ public class StorageController {
     private final CategoryService categoryService;
 
     @GetMapping("/storage")
-    public String storageHandler(Model model) {
-        model.addAttribute("wrapper", storageService.getProductWrapper());
+    public String storageHandler(Model model, Principal principal) {
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        String accessToken = keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getTokenString();
+
+        model.addAttribute("wrapper", storageService.getProductWrapper(accessToken));
 
         return "storage-templates/storage";
     }
 
     @PostMapping("/storage")
-    public String storageHandler(@Valid ProductWrapper productWrapper, BindingResult bindingResult, Model model) {
+    public String storageHandler(@Valid ProductWrapper productWrapper,
+                                 BindingResult bindingResult,
+                                 Model model, Principal principal) {
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        String accessToken = keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getTokenString();
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("wrapper", storageService.getProductWrapper());
+            model.addAttribute("wrapper", storageService.getProductWrapper(accessToken));
             return "storage-templates/storage";
         }
 
         storageService.sendProductWrapperToBackend(productWrapper);
         model.addAttribute("message", "Amount updated ");
-        model.addAttribute("wrapper", storageService.getProductWrapper());
+        model.addAttribute("wrapper", storageService.getProductWrapper(accessToken));
 
         return "redirect:/storage";
     }

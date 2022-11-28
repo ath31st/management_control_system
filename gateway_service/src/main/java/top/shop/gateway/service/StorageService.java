@@ -24,16 +24,12 @@ public class StorageService {
     @Value("${backend.url}")
     private String backendUrl;
     private final RestTemplate restTemplate;
-    private final Keycloak keycloak;
 
-    public ProductWrapper getProductWrapper() {
+    public ProductWrapper getProductWrapper(String accessToken) {
         String url = backendUrl + "/api/products";
 
-        // TODO rework this block!
-        AccessTokenResponse accessToken = keycloak.tokenManager().getAccessToken();
-
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken.getToken());
+        headers.setBearerAuth(accessToken);
 
         return restTemplate.exchange(RequestEntity.get(url).headers(headers).build(), ProductWrapper.class).getBody();
     }

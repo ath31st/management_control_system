@@ -1,6 +1,7 @@
 package top.shop.gateway.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import top.shop.gateway.util.wrapper.ProductPricingWrapper;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,8 +55,11 @@ public class CatalogueController {
     }
 
     @GetMapping("/new-catalogue")
-    public String createCatalogue(Model model) {
-        model.addAttribute("productWrapper", storageService.getProductWrapper());
+    public String createCatalogue(Model model, Principal principal) {
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        String accessToken = keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getTokenString();
+
+        model.addAttribute("productWrapper", storageService.getProductWrapper(accessToken));
         model.addAttribute("catalogueDto", new CatalogueDto());
 
         return "catalogue-templates/new-catalogue";
@@ -63,9 +68,11 @@ public class CatalogueController {
     @PostMapping("/new-catalogue")
     public String createCatalogue(@Valid @ModelAttribute("catalogueDto") CatalogueDto catalogueDto,
                                   @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
-                                  BindingResult bindingResult, Model model) {
+                                  BindingResult bindingResult, Model model, Principal principal) {
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        String accessToken = keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getTokenString();
         String shopServiceName = userService.getUserAttribute("shopServiceName");
-        ProductWrapper productWrapper = storageService.getProductWrapper();
+        ProductWrapper productWrapper = storageService.getProductWrapper(accessToken);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("productWrapper", productWrapper);
