@@ -35,3 +35,21 @@ spring:
       username: mongo
       password: mongo
       authentication-database: admin
+
+keycloak:
+  auth-server-url: http://127.0.0.1:8080/auth
+  #auth-server-url: http://keycloak:8080/auth
+  realm: "MCS"
+  #for every new shop-service change this field
+  resource: "shop1-client"
+  bearer-only: true
+  ssl-required: external
+  credentials:
+    secret: LhVnsO5FnhEnZQezC0oQiqgeZtPL8m6R
+  confidential-port: 0
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
