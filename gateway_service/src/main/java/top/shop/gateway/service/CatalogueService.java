@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.CatalogueDto;
 import top.shop.gateway.dto.product.ProductServiceNameDto;
+import top.shop.gateway.util.TokenExtractor;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
@@ -57,7 +59,7 @@ public class CatalogueService {
 
     public void sendCatalogueToStorage(CatalogueDto catalogueDto) {
         String url = backendUrl + "/api/catalogue";
-        restTemplate.postForObject(url, catalogueDto, CatalogueDto.class);
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(catalogueDto), CatalogueDto.class);
     }
 
     public void sendCatalogueChangesToStorage(String shopServiceName, String[] add, String[] delete) {
@@ -77,17 +79,20 @@ public class CatalogueService {
         }
 
         String url = backendUrl + "/api/catalogue-changes";
-        restTemplate.postForObject(url, productServiceNameDto, ProductServiceNameDto.class);
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(productServiceNameDto), ProductServiceNameDto.class);
     }
 
     public ProductPricingWrapper getProductPricingWrapperFromShop(String shopUrl) {
         String url = shopUrl + "/api/manager/prices";
-        return restTemplate.getForObject(url, ProductPricingWrapper.class);
+        return restTemplate.exchange(RequestEntity.get(url)
+                        .headers(TokenExtractor.headersWithTokenAuthUser())
+                        .build(), ProductPricingWrapper.class)
+                .getBody();
     }
 
     public void sendProductPricingWrapperToShop(ProductPricingWrapper wrapper, String shopUrl) {
         String url = shopUrl + "/api/manager/prices";
-        restTemplate.postForObject(url, wrapper, ProductPricingWrapper.class);
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(wrapper), ProductPricingWrapper.class);
     }
 
 }

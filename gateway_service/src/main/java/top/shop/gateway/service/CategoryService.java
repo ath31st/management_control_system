@@ -43,13 +43,11 @@ public class CategoryService {
 
     public void createCategory(CategoryDto categoryDto) {
         String url = backendUrl + "/api/new-category";
-
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(categoryDto), CategoryDto.class);
     }
 
     public void sendCategoryChanges(CategoryDto categoryDto) {
         String url = backendUrl + "/api/edit-category";
-
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(categoryDto), CategoryDto.class);
     }
 
