@@ -2,9 +2,12 @@ package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import top.shop.gateway.dto.CategoryDto;
 import top.shop.gateway.dto.ShopDto;
+import top.shop.gateway.util.TokenExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,10 @@ public class ShopService {
 
     public List<ShopDto> getShops() {
         String url = backendUrl + "/api/shops";
-        ShopDto[] shops = restTemplate.getForObject(url, ShopDto[].class);
+        ShopDto[] shops = restTemplate.exchange(RequestEntity.get(url)
+                        .headers(TokenExtractor.headersWithTokenAuthUser())
+                        .build(), ShopDto[].class)
+                .getBody();
 
         if (shops == null) return new ArrayList<>();
 
@@ -27,7 +33,10 @@ public class ShopService {
 
     public ShopDto getShop(String shopServiceName) {
         String url = backendUrl + "/api/shops/" + shopServiceName;
-       return restTemplate.getForObject(url, ShopDto.class);
+        return restTemplate.exchange(RequestEntity.get(url)
+                        .headers(TokenExtractor.headersWithTokenAuthUser())
+                        .build(), ShopDto.class)
+                .getBody();
     }
 
     public double getTotalBalance(List<ShopDto> shops) {
@@ -38,12 +47,12 @@ public class ShopService {
 
     public void createShop(ShopDto shopDto) {
         String url = backendUrl + "/api/new-shop";
-        restTemplate.postForObject(url, shopDto, ShopDto.class);
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(shopDto), ShopDto.class);
     }
 
     public void sendShopChanges(ShopDto shopDto) {
         String url = backendUrl + "/api/edit-shop";
-        restTemplate.postForObject(url, shopDto, ShopDto.class);
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(shopDto), ShopDto.class);
     }
 
 }
