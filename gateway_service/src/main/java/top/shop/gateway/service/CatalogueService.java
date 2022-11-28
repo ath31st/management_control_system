@@ -10,6 +10,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.CatalogueDto;
+import top.shop.gateway.dto.CategoryDto;
 import top.shop.gateway.dto.product.ProductServiceNameDto;
 import top.shop.gateway.util.TokenExtractor;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
@@ -33,7 +34,9 @@ public class CatalogueService {
         String url = backendUrl + "/api/catalogue/" + shopNameService;
 
         try {
-            return restTemplate.getForObject(url, CatalogueDto.class);
+            return restTemplate.exchange(RequestEntity.get(url)
+                    .headers(TokenExtractor.headersWithTokenAuthUser())
+                    .build(), CatalogueDto.class).getBody();
         } catch (HttpClientErrorException e) {
             if (e.getRawStatusCode() == 404)
                 return CatalogueDto.builder()
