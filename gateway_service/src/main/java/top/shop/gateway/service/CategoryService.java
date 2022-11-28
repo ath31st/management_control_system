@@ -43,14 +43,14 @@ public class CategoryService {
 
     public void createCategory(CategoryDto categoryDto) {
         String url = backendUrl + "/api/new-category";
-        HttpEntity<CategoryDto> entity = new HttpEntity<>(categoryDto, TokenExtractor.headersWithTokenAuthUser());
-        restTemplate.postForObject(url, entity, CategoryDto.class);
+
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(categoryDto), CategoryDto.class);
     }
 
     public void sendCategoryChanges(CategoryDto categoryDto) {
         String url = backendUrl + "/api/edit-category";
-        HttpEntity<CategoryDto> entity = new HttpEntity<>(categoryDto, TokenExtractor.headersWithTokenAuthUser());
-        restTemplate.postForObject(url, entity, CategoryDto.class);
+
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(categoryDto), CategoryDto.class);
     }
 
 }

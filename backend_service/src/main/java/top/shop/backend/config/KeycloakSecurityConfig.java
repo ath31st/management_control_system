@@ -48,6 +48,7 @@ class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     {
         super.configure(http);
         http
+                .csrf().disable()
                 .authorizeRequests()
              //   .antMatchers("/api/**").permitAll()
                 .anyRequest().fullyAuthenticated();

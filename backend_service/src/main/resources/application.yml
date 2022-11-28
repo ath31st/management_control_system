@@ -44,3 +44,8 @@ keycloak:
     secret: iaynxnyD7yrX8h30w7abGPar4rbGWMld
   confidential-port: 0
 
+logging:
+  level:
+    org:
+      springframework:
+        security: off
