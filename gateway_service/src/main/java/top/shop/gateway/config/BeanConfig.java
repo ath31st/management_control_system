@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
+import static org.keycloak.OAuth2Constants.CLIENT_CREDENTIALS;
+
 @Configuration
 public class BeanConfig {
     @Value("${keycloak.auth-server-url}")
@@ -20,17 +22,16 @@ public class BeanConfig {
     private String realm;
     @Value("${keycloak.resource}")
     private String clientId;
-    private String userName = "admin";
-    private String password = "123";
+    @Value("${keycloak.credentials.secret}")
+    private String secret;
 
     @Bean
     public Keycloak keycloak() {
         return KeycloakBuilder.builder()
                 .serverUrl(serverUrl)
                 .realm(realm)
-                .grantType(OAuth2Constants.PASSWORD)
-                .username(userName)
-                .password(password)
+                .grantType(CLIENT_CREDENTIALS)
+                .clientSecret(secret)
                 .clientId(clientId)
                 .build();
     }

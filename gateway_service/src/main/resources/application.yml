@@ -14,25 +14,13 @@ keycloak:
   #auth-server-url: http://keycloak:8080/auth
   realm: "MCS"
   resource: "gateway-client"
-  public-client: true
   principal-attribute: preferred_username
   ssl-required: external
+  credentials:
+    secret: 3y8HcfAV2owXErTKl8i7eMek97SSzk71
 #  use-resource-role-mappings: true
 
 spring:
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/postgresDB
-#    #url: jdbc:postgresql://postgres-container-gateway:5432/postgresDB
-#    username: postgres
-#    password: postgres
-#    driverClassName: org.postgresql.Driver
-#
-#  jpa:
-#    database: POSTGRESQL
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: update
-
   kafka:
     #bootstrap-servers: "kafka:9092"
     bootstrap-servers: "localhost:9093"
