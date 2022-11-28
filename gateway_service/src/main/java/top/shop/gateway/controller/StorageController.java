@@ -1,7 +1,6 @@
 package top.shop.gateway.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +11,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.product.ProductDto;
 import top.shop.gateway.service.CategoryService;
 import top.shop.gateway.service.StorageService;
-import top.shop.gateway.util.TokenExtractor;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,9 +23,9 @@ public class StorageController {
     private final CategoryService categoryService;
 
     @GetMapping("/storage")
-    public String storageHandler(Model model, Principal principal) {
+    public String storageHandler(Model model) {
 
-        model.addAttribute("wrapper", storageService.getProductWrapper(TokenExtractor.getTokenAuthUser(principal)));
+        model.addAttribute("wrapper", storageService.getProductWrapper());
 
         return "storage-templates/storage";
     }
@@ -36,15 +33,15 @@ public class StorageController {
     @PostMapping("/storage")
     public String storageHandler(@Valid ProductWrapper productWrapper,
                                  BindingResult bindingResult,
-                                 Model model, Principal principal) {
+                                 Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("wrapper", storageService.getProductWrapper(TokenExtractor.getTokenAuthUser(principal)));
+            model.addAttribute("wrapper", storageService.getProductWrapper());
             return "storage-templates/storage";
         }
 
         storageService.sendProductWrapperToBackend(productWrapper);
         model.addAttribute("message", "Amount updated ");
-        model.addAttribute("wrapper", storageService.getProductWrapper(TokenExtractor.getTokenAuthUser(principal)));
+        model.addAttribute("wrapper", storageService.getProductWrapper());
 
         return "redirect:/storage";
     }

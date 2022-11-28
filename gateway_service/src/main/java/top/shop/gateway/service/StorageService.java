@@ -1,19 +1,15 @@
 package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.CatalogueDto;
 import top.shop.gateway.dto.product.ProductDto;
+import top.shop.gateway.util.TokenExtractor;
 import top.shop.gateway.util.wrapper.ProductWrapper;
 
-import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,13 +21,13 @@ public class StorageService {
     private String backendUrl;
     private final RestTemplate restTemplate;
 
-    public ProductWrapper getProductWrapper(String accessToken) {
+    public ProductWrapper getProductWrapper() {
         String url = backendUrl + "/api/products";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-
-        return restTemplate.exchange(RequestEntity.get(url).headers(headers).build(), ProductWrapper.class).getBody();
+        return restTemplate.exchange(RequestEntity.get(url)
+                .headers(TokenExtractor.headersWithTokenAuthUser())
+                .build(), ProductWrapper.class)
+                .getBody();
     }
 
     public ProductWrapper getProductWrapperWithoutCatalogue(CatalogueDto catalogueDto) {

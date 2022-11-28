@@ -2,9 +2,13 @@ package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.CategoryDto;
+import top.shop.gateway.util.TokenExtractor;
+import top.shop.gateway.util.wrapper.ProductWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +22,11 @@ public class CategoryService {
 
     public List<CategoryDto> getCategories() {
         String url = backendUrl + "/api/categories";
-        CategoryDto[] categories = restTemplate.getForObject(url, CategoryDto[].class);
+
+        CategoryDto[] categories = restTemplate.exchange(RequestEntity.get(url)
+                        .headers(TokenExtractor.headersWithTokenAuthUser())
+                        .build(), CategoryDto[].class)
+                .getBody();
 
         if (categories == null) return new ArrayList<>();
 
@@ -27,17 +35,22 @@ public class CategoryService {
 
     public CategoryDto getCategory(String categoryServiceName) {
         String url = backendUrl + "/api/categories/" + categoryServiceName;
-       return restTemplate.getForObject(url, CategoryDto.class);
+        return restTemplate.exchange(RequestEntity.get(url)
+                        .headers(TokenExtractor.headersWithTokenAuthUser())
+                        .build(), CategoryDto.class)
+                .getBody();
     }
 
     public void createCategory(CategoryDto categoryDto) {
         String url = backendUrl + "/api/new-category";
-        restTemplate.postForObject(url, categoryDto, CategoryDto.class);
+        HttpEntity<CategoryDto> entity = new HttpEntity<>(categoryDto, TokenExtractor.headersWithTokenAuthUser());
+        restTemplate.postForObject(url, entity, CategoryDto.class);
     }
 
     public void sendCategoryChanges(CategoryDto categoryDto) {
         String url = backendUrl + "/api/edit-category";
-        restTemplate.postForObject(url, categoryDto, CategoryDto.class);
+        HttpEntity<CategoryDto> entity = new HttpEntity<>(categoryDto, TokenExtractor.headersWithTokenAuthUser());
+        restTemplate.postForObject(url, entity, CategoryDto.class);
     }
 
 }
