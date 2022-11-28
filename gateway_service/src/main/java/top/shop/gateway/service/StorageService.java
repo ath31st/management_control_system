@@ -25,8 +25,8 @@ public class StorageService {
         String url = backendUrl + "/api/products";
 
         return restTemplate.exchange(RequestEntity.get(url)
-                .headers(TokenExtractor.headersWithTokenAuthUser())
-                .build(), ProductWrapper.class)
+                        .headers(TokenExtractor.headersWithTokenAuthUser())
+                        .build(), ProductWrapper.class)
                 .getBody();
     }
 
@@ -37,20 +37,20 @@ public class StorageService {
                 .map(ProductDto::getServiceName)
                 .toList();
 
-        return restTemplate.postForObject(url, catalogueProductNames, ProductWrapper.class);
+        return restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(catalogueProductNames), ProductWrapper.class);
     }
 
     public void sendProductWrapperToBackend(ProductWrapper wrapper) {
         String url = backendUrl + "/api/products";
         wrapper.setProductDtoList(filterUnchangedProducts(wrapper.getProductDtoList()));
 
-        restTemplate.postForObject(url, wrapper, ProductWrapper.class);
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(wrapper), ProductWrapper.class);
     }
 
     public void createProduct(ProductDto productDto) {
         String url = backendUrl + "/api/products";
-
-        restTemplate.postForObject(url, new ProductWrapper(Collections.singletonList(productDto)), ProductWrapper.class);
+        ProductWrapper pw = new ProductWrapper(Collections.singletonList(productDto));
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(pw), ProductWrapper.class);
     }
 
     private List<ProductDto> filterUnchangedProducts(List<ProductDto> productDtoList) {
