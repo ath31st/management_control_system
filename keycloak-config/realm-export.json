@@ -126,7 +126,16 @@
       }
     ],
     "client": {
-      "gateway-client": [],
+      "gateway-client": [
+        {
+          "id": "65f900e0-e9f9-4a9e-ace6-64fc37e44fbf",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "c3272bb0-ded1-4f2d-976c-80679f7141e4",
+          "attributes": {}
+        }
+      ],
       "realm-management": [
         {
           "id": "b031191f-11d8-4608-b00e-4c4e7e8667a2",
@@ -482,6 +491,29 @@
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
+  "users": [
+    {
+      "id": "e166c772-6370-42f3-8191-2abe868b7214",
+      "createdTimestamp": 1669639883312,
+      "username": "service-account-gateway-client",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "gateway-client",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-mcs"
+      ],
+      "clientRoles": {
+        "gateway-client": [
+          "uma_protection"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    }
+  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -782,6 +814,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
       "redirectUris": [
         "*"
       ],
@@ -791,9 +824,9 @@
       "consentRequired": false,
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
