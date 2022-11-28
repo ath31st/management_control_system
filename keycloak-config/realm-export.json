@@ -503,7 +503,8 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-mcs"
+        "ADMINISTRATOR",
+        "MANAGER"
       ],
       "clientRoles": {
         "gateway-client": [
@@ -873,6 +874,20 @@
           }
         },
         {
+          "id": "9afee1e1-8db1-4df3-8882-4566995827dd",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
           "id": "95abbc94-ae78-4a05-a680-379d58fbe05b",
           "name": "shopUrl",
           "protocol": "openid-connect",
@@ -884,6 +899,34 @@
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "shopUrl",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "378a8547-9652-4eb2-a4bb-61f32617f0c3",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "fcf07dc6-7dcc-4216-8b86-66b9e2bf12a4",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
             "jsonType.label": "String"
           }
         }
