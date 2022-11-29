@@ -12,7 +12,9 @@ services:
     ports:
       - "2181:2181"
     environment:
-      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOO_ENABLE_AUTH: yes
+      ZOO_SERVER_USERS: kafka
+      ZOO_SERVER_PASSWORDS: kafka_password
     networks:
       - kafka-net
 
@@ -26,11 +28,22 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_USER: kafka
+      KAFKA_ZOOKEEPER_PASSWORD: kafka_password
       ALLOW_PLAINTEXT_LISTENER: yes
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_CFG_LISTENERS: CLIENT://:9092,EXTERNAL://:9093
       KAFKA_CFG_ADVERTISED_LISTENERS: CLIENT://kafka:9092,EXTERNAL://localhost:9093
       KAFKA_CFG_INTER_BROKER_LISTENER_NAME: CLIENT
+      # KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CLIENT:SASL_SSL,EXTERNAL:SSL
+      KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM:
+      KAFKA_CLIENT_USERS: user
+      KAFKA_CLIENT_PASSWORDS: password
+      KAFKA_CERTIFICATE_PASSWORD: certificatePassword123
+      KAFKA_TLS_TYPE: JKS
+    volumes:
+      - './kafka-key-trust-store/kafka.keystore.jks:/opt/bitnami/kafka/config/certs/kafka.keystore.jks:ro'
+      - './kafka-key-trust-store/kafka.truststore.jks:/opt/bitnami/kafka/config/certs/kafka.truststore.jks:ro'
     networks:
       - kafka-net
     depends_on:
