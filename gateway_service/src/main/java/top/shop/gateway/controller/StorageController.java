@@ -46,7 +46,7 @@ public class StorageController {
         return "redirect:/storage";
     }
 
-    @GetMapping("new-product")
+    @GetMapping("/new-product")
     public String productHandler(Model model) {
         model.addAttribute("productDto", new ProductDto());
         model.addAttribute("categoryList", categoryService.getCategories());
