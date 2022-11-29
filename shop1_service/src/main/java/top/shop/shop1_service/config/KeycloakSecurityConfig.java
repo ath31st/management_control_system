@@ -7,6 +7,7 @@ import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticatio
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -50,7 +51,8 @@ class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         http
                 .csrf().disable()
                 .authorizeRequests()
-             //   .antMatchers("/api/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/catalogue").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/order").permitAll()
                 .anyRequest().fullyAuthenticated();
     }
 }

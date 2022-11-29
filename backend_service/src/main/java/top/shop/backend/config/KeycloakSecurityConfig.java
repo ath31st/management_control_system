@@ -7,6 +7,7 @@ import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticatio
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,8 +18,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 
 @KeycloakConfiguration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
-{
+class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     /**
      * Registers the KeycloakAuthenticationProvider with the authentication manager.
      */
@@ -44,13 +44,12 @@ class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http
                 .csrf().disable()
                 .authorizeRequests()
-             //   .antMatchers("/api/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/products").permitAll()
                 .anyRequest().fullyAuthenticated();
     }
 }

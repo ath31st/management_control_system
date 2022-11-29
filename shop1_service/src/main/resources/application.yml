@@ -44,6 +44,7 @@ keycloak:
   resource: "shop1-client"
   bearer-only: true
   ssl-required: external
+  #for every new shop-service change this field
   credentials:
     secret: LhVnsO5FnhEnZQezC0oQiqgeZtPL8m6R
   confidential-port: 0
@@ -52,4 +53,4 @@ logging:
   level:
     org:
       springframework:
-        security: debug
+        security: off
