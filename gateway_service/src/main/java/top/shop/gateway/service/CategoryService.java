@@ -25,8 +25,7 @@ public class CategoryService {
 
         CategoryDto[] categories = restTemplate.exchange(RequestEntity.get(url)
                         .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), CategoryDto[].class)
-                .getBody();
+                        .build(), CategoryDto[].class).getBody();
 
         if (categories == null) return new ArrayList<>();
 
@@ -37,8 +36,7 @@ public class CategoryService {
         String url = backendUrl + "/api/categories/" + categoryServiceName;
         return restTemplate.exchange(RequestEntity.get(url)
                         .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), CategoryDto.class)
-                .getBody();
+                        .build(), CategoryDto.class).getBody();
     }
 
     public void createCategory(CategoryDto categoryDto) {
@@ -49,6 +47,13 @@ public class CategoryService {
     public void sendCategoryChanges(CategoryDto categoryDto) {
         String url = backendUrl + "/api/edit-category";
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(categoryDto), CategoryDto.class);
+    }
+
+    public void deleteCategory(String categoryServiceName) {
+        String url = backendUrl + "/api/delete-category/" + categoryServiceName;
+        restTemplate.exchange(RequestEntity.get(url)
+                        .headers(TokenExtractor.headersWithTokenAuthUser())
+                        .build(), String.class).getBody();
     }
 
 }

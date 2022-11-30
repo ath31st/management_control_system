@@ -47,7 +47,7 @@ class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/users", "/edit-user/*", "/delete-user/*").hasAuthority("ROLE_ADMINISTRATOR")
-                .antMatchers("/categories", "/edit-category/*", "/new-category").hasAuthority("ROLE_ADMINISTRATOR")
+                .antMatchers("/categories", "/edit-category/*", "/delete-category/*", "/new-category").hasAuthority("ROLE_ADMINISTRATOR")
                 .antMatchers("/shops", "/edit-shop/*", "/new-shop").hasAuthority("ROLE_ADMINISTRATOR")
                 .antMatchers("/storage", "/edit-product/*", "/new-product").hasAuthority("ROLE_ADMINISTRATOR")
                 .antMatchers("/catalogue", "/edit-catalogue/*", "/new-catalogue").hasAuthority("ROLE_MANAGER")

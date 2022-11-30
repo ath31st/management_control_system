@@ -89,8 +89,7 @@ public class CatalogueService {
         String url = shopUrl + "/api/manager/prices";
         return restTemplate.exchange(RequestEntity.get(url)
                         .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), ProductPricingWrapper.class)
-                .getBody();
+                        .build(), ProductPricingWrapper.class).getBody();
     }
 
     public void sendProductPricingWrapperToShop(ProductPricingWrapper wrapper, String shopUrl) {

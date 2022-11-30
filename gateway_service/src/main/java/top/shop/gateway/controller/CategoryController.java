@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.CategoryDto;
 import top.shop.gateway.service.CategoryService;
@@ -36,7 +33,8 @@ public class CategoryController {
     }
 
     @PostMapping("/edit-category")
-    public String categoryChangesHandler(@Valid @ModelAttribute("categoryDto") CategoryDto categoryDto, BindingResult bindingResult, Model model) {
+    public String categoryChangesHandler(@Valid @ModelAttribute("categoryDto") CategoryDto categoryDto,
+                                         BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categoryDto", categoryDto);
             return "category-templates/edit-category";
@@ -54,7 +52,8 @@ public class CategoryController {
     }
 
     @PostMapping("/new-category")
-    public String categoryHandler(@Valid @ModelAttribute("categoryDto") CategoryDto categoryDto, BindingResult bindingResult, Model model) {
+    public String categoryHandler(@Valid @ModelAttribute("categoryDto") CategoryDto categoryDto,
+                                  BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categoryDto", categoryDto);
             return "category-templates/new-category";
@@ -67,6 +66,12 @@ public class CategoryController {
             return "category-templates/new-category";
         }
 
+        return "redirect:/categories";
+    }
+
+    @DeleteMapping("/delete-category/{categoryServiceName}")
+    public String categoryHandler(@PathVariable String categoryServiceName) {
+        categoryService.deleteCategory(categoryServiceName);
         return "redirect:/categories";
     }
 

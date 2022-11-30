@@ -26,8 +26,7 @@ public class StorageService {
 
         return restTemplate.exchange(RequestEntity.get(url)
                         .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), ProductWrapper.class)
-                .getBody();
+                        .build(), ProductWrapper.class).getBody();
     }
 
     public ProductWrapper getProductWrapperWithoutCatalogue(CatalogueDto catalogueDto) {

@@ -23,8 +23,7 @@ public class ShopService {
         String url = backendUrl + "/api/shops";
         ShopDto[] shops = restTemplate.exchange(RequestEntity.get(url)
                         .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), ShopDto[].class)
-                .getBody();
+                        .build(), ShopDto[].class).getBody();
 
         if (shops == null) return new ArrayList<>();
 
@@ -35,8 +34,7 @@ public class ShopService {
         String url = backendUrl + "/api/shops/" + shopServiceName;
         return restTemplate.exchange(RequestEntity.get(url)
                         .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), ShopDto.class)
-                .getBody();
+                        .build(), ShopDto.class).getBody();
     }
 
     public double getTotalBalance(List<ShopDto> shops) {
