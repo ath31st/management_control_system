@@ -20,6 +20,15 @@ spring:
   kafka:
     #    bootstrap-servers: "kafka:9092"
     bootstrap-servers: "localhost:9093"
+    jaas:
+      enabled: true
+    properties:
+      sasl:
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${kafka_username:'admin'} password=${kafka_password:'admin-secret'};
+        mechanism: PLAIN
+      security:
+        protocol: SASL_PLAINTEXT
     consumer:
       auto-offset-reset: earliest
       #for every new shop-service change this field

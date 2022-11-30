@@ -8,133 +8,137 @@ networks:
 services:
   zookeeper:
     container_name: zookeeper
-    image: bitnami/zookeeper
+    image: wurstmeister/zookeeper:latest
     ports:
       - "2181:2181"
     environment:
-      ZOO_ENABLE_AUTH: yes
-      ZOO_SERVER_USERS: kafka
-      ZOO_SERVER_PASSWORDS: kafka_password
-      ZOO_CLIENT_USER: kafka
-      ZOO_CLIENT_PASSWORD: kafka_password
+#      ZOO_ENABLE_AUTH: yes
+#      ZOO_SERVER_USERS: kafka
+#      ZOO_SERVER_PASSWORDS: kafka_password
+#      ZOO_CLIENT_USER: kafka
+#      ZOO_CLIENT_PASSWORD: kafka_password
       #ALLOW_ANONYMOUS_LOGIN: yes
-#      JVMFLAGS: "-Djava.security.auth.login.config=/opt/bitnami/zookeeper/conf/zookeeper_jaas.conf"
-#    volumes:
-#      - './kafka-key-trust-store/zookeeper_jaas.conf:/opt/bitnami/zookeeper/conf/zookeeper_jaas.conf'
+      JVMFLAGS: "-Djava.security.auth.login.config=/etc/zookeeper/zookeeper_jaas.conf"
+    volumes:
+      - './kafka-key-trust-store/zookeeper_jaas.conf:/etc/zookeeper/zookeeper_jaas.conf'
     networks:
       - kafka-net
 
   kafka:
     container_name: kafka
-    image: bitnami/kafka
+    image: wurstmeister/kafka:latest
     ports:
       - "9092:9092"
       - "9093:9093"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ZOOKEEPER_USER: kafka
-      KAFKA_ZOOKEEPER_PASSWORD: kafka_password
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      #KAFKA_ZOOKEEPER_USER: kafka
+      #KAFKA_ZOOKEEPER_PASSWORD: kafka_password
       #KAFKA_CFG_ZOOKEEPER_PROTOCOL: PLAINTEXT
       ALLOW_PLAINTEXT_LISTENER: yes
 
-      KAFKA_CFG_LISTENERS: CLIENT://:9092,EXTERNAL://:9093
-      KAFKA_CFG_ADVERTISED_LISTENERS: CLIENT://kafka:9092,EXTERNAL://localhost:9093
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: CLIENT
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CLIENT:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT
+      KAFKA_LISTENERS: CLIENT://:9092,EXTERNAL://:9093
+      KAFKA_ADVERTISED_LISTENERS: CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: CLIENT
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CLIENT:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT
 
-      KAFKA_CFG_SASL_ENABLED_MECHANISMS: PLAIN
-      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
 
-    #      KAFKA_CFG_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ''
+#      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ''
 #      KAFKA_CLIENT_USERS: user
 #      KAFKA_CLIENT_PASSWORDS: password
 #      KAFKA_CERTIFICATE_PASSWORD: certificatePassword123
 #      KAFKA_TLS_TYPE: JKS
-#      KAFKA_OPTS: "-Djava.security.auth.login.config=/opt/bitnami/kafka/conf/kafka_jaas.conf"
-#    volumes:
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_jaas.conf"
+    volumes:
 #      - './kafka-key-trust-store/kafka.keystore.jks:/opt/bitnami/kafka/config/certs/kafka.keystore.jks:ro'
 #      - './kafka-key-trust-store/kafka.truststore.jks:/opt/bitnami/kafka/config/certs/kafka.truststore.jks:ro'
-#      - './kafka-key-trust-store/kafka_server_jaas.conf:/opt/bitnami/kafka/conf/kafka_jaas.conf'
+      - './kafka-key-trust-store/kafka_server_jaas.conf:/etc/kafka/kafka_jaas.conf'
     networks:
       - kafka-net
     depends_on:
       - zookeeper
 
-  #  kafdrop:
-  #    container_name: kafdrop
-  #    image: obsidiandynamics/kafdrop
-  #    restart: "no"
-  #    ports:
-  #      - "9000:9000"
-  #    environment:
-  #      KAFKA_BROKERCONNECT: "kafka:9092"
-  #    networks:
-  #      - kafka-net
-  #    depends_on:
-  #      - kafka
+#  kafdrop:
+#      container_name: kafdrop
+#      image: obsidiandynamics/kafdrop:latest
+#      restart: "no"
+#      ports:
+#        - "9000:9000"
+#      environment:
+#        KAFKA_PROPERTIES: "$(cat kafka.properties | base64)"
+#        KAFKA_BROKERCONNECT: "kafka:9092"
+#        SERVER_SERVLET_CONTEXTPATH: "/"
+#      volumes:
+#        - './kafka-key-trust-store/kafka.properties:/kafka.properties'
+#      networks:
+#        - kafka-net
+#      depends_on:
+#        - kafka
 
-#  keycloak:
-#    image: jboss/keycloak:latest
-#    container_name: keycloak
-#    environment:
-#      DB_VENDOR: POSTGRES
-#      DB_ADDR: postgres-keycloak
-#      DB_DATABASE: keycloakDB
-#      DB_USER: postgres
-#      DB_PASSWORD: postgres
-#      KEYCLOAK_USER: keycloak
-#      KEYCLOAK_PASSWORD: keycloak
-#      KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm-config/realm-export.json
-#    volumes:
-#      - ./keycloak-config:/opt/jboss/keycloak/realm-config
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - kafka-net
-#    depends_on:
-#      - postgres-keycloak
-#
-#  postgres-keycloak:
-#    image: postgres:15.0
-#    container_name: postgres-container-keycloak
-#    ports:
-#      - "5432:5432"
-#    environment:
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgres
-#      POSTGRES_DB: keycloakDB
-#    restart: always
-#    networks:
-#      - kafka-net
-#
-#  postgres-backend:
-#    image: postgres:15.0
-#    container_name: postgres-container-backend
-#    ports:
-#      - "5433:5433"
-#    command: -p 5433
-#    environment:
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgres
-#      POSTGRES_DB: postgresDB
-#    restart: always
-#    networks:
-#      - kafka-net
-#
-#  mongodb-shop1:
-#    image: mongo:latest
-#    container_name: mongo-container-shop1
-#    restart: always
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: mongo
-#      MONGO_INITDB_ROOT_PASSWORD: mongo
-#      MONGO_INITDB_DATABASE: mongoDBshop1
-#    ports:
-#      - "27017:27017"
-#    volumes:
-#      - ./shop1_service/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  keycloak:
+    image: jboss/keycloak:latest
+    container_name: keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres-keycloak
+      DB_DATABASE: keycloakDB
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      KEYCLOAK_USER: keycloak
+      KEYCLOAK_PASSWORD: keycloak
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm-config/realm-export.json
+    volumes:
+      - ./keycloak-config:/opt/jboss/keycloak/realm-config
+    ports:
+      - "8080:8080"
+    networks:
+      - kafka-net
+    depends_on:
+      - postgres-keycloak
+
+  postgres-keycloak:
+    image: postgres:15.0
+    container_name: postgres-container-keycloak
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: keycloakDB
+    restart: always
+    networks:
+      - kafka-net
+
+  postgres-backend:
+    image: postgres:15.0
+    container_name: postgres-container-backend
+    ports:
+      - "5433:5433"
+    command: -p 5433
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgresDB
+    restart: always
+    networks:
+      - kafka-net
+
+  mongodb-shop1:
+    image: mongo:latest
+    container_name: mongo-container-shop1
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: mongoDBshop1
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./shop1_service/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
 #  gateway-service:
 #    container_name: gateway-service
