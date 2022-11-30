@@ -29,6 +29,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     @Override
     public void run(String... args) {
         createAdminKeycloakUser();
+        createManagerKeycloakUser();
     }
 
     private void createAdminKeycloakUser() {
@@ -65,6 +66,42 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         userResource.resetPassword(cr);
         userResource.roles().realmLevel().remove(list);
         userResource.roles().realmLevel().add(List.of(userService.getRoleRepresentation("ADMINISTRATOR")));
+    }
+
+    private void createManagerKeycloakUser() {
+        if (!keycloak.realm(realm).users().searchByUsername("usr", true).isEmpty()) return;
+
+        UserRepresentation ur = new UserRepresentation();
+        ur.setEnabled(true);
+        ur.setUsername("usr");
+        ur.setFirstName("Petr");
+        ur.setLastName("Topov");
+        ur.setEmail("ok@neorg.ru");
+        ur.setAttributes(Map.of(
+                "shopServiceName", List.of("shop1"),
+                "shopUrl", List.of("http://localhost:28880")));
+
+        Response response = keycloak.realm(realm).users().create(ur);
+        String userId = CreatedResponseUtil.getCreatedId(response);
+
+        UserResource userResource = keycloak
+                .realm(realm)
+                .users()
+                .get(userId);
+
+        List<RoleRepresentation> list = userResource
+                .roles()
+                .realmLevel()
+                .listAll();
+
+        CredentialRepresentation cr = new CredentialRepresentation();
+        cr.setTemporary(false);
+        cr.setType("password");
+        cr.setValue("123");
+
+        userResource.resetPassword(cr);
+        userResource.roles().realmLevel().remove(list);
+        userResource.roles().realmLevel().add(List.of(userService.getRoleRepresentation("MANAGER")));
     }
 
 }
