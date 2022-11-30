@@ -20,7 +20,7 @@ services:
       #ALLOW_ANONYMOUS_LOGIN: yes
       JVMFLAGS: "-Djava.security.auth.login.config=/etc/zookeeper/zookeeper_jaas.conf"
     volumes:
-      - './kafka-key-trust-store/zookeeper_jaas.conf:/etc/zookeeper/zookeeper_jaas.conf'
+      - './kafka-configs/zookeeper_jaas.conf:/etc/zookeeper/zookeeper_jaas.conf'
     networks:
       - kafka-net
 
@@ -56,7 +56,7 @@ services:
     volumes:
 #      - './kafka-key-trust-store/kafka.keystore.jks:/opt/bitnami/kafka/config/certs/kafka.keystore.jks:ro'
 #      - './kafka-key-trust-store/kafka.truststore.jks:/opt/bitnami/kafka/config/certs/kafka.truststore.jks:ro'
-      - './kafka-key-trust-store/kafka_server_jaas.conf:/etc/kafka/kafka_jaas.conf'
+      - './kafka-configs/kafka_server_jaas.conf:/etc/kafka/kafka_jaas.conf'
     networks:
       - kafka-net
     depends_on:
@@ -73,7 +73,7 @@ services:
 #        KAFKA_BROKERCONNECT: "kafka:9092"
 #        SERVER_SERVLET_CONTEXTPATH: "/"
 #      volumes:
-#        - './kafka-key-trust-store/kafka.properties:/kafka.properties'
+#        - './kafka-configs/kafka.properties:/kafka.properties'
 #      networks:
 #        - kafka-net
 #      depends_on:
