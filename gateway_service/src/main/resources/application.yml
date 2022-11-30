@@ -17,7 +17,7 @@ keycloak:
   principal-attribute: preferred_username
   ssl-required: external
   credentials:
-    secret: 7E9jsqJESTQMdGCp00UqLMcXpHEjGMUb
+    secret: super_secret_password_for_gateway_service
 #  use-resource-role-mappings: true
 
 spring:

@@ -672,7 +672,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "super_secret_password_for_backend_service",
       "redirectUris": [
         "*"
       ],
@@ -819,7 +819,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "super_secret_password_for_gateway_service",
       "redirectUris": [
         "http://127.0.0.1:28888/*"
       ],
@@ -1057,7 +1057,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "super_secret_password_for_shop1_service",
       "redirectUris": [
         "*"
       ],

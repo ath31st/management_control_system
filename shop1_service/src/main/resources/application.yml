@@ -55,7 +55,7 @@ keycloak:
   ssl-required: external
   #for every new shop-service change this field
   credentials:
-    secret: LhVnsO5FnhEnZQezC0oQiqgeZtPL8m6R
+    secret: super_secret_password_for_shop1_service
   confidential-port: 0
 
 logging:

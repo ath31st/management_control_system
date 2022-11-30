@@ -50,7 +50,7 @@ keycloak:
   bearer-only: true
   ssl-required: external
   credentials:
-    secret: iaynxnyD7yrX8h30w7abGPar4rbGWMld
+    secret: super_secret_password_for_backend_service
   confidential-port: 0
 
 logging:
