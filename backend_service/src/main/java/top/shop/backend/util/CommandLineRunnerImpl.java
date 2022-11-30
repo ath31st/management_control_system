@@ -19,14 +19,20 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        createDefaultShop();
+        createDefaultCategory();
+    }
+
+    private void createDefaultShop() {
         ShopDto shop1 = new ShopDto();
         shop1.setServiceName("shop1");
         shop1.setName("DEFAULT");
         shop1.setUrl("http://localhost:28880");
 
         shopService.saveNewShop(shop1);
-        log.info("shop with name {} added!", shop1.getName());
+    }
 
+    private void createDefaultCategory() {
         CategoryDto defaultCategory = new CategoryDto();
         defaultCategory.setServiceName("default_category");
         defaultCategory.setName("DEFAULT");
