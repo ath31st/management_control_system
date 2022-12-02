@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import top.shop.gateway.dto.CategoryDto;
@@ -51,9 +52,9 @@ public class CategoryService {
 
     public void deleteCategory(String categoryServiceName) {
         String url = backendUrl + "/api/delete-category/" + categoryServiceName;
-        restTemplate.exchange(RequestEntity.get(url)
+        restTemplate.exchange(RequestEntity.delete(url)
                         .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), String.class).getBody();
+                        .build(), ResponseEntity.class).getBody();
     }
 
 }

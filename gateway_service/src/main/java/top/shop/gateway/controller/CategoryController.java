@@ -69,7 +69,7 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @DeleteMapping("/delete-category/{categoryServiceName}")
+    @GetMapping("/delete-category/{categoryServiceName}")
     public String categoryHandler(@PathVariable String categoryServiceName) {
         categoryService.deleteCategory(categoryServiceName);
         return "redirect:/categories";

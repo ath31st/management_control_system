@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.dto.product.ProductAmountDto;
@@ -12,6 +13,7 @@ import top.shop.backend.entity.Category;
 import top.shop.backend.entity.Product;
 import top.shop.backend.exceptionhandler.exception.ProductException;
 import top.shop.backend.repository.ProductRepository;
+import top.shop.backend.service.event.CategoryEvent;
 import top.shop.backend.service.event.ProductAmountEvent;
 import top.shop.backend.util.wrapper.ProductWrapper;
 
@@ -117,6 +119,11 @@ public class ProductService {
                 .filter(p -> !catalogueProductNames.contains(p.getServiceName()))
                 .map(p -> modelMapper.map(p, ProductDto.class))
                 .toList());
+    }
+
+    @EventListener
+    public void changeCategoryToDefault(CategoryEvent event) {
+
     }
 
 }

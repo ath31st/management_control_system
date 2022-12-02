@@ -2,12 +2,14 @@ package top.shop.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.dto.CategoryDto;
 import top.shop.backend.entity.Category;
 import top.shop.backend.exceptionhandler.exception.CategoryException;
 import top.shop.backend.repository.CategoryRepository;
+import top.shop.backend.service.event.CategoryEvent;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +20,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Category getCategory(String categoryServiceName) {
         return categoryRepository.findByServiceName(categoryServiceName).orElseThrow(
@@ -53,6 +56,14 @@ public class CategoryService {
         category.setDescription(categoryDto.getDescription());
 
         return categoryRepository.save(category);
+    }
+
+    public void deleteCategory(String categoryServiceName) {
+        Category category = getCategory(categoryServiceName);
+
+        eventPublisher.publishEvent(new CategoryEvent(categoryServiceName));
+
+        categoryRepository.delete(category);
     }
 
     public boolean categoryExists(String categoryServiceName) {
