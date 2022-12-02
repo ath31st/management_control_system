@@ -95,7 +95,7 @@ public class ProductService {
 
     public List<ProductDto> convertProductDtoListFromProducts(List<Product> products) {
         return products.stream()
-                .map(p -> modelMapper.map(p, ProductDto.class))
+                .map(this::convertProductToProductDto)
                 .sorted(Comparator.comparing(ProductDto::getServiceName))
                 .toList();
     }
@@ -117,13 +117,35 @@ public class ProductService {
 
         return new ProductWrapper(products.stream()
                 .filter(p -> !catalogueProductNames.contains(p.getServiceName()))
-                .map(p -> modelMapper.map(p, ProductDto.class))
+                .map(this::convertProductToProductDto)
                 .toList());
     }
 
-    @EventListener
-    public void changeCategoryToDefault(CategoryEvent event) {
+    public ProductDto changeProduct(ProductDto productDto) {
+        Product product = getProduct(productDto.getServiceName());
+        product.setName(productDto.getName());
+        product.setDescription(productDto.getDescription());
+        product.setCategory(categoryService.getCategory(productDto.getCategory().getServiceName()));
+        product.setPrice(productDto.getPrice());
+        product.setAmount(productDto.getAmount());
 
+        productRepository.save(product);
+        eventPublisher.publishEvent(new ProductAmountEvent(
+                new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
+
+        return convertProductToProductDto(product);
     }
 
+    @EventListener
+    public void changeProductsCategoryToDefault(CategoryEvent event) {
+        List<Product> products = productRepository.getProductByCategory_ServiceName((String) event.getSource());
+        products.forEach(p-> {
+            p.setCategory(categoryService.getCategory("default_category"));
+            productRepository.save(p);
+        });
+    }
+
+    private ProductDto convertProductToProductDto(Product product) {
+        return modelMapper.map(product, ProductDto.class);
+    }
 }
