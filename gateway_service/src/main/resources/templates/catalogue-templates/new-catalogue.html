@@ -58,7 +58,9 @@
                 <br/>
                 <div th:if="${#lists.isEmpty(productWrapper.productDtoList)}"><h4>No storage data found</h4></div>
                 <div>
-                    <input th:if="${not #lists.isEmpty(productWrapper.productDtoList)}" type="submit" value="Create"/>
+                    <input th:if="${not #lists.isEmpty(productWrapper.productDtoList)}"
+                           type="submit"
+                           class="btn btn-primary" value="Create"/>
                 </div>
             </form>
 
