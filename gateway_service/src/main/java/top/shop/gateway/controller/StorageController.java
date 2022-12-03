@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
+import top.shop.gateway.dto.ShopDto;
 import top.shop.gateway.dto.product.ProductDto;
 import top.shop.gateway.service.CategoryService;
 import top.shop.gateway.service.StorageService;
@@ -55,7 +56,8 @@ public class StorageController {
     }
 
     @PostMapping("/new-product")
-    public String productHandler(@Valid @ModelAttribute("productDto") ProductDto productDto, BindingResult bindingResult, Model model) {
+    public String productHandler(@Valid @ModelAttribute("productDto") ProductDto productDto,
+                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("productDto", productDto);
             model.addAttribute("categoryList", categoryService.getCategories());
@@ -76,7 +78,22 @@ public class StorageController {
     public String productChangesHandler(@PathVariable String productServiceName, Model model) {
         ProductDto productDto = storageService.getProductDto(productServiceName);
         model.addAttribute("productDto", productDto);
+        model.addAttribute("categoryList", categoryService.getCategories());
         return "storage-templates/edit-product";
+    }
+
+    @PostMapping("/edit-product")
+    public String productChangesHandler(@Valid @ModelAttribute("productDto") ProductDto productDto,
+                                        BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("productDto", productDto);
+            model.addAttribute("categoryList", categoryService.getCategories());
+            return "storage-templates/edit-product";
+        }
+        model.addAttribute("productDto", productDto);
+
+        storageService.sendChangesProductDto(productDto);
+        return "redirect:/storage";
     }
 
 }

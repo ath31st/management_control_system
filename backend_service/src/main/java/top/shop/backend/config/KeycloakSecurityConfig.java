@@ -1,4 +1,4 @@
-package top.shop.backend.config.keycloakconfig;
+package top.shop.backend.config;
 
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;

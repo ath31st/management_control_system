@@ -1,4 +1,4 @@
-package top.shop.shop1_service.config.keycloakconfig;
+package top.shop.shop1_service.config;
 
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
