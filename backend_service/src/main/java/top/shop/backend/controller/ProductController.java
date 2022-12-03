@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import top.shop.backend.dto.product.ProductDto;
 import top.shop.backend.service.ProductService;
 import top.shop.backend.util.wrapper.ProductWrapper;
 
@@ -32,6 +33,16 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<ProductWrapper> productsHandler() {
         return ResponseEntity.ok(productService.getProductWrapper());
+    }
+
+    @GetMapping("/products/{productServiceName}")
+    public ResponseEntity<ProductDto> productHandler(@PathVariable String productServiceName) {
+        return ResponseEntity.ok(productService.getProductDto(productServiceName));
+    }
+
+    @PostMapping("/product")
+    public ResponseEntity<ProductDto> productHandler(@RequestBody ProductDto productDto) {
+        return ResponseEntity.ok(productService.changeProduct(productDto));
     }
 
 }

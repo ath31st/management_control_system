@@ -121,6 +121,11 @@ public class ProductService {
                 .toList());
     }
 
+    public ProductDto getProductDto(String productServiceName) {
+        Product p = getProduct(productServiceName);
+        return convertProductToProductDto(p);
+    }
+
     public ProductDto changeProduct(ProductDto productDto) {
         Product product = getProduct(productDto.getServiceName());
         product.setName(productDto.getName());
@@ -139,7 +144,7 @@ public class ProductService {
     @EventListener
     public void changeProductsCategoryToDefault(CategoryEvent event) {
         List<Product> products = productRepository.getProductByCategory_ServiceName((String) event.getSource());
-        products.forEach(p-> {
+        products.forEach(p -> {
             p.setCategory(categoryService.getCategory("default_category"));
             productRepository.save(p);
         });
