@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.product.ProductDto;
@@ -69,6 +70,13 @@ public class StorageController {
         }
 
         return "redirect:/storage";
+    }
+
+    @GetMapping("/edit-product/{productServiceName}")
+    public String productChangesHandler(@PathVariable String productServiceName, Model model) {
+        ProductDto productDto = storageService.getProductDto(productServiceName);
+        model.addAttribute("productDto", productDto);
+        return "storage-templates/edit-product";
     }
 
 }

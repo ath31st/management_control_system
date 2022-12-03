@@ -46,12 +46,19 @@
                                 <th>Category</th>
                                 <th>Price</th>
                                 <th>Amount</th>
+                                <th></th>
                             </tr>
                             <tr th:each="product: ${wrapper.productDtoList}">
                                 <td th:text="${product.serviceName}">product service name</td>
                                 <td th:text="${product.category.serviceName}">category service name</td>
                                 <td th:text="${product.price}">price</td>
                                 <td th:text="${product.amount}">amount</td>
+                                <td>
+                                    <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                                       th:href="@{|/edit-product/${product.serviceName}|}">Edit
+                                        product</a>
+                                    </button>
+                                </td>
                             </tr>
                         </table>
                     </td>
@@ -62,15 +69,17 @@
                             </tr>
                             <tr th:each="product, itemStat : ${wrapper.productDtoList}">
                                 <td><input th:name="|productDtoList[${itemStat.index}].amount|" th:value="0"/></td>
-                                <td style="display:none"><input th:name="|productDtoList[${itemStat.index}].serviceName|" th:value="${product.serviceName}"/></td>
+                                <td style="display:none"><input
+                                        th:name="|productDtoList[${itemStat.index}].serviceName|"
+                                        th:value="${product.serviceName}"/></td>
                             </tr>
                         </table>
                     </td>
                 </table>
                 <div>
-<!--                    <p><span th:text="${message}"></span>-->
-<!--                        <span th:if="${message} != null" th:text="${#dates.createNow()}"></span>-->
-<!--                    </p>-->
+                    <!--                    <p><span th:text="${message}"></span>-->
+                    <!--                        <span th:if="${message} != null" th:text="${#dates.createNow()}"></span>-->
+                    <!--                    </p>-->
                     <br>
                     <button th:if="${not #lists.isEmpty(wrapper.productDtoList)}" type="submit"
                             class="btn btn-primary">Submit

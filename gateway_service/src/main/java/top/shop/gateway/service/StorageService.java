@@ -29,6 +29,14 @@ public class StorageService {
                         .build(), ProductWrapper.class).getBody();
     }
 
+    public ProductDto getProductDto(String productServiceName) {
+        String url = backendUrl + "/api/products/" + productServiceName;
+
+        return restTemplate.exchange(RequestEntity.get(url)
+                .headers(TokenExtractor.headersWithTokenAuthUser())
+                .build(), ProductDto.class).getBody();
+    }
+
     public ProductWrapper getProductWrapperWithoutCatalogue(CatalogueDto catalogueDto) {
         String url = backendUrl + "/api/products-without-catalogue";
         List<String> catalogueProductNames = catalogueDto.getProducts()

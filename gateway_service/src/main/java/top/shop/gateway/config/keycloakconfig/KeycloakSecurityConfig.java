@@ -1,4 +1,4 @@
-package top.shop.gateway.config;
+package top.shop.gateway.config.keycloakconfig;
 
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;

@@ -1,4 +1,4 @@
-package top.shop.backend.config;
+package top.shop.gateway.config.keycloakconfig;
 
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
