@@ -49,6 +49,9 @@ public class CatalogueService {
     }
 
     public Catalogue createCatalogue(CatalogueDto catalogueDto) {
+        if (catalogueRepository.existsByShop_ServiceName(catalogueDto.getShopServiceName()))
+            catalogueRepository.delete(getCatalogue(catalogueDto.getShopServiceName()));
+
         List<Product> products = productService.convertProductListFromDto(catalogueDto.getProducts());
         Catalogue catalogue = new Catalogue();
 
@@ -78,12 +81,12 @@ public class CatalogueService {
     }
 
     public void catalogueHandler(CatalogueDto catalogueDto) {
-        if (!catalogueRepository.existsByShop_ServiceName(catalogueDto.getShopServiceName())) {
-            createCatalogue(catalogueDto);
+        //  if (!catalogueRepository.existsByShop_ServiceName(catalogueDto.getShopServiceName())) {
+        createCatalogue(catalogueDto);
 
-            CatalogueDto catalogue = getCatalogueDto(catalogueDto.getShopServiceName());
-            eventPublisher.publishEvent(new CatalogueEvent(catalogue));
-        }
+        CatalogueDto catalogue = getCatalogueDto(catalogueDto.getShopServiceName());
+        eventPublisher.publishEvent(new CatalogueEvent(catalogue));
+        //   }
     }
 
     @EventListener

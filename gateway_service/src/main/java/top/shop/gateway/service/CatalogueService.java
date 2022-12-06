@@ -55,7 +55,8 @@ public class CatalogueService {
                 .catalogueOnDate(LocalDateTime.now())
                 .products(productWrapper.getProductDtoList()
                         .stream()
-                        .filter(p -> Arrays.stream(productServiceName).anyMatch(n -> p.getServiceName().equals(n)))
+                        .filter(p -> productServiceName != null && Arrays.stream(productServiceName)
+                                .anyMatch(n -> p.getServiceName().equals(n)))
                         .toList())
                 .build();
     }
@@ -88,8 +89,8 @@ public class CatalogueService {
     public ProductPricingWrapper getProductPricingWrapperFromShop(String shopUrl) {
         String url = shopUrl + "/api/manager/prices";
         return restTemplate.exchange(RequestEntity.get(url)
-                        .headers(TokenExtractor.headersWithTokenAuthUser())
-                        .build(), ProductPricingWrapper.class).getBody();
+                .headers(TokenExtractor.headersWithTokenAuthUser())
+                .build(), ProductPricingWrapper.class).getBody();
     }
 
     public void sendProductPricingWrapperToShop(ProductPricingWrapper wrapper, String shopUrl) {
