@@ -9,22 +9,20 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
-import top.shop.shop1_service.dto.product.ProductAmountDto;
 import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.dto.product.ProductPricingDto;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException;
-import top.shop.shop1_service.repository.ProductPricingRepository;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductPricingService {
 
-    private final ProductPricingRepository productPricingRepository;
     private final ModelMapper modelMapper;
     private final MongoTemplate mongoTemplate;
 
@@ -33,7 +31,7 @@ public class ProductPricingService {
                     if (productPricingExists(p.getProductServiceName())) {
                         updateProductPricing(p);
                     } else {
-                        productPricingRepository.save(ProductPricing.builder()
+                        mongoTemplate.save(ProductPricing.builder()
                                 .productServiceName(p.getProductServiceName())
                                 .price(p.getPrice())
                                 .build());
@@ -43,8 +41,8 @@ public class ProductPricingService {
     }
 
     public ProductPricing getProductPricing(String productServiceName) {
-        return productPricingRepository.findByProductServiceName(productServiceName).orElseThrow(
-                () -> new ProductPricingException(HttpStatus.NOT_FOUND, "Product price with " + productServiceName + " not found!"));
+        Optional<ProductPricing> pp = Optional.ofNullable(mongoTemplate.findById(productServiceName, ProductPricing.class));
+        return pp.orElseThrow(() -> new ProductPricingException(HttpStatus.NOT_FOUND, "Product price with " + productServiceName + " not found!"));
     }
 
     public ProductPricingDto getProductPricingDto(String productServiceName) {
@@ -56,7 +54,7 @@ public class ProductPricingService {
         query.addCriteria(Criteria.where("productServiceName").is(ppDto.getProductServiceName()));
         Update update = new Update();
         update.set("price", ppDto.getPrice());
-        mongoTemplate.updateFirst(query, update, ProductPricing.class);
+        mongoTemplate.findAndModify(query, update, ProductPricing.class);
     }
 
     public ProductDto updatePriceOfProductDto(ProductDto productDto) {
@@ -65,11 +63,18 @@ public class ProductPricingService {
     }
 
     public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
-        return productPricingRepository.findAll().stream()
-                .filter(pp -> productServiceName.contains(pp.getProductServiceName()))
+        Query query = new Query();
+        query.addCriteria(Criteria.where("productServiceName").in(productServiceName));
+        return mongoTemplate.find(query, ProductPricing.class)
+                .stream()
                 .map(pp -> modelMapper.map(pp, ProductPricingDto.class))
                 .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
                 .toList();
+//        return productPricingRepository.findAll().stream()
+//                .filter(pp -> productServiceName.contains(pp.getProductServiceName()))
+//                .map(pp -> modelMapper.map(pp, ProductPricingDto.class))
+//                .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
+//                .toList();
     }
 
     public void addMockProductPricing(CatalogueDto catalogueDto) {
@@ -80,12 +85,13 @@ public class ProductPricingService {
                     ProductPricing pp = new ProductPricing();
                     pp.setProductServiceName(p.getServiceName());
                     pp.setPrice(0);
-                    productPricingRepository.save(pp);
+                    mongoTemplate.save(pp);
                 });
     }
 
     public boolean productPricingExists(String productServiceName) {
-        return productPricingRepository.existsByProductServiceName(productServiceName);
+        return mongoTemplate.exists(Query.query(Criteria.where("productServiceName")
+                .is(productServiceName)), ProductPricing.class);
     }
 
 }
