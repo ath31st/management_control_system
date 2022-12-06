@@ -7,13 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.shop.shop1_service.dto.OrderDto;
-import top.shop.shop1_service.dto.product.ProductDto;
-import top.shop.shop1_service.entity.Catalogue;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
 import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +44,7 @@ public class OrderService {
     }
 
     private void checkAvailableAmountProductForSale(String productServiceName, int orderAmount) {
-        if (!((catalogueService.getAmountProductFromCatalogoue(productServiceName) - orderAmount) >= 0))
+        if (!((catalogueService.getAmountProductFromCatalogue(productServiceName) - orderAmount) >= 0))
             throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is not enough for the order");
     }
 

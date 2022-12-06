@@ -100,7 +100,7 @@ public class CatalogueService {
         catalogueRepository.save(catalogue);
     }
 
-    public long getAmountProductFromCatalogoue(String productServiceName) {
+    public long getAmountProductFromCatalogue(String productServiceName) {
         return getCatalogue().getProducts().get(productServiceName).getAmount();
     }
 

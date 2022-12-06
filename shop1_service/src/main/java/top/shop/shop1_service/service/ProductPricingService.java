@@ -2,6 +2,10 @@ package top.shop.shop1_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
@@ -22,6 +26,7 @@ public class ProductPricingService {
 
     private final ProductPricingRepository productPricingRepository;
     private final ModelMapper modelMapper;
+    private final MongoTemplate mongoTemplate;
 
     public void receiveProductPricingWrapperFromGateway(ProductPricingWrapper wrapper) {
         wrapper.getPricingDtoList().forEach(p -> {
@@ -46,11 +51,12 @@ public class ProductPricingService {
         return modelMapper.map(getProductPricing(productServiceName), ProductPricingDto.class);
     }
 
-    public ProductPricing updateProductPricing(ProductPricingDto ppDto) {
-        ProductPricing p = getProductPricing(ppDto.getProductServiceName());
-        p.setPrice(ppDto.getPrice());
-
-        return productPricingRepository.save(p);
+    public void updateProductPricing(ProductPricingDto ppDto) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("productServiceName").is(ppDto.getProductServiceName()));
+        Update update = new Update();
+        update.set("price", ppDto.getPrice());
+        mongoTemplate.updateFirst(query, update, ProductPricing.class);
     }
 
     public ProductDto updatePriceOfProductDto(ProductDto productDto) {
