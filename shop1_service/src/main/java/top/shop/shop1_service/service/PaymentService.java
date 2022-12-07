@@ -19,6 +19,7 @@ import top.shop.shop1_service.exceptionhandler.exception.PaymentServiceException
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.UUID;
 
 @Service
@@ -68,18 +69,17 @@ public class PaymentService {
 
     private void checkExistingPayment(String paymentUuid) {
         if (!mongoTemplate.exists(Query.query(Criteria.where("paymentUuid").is(paymentUuid)), Payment.class))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment with " + paymentUuid + " UUID not found!");
+            throw new PaymentServiceException(HttpStatus.NOT_FOUND, "Payment with " + paymentUuid + " UUID not found!");
     }
 
     private void checkIsExpiredPayment(Payment payment) {
-        if (Duration.between(LocalDateTime.now(), payment.getPaymentDate()).toMinutes() >
-                payment.getMinutesBeforeExpiration())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment is expired, please try place an order again.");
+        if (LocalDateTime.now().isAfter(payment.getPaymentDate().plusMinutes(payment.getMinutesBeforeExpiration())))
+            throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Payment is expired, please try place an order again.");
     }
 
     private void checkIsRightTotalPrice(Payment payment, PaymentRequestDto paymentRequestDto) {
-         if (!(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0))
-             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Your total price not equals total price in your order.");
+        if (!(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0))
+            throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Your total price not equals total price in your order.");
     }
 
 }
