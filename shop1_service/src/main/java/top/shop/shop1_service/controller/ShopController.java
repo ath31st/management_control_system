@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.OrderDto;
+import top.shop.shop1_service.dto.PaymentDto;
 import top.shop.shop1_service.service.CatalogueService;
 import top.shop.shop1_service.service.OrderService;
 import top.shop.shop1_service.service.ProductPricingService;
@@ -28,6 +29,12 @@ public class ShopController {
         log.info("order request received");
         return orderService.createOrder(orderDto);
     }
+
+//    @PostMapping("/payment")
+//    public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody PaymentDto paymentDto) {
+//        log.info("payment request received");
+//
+//    }
 
     @GetMapping("/catalogue")
     public ResponseEntity<CatalogueDto> catalogueForCustomersHandler() {

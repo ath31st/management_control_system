@@ -6,7 +6,6 @@ import top.shop.shop1_service.dto.product.ProductDto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
