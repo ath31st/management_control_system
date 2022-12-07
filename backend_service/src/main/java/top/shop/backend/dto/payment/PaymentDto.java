@@ -1,4 +1,4 @@
-package top.shop.backend.dto;
+package top.shop.backend.dto.payment;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,7 @@
 package top.shop.backend.dto;
 
 import lombok.*;
+import top.shop.backend.dto.payment.PaymentDto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
