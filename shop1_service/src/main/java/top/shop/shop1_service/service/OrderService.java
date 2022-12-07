@@ -23,20 +23,15 @@ public class OrderService {
     private String serviceName;
     private final CatalogueService catalogueService;
     private final OrderProducer orderProducer;
-    private final ProductPricingService productPricingService;
+
+    private final PaymentService paymentService;
 
     @Transactional
     public PaymentDto createOrder(OrderDto orderDto) {
         checkAvailableProductForSale(orderDto.getProductName());
         checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
 
-        PaymentDto paymentDto = new PaymentDto();
-        paymentDto.setPaymentDate(LocalDateTime.now());
-        paymentDto.setPaymentUuid(UUID.randomUUID().toString());
-        paymentDto.setExecuted(false);
-        paymentDto.setMinutesBeforeExpiration(5);
-        paymentDto.setTotalPrice(BigDecimal.valueOf(orderDto.getAmount())
-                .multiply(BigDecimal.valueOf(productPricingService.getProductPricing(orderDto.getProductName()).getPrice())));
+        PaymentDto paymentDto = paymentService.createPaymentDto(orderDto.getProductName(),orderDto.getAmount());
 
         orderDto.setPaymentDto(paymentDto);
         orderDto.setShopServiceName(serviceName);

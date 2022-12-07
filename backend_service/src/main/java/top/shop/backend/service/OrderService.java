@@ -20,8 +20,6 @@ import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.util.OrderStatus;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -30,7 +28,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ShopService shopService;
     private final ProductService productService;
-    private final PaymentService paymentService;
     private final ApplicationEventPublisher eventPublisher;
     private final DeliveryProducer deliveryProducer;
     private final ModelMapper modelMapper;
@@ -48,14 +45,13 @@ public class OrderService {
 
         Order persistedOrder = orderRepository.save(order);
 
-        eventPublisher.publishEvent(new OrderEvent(persistedOrder));
-        eventPublisher.publishEvent(new BalanceEvent(persistedOrder));
+//        eventPublisher.publishEvent(new OrderEvent(persistedOrder));
+//        eventPublisher.publishEvent(new BalanceEvent(persistedOrder));
 
         log.info("order received and persisted {}", persistedOrder);
     }
 
     @EventListener
-    @Transactional
     public void sendDelivery(OrderEvent event) {
         Order order = (Order) event.getSource();
         DeliveryOrderDto deliveryOrderDto = processingDelivery(order);
