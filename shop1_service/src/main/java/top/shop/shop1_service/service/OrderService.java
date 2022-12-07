@@ -33,6 +33,7 @@ public class OrderService {
         PaymentDto paymentDto = new PaymentDto();
         paymentDto.setPaymentDate(LocalDateTime.now());
         paymentDto.setPaymentUuid(UUID.randomUUID().toString());
+        paymentDto.setExecuted(false);
         paymentDto.setMinutesBeforeExpiration(5);
         paymentDto.setTotalPrice(BigDecimal.valueOf(orderDto.getAmount())
                 .multiply(BigDecimal.valueOf(orderDto.getPrice())));

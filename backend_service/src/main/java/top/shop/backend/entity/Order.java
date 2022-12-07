@@ -1,6 +1,7 @@
 package top.shop.backend.entity;
 
 import lombok.*;
+import top.shop.backend.util.OrderStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -26,7 +27,9 @@ public class Order {
     private String customerName;
     private LocalDateTime orderDate;
     private LocalDateTime executionDate;
-    private boolean isExecuted;
+    private OrderStatus status;
     private int amount;
-    private BigDecimal totalPrice;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    private Payment payment;
 }

@@ -15,6 +15,7 @@ import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.BalanceEvent;
 import top.shop.backend.service.event.OrderEvent;
+import top.shop.backend.util.OrderStatus;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -32,10 +33,9 @@ public class OrderService {
 
     public void persistOrder(OrderDto orderDto) {
         Order order = Order.builder()
-                .totalPrice(BigDecimal.valueOf(orderDto.getAmount())
-                        .multiply(BigDecimal.valueOf(orderDto.getPrice())))
                 .amount(orderDto.getAmount())
-                .isExecuted(false)
+                .status(OrderStatus.CREATED)
+                .payment()
                 .orderDate(orderDto.getOrderDate())
                 .customerName(orderDto.getCustomerName())
                 .productName(orderDto.getProductName())
