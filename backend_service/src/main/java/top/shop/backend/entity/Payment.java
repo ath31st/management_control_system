@@ -24,6 +24,7 @@ public class Payment {
     private LocalDateTime paymentDate;
     private boolean isExecuted;
     private int minutesBeforeExpiration;
-    @OneToOne(mappedBy = "payments")
+    @OneToOne
+    @JoinColumn(name = "order_id")
     private Order order;
 }

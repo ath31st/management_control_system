@@ -36,12 +36,11 @@ public class OrderService {
         paymentDto.setExecuted(false);
         paymentDto.setMinutesBeforeExpiration(5);
         paymentDto.setTotalPrice(BigDecimal.valueOf(orderDto.getAmount())
-                .multiply(BigDecimal.valueOf(orderDto.getPrice())));
+                .multiply(BigDecimal.valueOf(productPricingService.getProductPricing(orderDto.getProductName()).getPrice())));
 
         orderDto.setPaymentDto(paymentDto);
         orderDto.setShopServiceName(serviceName);
         orderDto.setOrderDate(LocalDateTime.now());
-        orderDto.setPrice(productPricingService.getProductPricing(orderDto.getProductName()).getPrice());
 
         try {
             orderProducer.sendMessage(orderDto);

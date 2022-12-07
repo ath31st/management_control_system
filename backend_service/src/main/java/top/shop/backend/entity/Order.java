@@ -29,7 +29,7 @@ public class Order {
     private LocalDateTime executionDate;
     private OrderStatus status;
     private int amount;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "payment_id")
     private Payment payment;
 }

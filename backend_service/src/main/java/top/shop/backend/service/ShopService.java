@@ -34,7 +34,7 @@ public class ShopService {
     public void changeBalance(BalanceEvent event) {
         Order order = (Order) event.getSource();
         Shop shop = getShop(order.getShop().getServiceName());
-        shop.setBalance(shop.getBalance().add(order.getTotalPrice()));
+        shop.setBalance(shop.getBalance().add(order.getPayment().getTotalPrice()));
         shopRepository.save(shop);
     }
 
