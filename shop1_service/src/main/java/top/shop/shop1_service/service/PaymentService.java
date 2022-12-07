@@ -78,7 +78,7 @@ public class PaymentService {
     }
 
     private void checkIsRightTotalPrice(Payment payment, PaymentRequestDto paymentRequestDto) {
-         if (payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0)
+         if (!(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0))
              throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Your total price not equals total price in your order.");
     }
 
