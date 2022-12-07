@@ -25,4 +25,5 @@ public class OrderDto {
     @Max(value = 10000, message = "Amount must be maximum 10000")
     private int amount;
     private double price;
+    private PaymentDto paymentDto;
 }

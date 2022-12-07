@@ -11,6 +11,7 @@ import top.shop.backend.config.kafkaconfig.DeliveryProducer;
 import top.shop.backend.dto.DeliveryOrderDto;
 import top.shop.backend.dto.OrderDto;
 import top.shop.backend.entity.Order;
+import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.BalanceEvent;
@@ -28,6 +29,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ShopService shopService;
     private final ProductService productService;
+    private final PaymentService paymentService;
     private final ApplicationEventPublisher eventPublisher;
     private final DeliveryProducer deliveryProducer;
 
@@ -35,12 +37,14 @@ public class OrderService {
         Order order = Order.builder()
                 .amount(orderDto.getAmount())
                 .status(OrderStatus.CREATED)
-                .payment()
                 .orderDate(orderDto.getOrderDate())
                 .customerName(orderDto.getCustomerName())
                 .productName(orderDto.getProductName())
                 .shop(shopService.getShop(orderDto.getShopServiceName()))
                 .build();
+        Payment payment = paymentService.savePayment(orderDto.getPaymentDto(), order);
+        order.setPayment(payment);
+
         Order persistedOrder = orderRepository.save(order);
 
         eventPublisher.publishEvent(new OrderEvent(persistedOrder));
@@ -64,7 +68,6 @@ public class OrderService {
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopServiceName());
 
         productService.reduceAmountProduct(order.getAmount(), order.getProductName());
-        setExecutedStatusOrder(order);
     }
 
     private DeliveryOrderDto processingDelivery(Order order) {
@@ -74,17 +77,8 @@ public class OrderService {
                 .shopServiceName(order.getShop().getServiceName())
                 .shopName(order.getShop().getName())
                 .productName(order.getProductName())
-                .totalPrice(order.getTotalPrice().doubleValue())
+                .totalPrice(order.getPayment().getTotalPrice().doubleValue())
                 .build();
-    }
-
-    private void setExecutedStatusOrder(Order order) {
-        if (!order.isExecuted()) {
-            order.setExecuted(true);
-            order.setExecutionDate(LocalDateTime.now());
-
-            orderRepository.save(order);
-        }
     }
 
 }
