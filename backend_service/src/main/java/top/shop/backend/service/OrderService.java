@@ -3,6 +3,7 @@ package top.shop.backend.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -32,18 +33,18 @@ public class OrderService {
     private final PaymentService paymentService;
     private final ApplicationEventPublisher eventPublisher;
     private final DeliveryProducer deliveryProducer;
+    private final ModelMapper modelMapper;
 
     public void persistOrder(OrderDto orderDto) {
         Order order = Order.builder()
                 .amount(orderDto.getAmount())
                 .status(OrderStatus.CREATED)
+                .payment(modelMapper.map(orderDto.getPaymentDto(), Payment.class))
                 .orderDate(orderDto.getOrderDate())
                 .customerName(orderDto.getCustomerName())
                 .productName(orderDto.getProductName())
                 .shop(shopService.getShop(orderDto.getShopServiceName()))
                 .build();
-        Payment payment = paymentService.savePayment(orderDto.getPaymentDto(), order);
-        order.setPayment(payment);
 
         Order persistedOrder = orderRepository.save(order);
 
