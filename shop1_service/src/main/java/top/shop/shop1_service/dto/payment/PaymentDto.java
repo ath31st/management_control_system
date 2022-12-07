@@ -1,4 +1,4 @@
-package top.shop.shop1_service.dto;
+package top.shop.shop1_service.dto.payment;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

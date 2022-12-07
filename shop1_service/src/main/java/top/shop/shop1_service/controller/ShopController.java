@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.OrderDto;
-import top.shop.shop1_service.dto.PaymentDto;
+import top.shop.shop1_service.dto.payment.PaymentDto;
+import top.shop.shop1_service.dto.payment.PaymentRequestDto;
 import top.shop.shop1_service.service.CatalogueService;
 import top.shop.shop1_service.service.OrderService;
+import top.shop.shop1_service.service.PaymentService;
 import top.shop.shop1_service.service.ProductPricingService;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
@@ -23,6 +25,7 @@ public class ShopController {
     private final OrderService orderService;
     private final CatalogueService catalogueService;
     private final ProductPricingService productPricingService;
+    private final PaymentService paymentService;
 
     @PostMapping("/order")
     public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody OrderDto orderDto) {
@@ -30,11 +33,11 @@ public class ShopController {
         return ResponseEntity.ok(orderService.createOrder(orderDto));
     }
 
-//    @PostMapping("/payment")
-//    public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody PaymentDto paymentDto) {
-//        log.info("payment request received");
-//
-//    }
+    @PostMapping("/payment")
+    public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody PaymentRequestDto paymentRequestDto) {
+        log.info("payment request received");
+        paymentService.receivePaymentRequestDto(paymentRequestDto);
+    }
 
     @GetMapping("/catalogue")
     public ResponseEntity<CatalogueDto> catalogueForCustomersHandler() {

@@ -7,13 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.shop.shop1_service.dto.OrderDto;
-import top.shop.shop1_service.dto.PaymentDto;
+import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
 import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

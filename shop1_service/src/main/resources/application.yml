@@ -11,6 +11,8 @@ topic:
     name: t.catalogue
   amount:
     name: t.amount
+  payment:
+    name: t.payment
 
 #for every new shop-service change this field
 shop:
