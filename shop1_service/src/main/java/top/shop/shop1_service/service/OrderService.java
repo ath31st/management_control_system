@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.shop.shop1_service.dto.OrderDto;
+import top.shop.shop1_service.dto.PaymentDto;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
 import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,19 +26,28 @@ public class OrderService {
     private final ProductPricingService productPricingService;
 
     @Transactional
-    public String createOrder(OrderDto orderDto) {
+    public PaymentDto createOrder(OrderDto orderDto) {
         checkAvailableProductForSale(orderDto.getProductName());
         checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
 
+        PaymentDto paymentDto = new PaymentDto();
+        paymentDto.setPaymentDate(LocalDateTime.now());
+        paymentDto.setPaymentUuid(UUID.randomUUID().toString());
+        paymentDto.setMinutesBeforeExpiration(5);
+        paymentDto.setTotalPrice(BigDecimal.valueOf(orderDto.getAmount())
+                .multiply(BigDecimal.valueOf(orderDto.getPrice())));
+
+        orderDto.setPaymentDto(paymentDto);
         orderDto.setShopServiceName(serviceName);
         orderDto.setOrderDate(LocalDateTime.now());
         orderDto.setPrice(productPricingService.getProductPricing(orderDto.getProductName()).getPrice());
 
         try {
-            return orderProducer.sendMessage(orderDto);
+            orderProducer.sendMessage(orderDto);
         } catch (JsonProcessingException e) {
             throw new OrderServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+        return paymentDto;
     }
 
     private void checkAvailableProductForSale(String productServiceName) {

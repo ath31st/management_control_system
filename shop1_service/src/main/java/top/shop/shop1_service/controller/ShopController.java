@@ -25,9 +25,9 @@ public class ShopController {
     private final ProductPricingService productPricingService;
 
     @PostMapping("/order")
-    public String orderHandler(@Valid @RequestBody OrderDto orderDto) {
+    public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody OrderDto orderDto) {
         log.info("order request received");
-        return orderService.createOrder(orderDto);
+        return ResponseEntity.ok(orderService.createOrder(orderDto));
     }
 
 //    @PostMapping("/payment")
