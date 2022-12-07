@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import top.shop.shop1_service.dto.payment.PaymentDto;
+import top.shop.shop1_service.dto.payment.PaymentRequestDto;
 
 @Slf4j
 @Component
@@ -20,8 +21,8 @@ public class PaymentProducer {
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public String sendMessage(PaymentDto paymentDto) throws JsonProcessingException {
-        String paymentAsMessage = objectMapper.writeValueAsString(paymentDto);
+    public String sendMessage(PaymentRequestDto paymentRequestDto) throws JsonProcessingException {
+        String paymentAsMessage = objectMapper.writeValueAsString(paymentRequestDto);
         kafkaTemplate.send(paymentTopic, paymentAsMessage);
 
         log.info("payment produced {}", paymentAsMessage);

@@ -1,11 +1,14 @@
 package top.shop.shop1_service.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.config.kafkaconfig.PaymentProducer;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.dto.payment.PaymentRequestDto;
 import top.shop.shop1_service.entity.ProductPricing;
+import top.shop.shop1_service.exceptionhandler.exception.PaymentServiceException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,7 +35,11 @@ public class PaymentService {
     }
 
     public void receivePaymentRequestDto(PaymentRequestDto paymentRequestDto) {
-        paymentProducer.sendMessage();
+        try {
+            paymentProducer.sendMessage(paymentRequestDto);
+        } catch (JsonProcessingException e) {
+            throw new PaymentServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
 

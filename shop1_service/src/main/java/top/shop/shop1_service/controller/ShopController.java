@@ -34,9 +34,10 @@ public class ShopController {
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody PaymentRequestDto paymentRequestDto) {
+    public String orderHandler(@Valid @RequestBody PaymentRequestDto paymentRequestDto) {
         log.info("payment request received");
         paymentService.receivePaymentRequestDto(paymentRequestDto);
+        return "Payment with UUID " + paymentRequestDto.getPaymentUuid() + " accepted";
     }
 
     @GetMapping("/catalogue")

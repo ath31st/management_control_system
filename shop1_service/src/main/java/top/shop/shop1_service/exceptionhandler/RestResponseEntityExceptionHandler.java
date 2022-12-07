@@ -4,10 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import top.shop.shop1_service.exceptionhandler.exception.AbstractException;
-import top.shop.shop1_service.exceptionhandler.exception.CatalogueException;
-import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
-import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException;
+import top.shop.shop1_service.exceptionhandler.exception.*;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +23,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(CatalogueException.class)
     protected ResponseEntity<Response> handleCustomException(CatalogueException e) {
+        return new ResponseEntity<>(buildResponse(e), e.getStatus());
+    }
+
+    @ExceptionHandler(PaymentServiceException.class)
+    protected ResponseEntity<Response> handleCustomException(PaymentServiceException e) {
         return new ResponseEntity<>(buildResponse(e), e.getStatus());
     }
 
