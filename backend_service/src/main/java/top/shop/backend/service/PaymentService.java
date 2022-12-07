@@ -12,15 +12,12 @@ import top.shop.backend.repository.PaymentRepository;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-    private final ModelMapper modelMapper;
 
     public Payment getPayment(String paymentUuid) {
         return paymentRepository.findByPaymentUuid(paymentUuid).orElseThrow(
@@ -32,6 +29,7 @@ public class PaymentService {
         Payment payment = getPayment(paymentRequestDto.getPaymentUuid());
         checkIsExpiredPayment(payment);
         checkIsRightTotalPrice(payment, paymentRequestDto);
+        ...
     }
 
     private boolean checkIsExpiredPayment(Payment payment) {
