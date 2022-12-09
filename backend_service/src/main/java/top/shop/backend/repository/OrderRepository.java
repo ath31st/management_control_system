@@ -6,4 +6,6 @@ import top.shop.backend.entity.Order;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
+    Order findByPayment_PaymentUuid(String paymentUuid);
+
 }

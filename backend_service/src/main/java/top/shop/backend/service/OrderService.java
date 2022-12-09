@@ -16,7 +16,9 @@ import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.OrderEvent;
+import top.shop.backend.service.event.PaymentEvent;
 import top.shop.backend.util.OrderStatus;
+import top.shop.backend.util.PaymentStatus;
 
 @Slf4j
 @Service
@@ -62,6 +64,20 @@ public class OrderService {
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopServiceName());
 
         productService.reduceAmountProduct(order.getAmount(), order.getProductName());
+    }
+
+    @EventListener
+    public void processingOrder(PaymentEvent event) {
+        Payment payment = (Payment) event.getSource();
+        Order order = orderRepository.findByPayment_PaymentUuid(payment.getPaymentUuid());
+
+        switch (payment.getPaymentStatus()) {
+            case EXPIRED -> order.setStatus(OrderStatus.EXPIRED);
+            case CANCELED -> order.setStatus(OrderStatus.CANCELED);
+            case REJECTION -> order.setStatus(OrderStatus.REJECTION);
+            case EXECUTED -> order.setStatus(OrderStatus.IS_PAID);
+        }
+        orderRepository.save(order);
     }
 
     private DeliveryOrderDto processingDelivery(Order order) {

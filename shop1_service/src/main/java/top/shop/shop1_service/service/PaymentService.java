@@ -14,6 +14,7 @@ import top.shop.shop1_service.dto.payment.PaymentRequestDto;
 import top.shop.shop1_service.entity.Payment;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.PaymentServiceException;
+import top.shop.shop1_service.util.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,7 +35,7 @@ public class PaymentService {
 
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentUuid(UUID.randomUUID().toString());
-        payment.setExecuted(false);
+        payment.setPaymentStatus(PaymentStatus.PROCESSING);
         payment.setMinutesBeforeExpiration(MINUTES_BEFORE_EXPIRATION);
         payment.setTotalPrice(BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(pp.getPrice())));
 
