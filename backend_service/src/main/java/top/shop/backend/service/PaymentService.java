@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final OrderService orderService;
 
     public Payment getPayment(String paymentUuid) {
         return paymentRepository.findByPaymentUuid(paymentUuid).orElseThrow(
@@ -30,10 +29,15 @@ public class PaymentService {
 
     public void receivePaymentRequest(PaymentRequestDto paymentRequestDto) {
         Payment payment = getPayment(paymentRequestDto.getPaymentUuid());
-        checkIsExpiredPayment(payment);
-        checkIsRightTotalPrice(payment, paymentRequestDto);
 
-        payment.setPaymentStatus(PaymentStatus.EXECUTED);
+        if(checkIsExpiredPayment(payment)) {
+            payment.setPaymentStatus(PaymentStatus.EXPIRED);
+        } else if (checkIsRightTotalPrice(payment, paymentRequestDto)) {
+            payment.setPaymentStatus(PaymentStatus.REJECTION);
+        } else {
+            payment.setPaymentStatus(PaymentStatus.EXECUTED);
+        }
+
         paymentRepository.save(payment);
 
         eventPublisher.publishEvent(new PaymentEvent(payment));
@@ -41,21 +45,11 @@ public class PaymentService {
 
     // TODO make here chargeback logic when payment is failure
 
-    private void checkIsExpiredPayment(Payment payment) {
-        if (LocalDateTime.now().isAfter(payment.getPaymentDate().plusMinutes(payment.getMinutesBeforeExpiration()))) {
-            payment.setPaymentStatus(PaymentStatus.EXPIRED);
-            paymentRepository.save(payment);
-
-            //throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Payment is expired, please try place an order again.");
-        }
+    private boolean checkIsExpiredPayment(Payment payment) {
+        return LocalDateTime.now().isAfter(payment.getPaymentDate().plusMinutes(payment.getMinutesBeforeExpiration()));
     }
 
-    private void checkIsRightTotalPrice(Payment payment, PaymentRequestDto paymentRequestDto) {
-        if (!(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0)) {
-            payment.setPaymentStatus(PaymentStatus.REJECTION);
-            paymentRepository.save(payment);
-
-            //throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Your total price not equals total price in your order.");
-        }
+    private boolean checkIsRightTotalPrice(Payment payment, PaymentRequestDto paymentRequestDto) {
+        return !(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0);
     }
 }
