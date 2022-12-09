@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import top.shop.shop1_service.config.kafkaconfig.PaymentProducer;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.dto.payment.PaymentRequestDto;
@@ -17,9 +16,7 @@ import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.PaymentServiceException;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.UUID;
 
 @Service

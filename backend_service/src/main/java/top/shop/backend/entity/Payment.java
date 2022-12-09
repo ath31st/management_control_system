@@ -1,6 +1,7 @@
 package top.shop.backend.entity;
 
 import lombok.*;
+import top.shop.backend.util.PaymentStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -22,7 +23,7 @@ public class Payment {
     private String paymentUuid;
     private BigDecimal totalPrice;
     private LocalDateTime paymentDate;
-    private boolean isExecuted;
+    private PaymentStatus paymentStatus;
     private int minutesBeforeExpiration;
     @OneToOne
     @JoinColumn(name = "order_id")

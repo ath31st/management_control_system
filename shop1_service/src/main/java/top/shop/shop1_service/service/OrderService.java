@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.dto.payment.PaymentDto;
-import top.shop.shop1_service.entity.Payment;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
-import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 
 import java.time.LocalDateTime;
 
