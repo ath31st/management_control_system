@@ -15,11 +15,8 @@ import top.shop.backend.entity.Order;
 import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
-import top.shop.backend.service.event.BalanceEvent;
 import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.util.OrderStatus;
-
-import javax.transaction.Transactional;
 
 @Slf4j
 @Service

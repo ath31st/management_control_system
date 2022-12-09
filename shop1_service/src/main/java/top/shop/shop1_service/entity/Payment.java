@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import top.shop.shop1_service.util.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +19,6 @@ public class Payment {
    private String paymentUuid;
    private BigDecimal totalPrice;
    private LocalDateTime paymentDate;
-   private boolean isExecuted;
+   private PaymentStatus paymentStatus;
    private int minutesBeforeExpiration;
 }

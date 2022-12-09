@@ -2,17 +2,14 @@ package top.shop.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import top.shop.backend.dto.payment.PaymentRequestDto;
 import top.shop.backend.entity.Order;
 import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.PaymentServiceException;
 import top.shop.backend.repository.PaymentRepository;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Slf4j
