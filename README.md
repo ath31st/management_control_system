@@ -4,7 +4,7 @@
 
 #### Project objectives:
 
-![image info](images/image01.jpg)
+![image info](images/early_version005.jpg)
 
 
 [//]: # (#### Results:)
