@@ -5,13 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.shop.shop1_service.dto.CatalogueDto;
+import top.shop.shop1_service.dto.DeliveryOrderDto;
 import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.dto.payment.PaymentRequestDto;
-import top.shop.shop1_service.service.CatalogueService;
-import top.shop.shop1_service.service.OrderService;
-import top.shop.shop1_service.service.PaymentService;
-import top.shop.shop1_service.service.ProductPricingService;
+import top.shop.shop1_service.service.*;
+import top.shop.shop1_service.util.DeliveryStatus;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
 import javax.validation.Valid;
@@ -26,11 +25,17 @@ public class ShopController {
     private final CatalogueService catalogueService;
     private final ProductPricingService productPricingService;
     private final PaymentService paymentService;
+    private final DeliveryService deliveryService;
 
     @PostMapping("/order")
     public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody OrderDto orderDto) {
         log.info("order request received");
         return ResponseEntity.ok(orderService.createOrder(orderDto));
+    }
+
+    @GetMapping("/delivery/status/{orderNumber}")
+    public ResponseEntity<DeliveryStatus> checkDeliveryOrderStatus(@PathVariable Long orderNumber) {
+        return ResponseEntity.ok(deliveryService.checkDeliveryStatus(orderNumber));
     }
 
     @PostMapping("/payment")

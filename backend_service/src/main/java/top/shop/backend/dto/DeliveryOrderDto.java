@@ -2,6 +2,7 @@ package top.shop.backend.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import top.shop.backend.util.DeliveryStatus;
 
 @Data
 @Builder
@@ -13,5 +14,5 @@ public class DeliveryOrderDto {
     private String customerName;
     private int amount;
     private double totalPrice;
-
+    private DeliveryStatus deliveryStatus;
 }

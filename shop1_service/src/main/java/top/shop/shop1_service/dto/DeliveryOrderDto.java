@@ -1,6 +1,7 @@
 package top.shop.shop1_service.dto;
 
 import lombok.Data;
+import top.shop.shop1_service.util.DeliveryStatus;
 
 @Data
 public class DeliveryOrderDto {
@@ -11,4 +12,5 @@ public class DeliveryOrderDto {
     private String customerName;
     private int amount;
     private double totalPrice;
+    private DeliveryStatus deliveryStatus;
 }

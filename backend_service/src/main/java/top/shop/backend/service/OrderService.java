@@ -18,6 +18,7 @@ import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.BalanceEvent;
 import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.service.event.PaymentEvent;
+import top.shop.backend.util.DeliveryStatus;
 import top.shop.backend.util.OrderStatus;
 import top.shop.backend.util.PaymentStatus;
 
@@ -83,6 +84,7 @@ public class OrderService {
 
     private DeliveryOrderDto processingDelivery(Order order) {
         return DeliveryOrderDto.builder()
+                .deliveryStatus(DeliveryStatus.IN_TRANSIT)
                 .orderNumber(order.getId())
                 .amount(order.getAmount())
                 .customerName(order.getCustomerName())

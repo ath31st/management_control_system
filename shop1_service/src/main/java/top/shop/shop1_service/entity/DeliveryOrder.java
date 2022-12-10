@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import top.shop.shop1_service.util.DeliveryStatus;
 
 @NoArgsConstructor
 @Getter
@@ -19,4 +20,5 @@ public class DeliveryOrder {
     private String customerName;
     private int amount;
     private double totalPrice;
+    private DeliveryStatus deliveryStatus;
 }
