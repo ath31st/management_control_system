@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class DeliveryOrderDto {
-
+    private Long orderNumber;
     private String shopServiceName;
     private String shopName;
     private String productName;

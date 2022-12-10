@@ -24,7 +24,7 @@ public class DeliveryConsumer {
         log.info("message consumed {}", message);
 
         DeliveryOrderDto deliveryOrderDto = objectMapper.readValue(message, DeliveryOrderDto.class);
-        deliveryService.
+        deliveryService.receiveDeliveryFromStorage(deliveryOrderDto);
     }
 
 }

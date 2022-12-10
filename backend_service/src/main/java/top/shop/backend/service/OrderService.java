@@ -15,6 +15,7 @@ import top.shop.backend.entity.Order;
 import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
+import top.shop.backend.service.event.BalanceEvent;
 import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.service.event.PaymentEvent;
 import top.shop.backend.util.OrderStatus;
@@ -43,16 +44,12 @@ public class OrderService {
                 .build();
 
         Order persistedOrder = orderRepository.save(order);
-
-//        eventPublisher.publishEvent(new OrderEvent(persistedOrder));
-//        eventPublisher.publishEvent(new BalanceEvent(persistedOrder));
+        productService.reduceAmountProduct(order.getAmount(), order.getProductName());
 
         log.info("order received and persisted {}", persistedOrder);
     }
 
-    @EventListener
-    public void sendDelivery(OrderEvent event) {
-        Order order = (Order) event.getSource();
+    public void sendDelivery(Order order) {
         DeliveryOrderDto deliveryOrderDto = processingDelivery(order);
 
         try {
@@ -62,8 +59,6 @@ public class OrderService {
         }
 
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopServiceName());
-
-        productService.reduceAmountProduct(order.getAmount(), order.getProductName());
     }
 
     @EventListener
@@ -77,11 +72,18 @@ public class OrderService {
             case REJECTION -> order.setStatus(OrderStatus.REJECTION);
             case EXECUTED -> order.setStatus(OrderStatus.IS_PAID);
         }
+
         orderRepository.save(order);
+
+        if (order.getStatus().equals(OrderStatus.IS_PAID)) {
+            eventPublisher.publishEvent(new BalanceEvent(order));
+            sendDelivery(order);
+        }
     }
 
     private DeliveryOrderDto processingDelivery(Order order) {
         return DeliveryOrderDto.builder()
+                .orderNumber(order.getId())
                 .amount(order.getAmount())
                 .customerName(order.getCustomerName())
                 .shopServiceName(order.getShop().getServiceName())

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class DeliveryOrderDto {
+    private Long orderNumber;
     private String shopServiceName;
     private String shopName;
     private String productName;
