@@ -38,6 +38,11 @@ public class ShopController {
         return ResponseEntity.ok(deliveryService.checkDeliveryStatus(orderNumber));
     }
 
+    @GetMapping("/delivery/accepting/{orderNumber}")
+    public ResponseEntity<DeliveryStatus> acceptingDeliveryOrder(@PathVariable Long orderNumber) {
+        return ResponseEntity.ok(deliveryService.acceptingDelivery(orderNumber));
+    }
+
     @PostMapping("/payment")
     public String orderHandler(@Valid @RequestBody PaymentRequestDto paymentRequestDto) {
         log.info("payment request received");

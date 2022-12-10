@@ -22,6 +22,18 @@ public class DeliveryService {
         //TODO here need email notification customer - order delivered
     }
 
+    public DeliveryStatus acceptingDelivery(Long orderNumber) {
+        DeliveryOrder deliveryOrder = mongoTemplate.findById(orderNumber, DeliveryOrder.class);
+        if (deliveryOrder == null) return DeliveryStatus.NOT_FOUND;
+
+        if (!deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED)) {
+            deliveryOrder.setDeliveryStatus(DeliveryStatus.DELIVERED);
+            mongoTemplate.save(deliveryOrder);
+        }
+
+        return deliveryOrder.getDeliveryStatus();
+    }
+
     public DeliveryStatus checkDeliveryStatus(Long orderNumber) {
         DeliveryOrder deliveryOrder = mongoTemplate.findById(orderNumber, DeliveryOrder.class);
 
