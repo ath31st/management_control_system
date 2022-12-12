@@ -1,3 +1,5 @@
+print("Started Adding the Users.");
+db.getCollectionNames().forEach(c=>db[c].drop());
 db.createUser(
     {
         user: "mongo",
@@ -10,3 +12,4 @@ db.createUser(
         ]
     }
 );
+print("End Adding the User Roles.");
