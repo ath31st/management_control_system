@@ -7,8 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import top.shop.shop1_service.dto.delivery.DeliveryResultDto;
-import top.shop.shop1_service.dto.payment.PaymentRequestDto;
+import top.shop.shop1_service.dto.delivery.DeliveryOrderDto;
 
 @Slf4j
 @Component
@@ -21,11 +20,11 @@ public class DeliveryResultProducer {
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public String sendMessage(DeliveryResultDto dto) throws JsonProcessingException {
-        String deliveryResultAsMessage = objectMapper.writeValueAsString(dto);
-        kafkaTemplate.send(deliveryResultTopic, deliveryResultAsMessage);
+    public String sendMessage(DeliveryOrderDto dto) throws JsonProcessingException {
+        String deliveryOrderAsMessage = objectMapper.writeValueAsString(dto);
+        kafkaTemplate.send(deliveryResultTopic, deliveryOrderAsMessage);
 
-        log.info("delivery result produced {}", deliveryResultAsMessage);
+        log.info("delivery result produced {}", deliveryOrderAsMessage);
 
         return "message sent";
     }

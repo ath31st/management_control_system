@@ -1,4 +1,4 @@
-package top.shop.backend.dto;
+package top.shop.backend.dto.delivery;
 
 import lombok.Builder;
 import lombok.Data;

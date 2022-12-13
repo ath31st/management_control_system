@@ -2,7 +2,7 @@ package top.shop.backend.util;
 
 public enum OrderStatus {
     IS_PAID,
-    REJECTION,
+    REJECTED,
     CANCELED,
     DELIVERED,
     CREATED,

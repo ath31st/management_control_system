@@ -4,6 +4,8 @@ server:
 topic:
   delivery:
     name: t.delivery
+  delivery-result:
+    name: t.delivery-result
   order:
     name: t.order
   catalogue:

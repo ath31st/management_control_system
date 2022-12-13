@@ -9,18 +9,16 @@ import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.config.kafkaconfig.DeliveryProducer;
-import top.shop.backend.dto.DeliveryOrderDto;
+import top.shop.backend.dto.delivery.DeliveryOrderDto;
 import top.shop.backend.dto.OrderDto;
 import top.shop.backend.entity.Order;
 import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.BalanceEvent;
-import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.service.event.PaymentEvent;
 import top.shop.backend.util.DeliveryStatus;
 import top.shop.backend.util.OrderStatus;
-import top.shop.backend.util.PaymentStatus;
 
 @Slf4j
 @Service
@@ -70,7 +68,7 @@ public class OrderService {
         switch (payment.getPaymentStatus()) {
             case EXPIRED -> order.setStatus(OrderStatus.EXPIRED);
             case CANCELED -> order.setStatus(OrderStatus.CANCELED);
-            case REJECTION -> order.setStatus(OrderStatus.REJECTION);
+            case REJECTION -> order.setStatus(OrderStatus.REJECTED);
             case EXECUTED -> order.setStatus(OrderStatus.IS_PAID);
         }
 
@@ -80,6 +78,17 @@ public class OrderService {
             eventPublisher.publishEvent(new BalanceEvent(order));
             sendDelivery(order);
         }
+    }
+
+    public void processingDeliveryResult(DeliveryOrderDto deliveryOrderDto) {
+        Order order = getOrderById(deliveryOrderDto.getOrderNumber());
+
+        switch (deliveryOrderDto.getDeliveryStatus()) {
+            case DELIVERED -> order.setStatus(OrderStatus.DELIVERED);
+            case REJECTED -> order.setStatus(OrderStatus.REJECTED);
+        }
+
+        orderRepository.save(order);
     }
 
     private DeliveryOrderDto processingDelivery(Order order) {
@@ -93,6 +102,11 @@ public class OrderService {
                 .productName(order.getProductName())
                 .totalPrice(order.getPayment().getTotalPrice().doubleValue())
                 .build();
+    }
+
+    private Order getOrderById(Long id) {
+        return orderRepository.findById(id).orElseThrow(
+                () -> new OrderServiceException(HttpStatus.NOT_FOUND, "Order with id " + id + " not found"));
     }
 
 }
