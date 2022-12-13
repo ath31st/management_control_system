@@ -88,7 +88,7 @@ public class OrderService {
             case DELIVERED -> order.setStatus(OrderStatus.DELIVERED);
             case REJECTED -> {
                 productService.increaseAmountProduct(dto.getAmount(), dto.getProductName());
-                shopService.moneyBackFromBalance(dto.getTotalPrice(), dto.getShopName());
+                shopService.moneyBackFromBalance(dto.getTotalPrice(), dto.getShopServiceName());
                 paymentService.chargeBack(dto.getCustomerName(), dto.getTotalPrice());
                 order.setStatus(OrderStatus.REJECTED);
             }
