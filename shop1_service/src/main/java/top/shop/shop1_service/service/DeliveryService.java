@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.config.kafkaconfig.DeliveryResultProducer;
 import top.shop.shop1_service.dto.delivery.DeliveryOrderDto;
 import top.shop.shop1_service.entity.DeliveryOrder;
+import top.shop.shop1_service.exceptionhandler.exception.DeliveryServiceException;
 import top.shop.shop1_service.util.DeliveryStatus;
 
 @Service
@@ -39,7 +41,7 @@ public class DeliveryService {
         try {
             deliveryResultProducer.sendMessage(modelMapper.map(deliveryOrder, DeliveryOrderDto.class));
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new DeliveryServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
 
         return deliveryOrder.getDeliveryStatus();
