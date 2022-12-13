@@ -63,6 +63,9 @@ public class PaymentService {
         } catch (JsonProcessingException e) {
             throw new PaymentServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+
+        payment.setPaymentStatus(PaymentStatus.EXECUTED);
+        mongoTemplate.save(payment);
     }
 
     private void checkExistingPayment(String paymentUuid) {
@@ -71,13 +74,21 @@ public class PaymentService {
     }
 
     private void checkIsExpiredPayment(Payment payment) {
-        if (LocalDateTime.now().isAfter(payment.getPaymentDate().plusMinutes(payment.getMinutesBeforeExpiration())))
+        if (LocalDateTime.now().isAfter(payment.getPaymentDate().plusMinutes(payment.getMinutesBeforeExpiration()))) {
+            payment.setPaymentStatus(PaymentStatus.EXPIRED);
+            mongoTemplate.save(payment);
+
             throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Payment is expired, please try place an order again.");
+        }
     }
 
     private void checkIsRightTotalPrice(Payment payment, PaymentRequestDto paymentRequestDto) {
-        if (!(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0))
+        if (!(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0)) {
+            payment.setPaymentStatus(PaymentStatus.CANCELED);
+            mongoTemplate.save(payment);
+
             throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Your total price not equals total price in your order.");
+        }
     }
 
 }
