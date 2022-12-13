@@ -25,6 +25,7 @@ import top.shop.backend.util.OrderStatus;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final PaymentService paymentService;
     private final ShopService shopService;
     private final ProductService productService;
     private final ApplicationEventPublisher eventPublisher;
@@ -80,12 +81,17 @@ public class OrderService {
         }
     }
 
-    public void processingDeliveryResult(DeliveryOrderDto deliveryOrderDto) {
-        Order order = getOrderById(deliveryOrderDto.getOrderNumber());
+    public void processingDeliveryResult(DeliveryOrderDto dto) {
+        Order order = getOrderById(dto.getOrderNumber());
 
-        switch (deliveryOrderDto.getDeliveryStatus()) {
+        switch (dto.getDeliveryStatus()) {
             case DELIVERED -> order.setStatus(OrderStatus.DELIVERED);
-            case REJECTED -> order.setStatus(OrderStatus.REJECTED);
+            case REJECTED -> {
+                productService.increaseAmountProduct(dto.getAmount(), dto.getProductName());
+                shopService.moneyBackFromBalance(dto.getTotalPrice(), dto.getShopName());
+                paymentService.chargeBack(dto.getCustomerName(), dto.getTotalPrice());
+                order.setStatus(OrderStatus.REJECTED);
+            }
         }
 
         orderRepository.save(order);

@@ -78,6 +78,15 @@ public class ProductService {
                 new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
     }
 
+    public void increaseAmountProduct(int amount, String productServiceName) {
+        Product product = getProduct(productServiceName);
+        product.setAmount(product.getAmount() + amount);
+
+        productRepository.save(product);
+        eventPublisher.publishEvent(new ProductAmountEvent(
+                new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
+    }
+
     public List<ProductDto> getProductDtoList() {
         List<Product> products = productRepository.findAll();
         return products.stream()

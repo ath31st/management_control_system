@@ -21,7 +21,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ShopService {
-
     private final ShopRepository shopRepository;
     private final ModelMapper modelMapper;
 
@@ -38,9 +37,9 @@ public class ShopService {
         shopRepository.save(shop);
     }
 
-    public void changeBalance(double payment, String shopName) {
+    public void moneyBackFromBalance(double payment, String shopName) {
         Shop shop = getShop(shopName);
-        shop.setBalance(shop.getBalance().add(BigDecimal.valueOf(payment)));
+        shop.setBalance(shop.getBalance().subtract(BigDecimal.valueOf(payment)));
         shopRepository.save(shop);
     }
 

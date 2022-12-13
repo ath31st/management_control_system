@@ -43,7 +43,10 @@ public class PaymentService {
         eventPublisher.publishEvent(new PaymentEvent(payment));
     }
 
-    // TODO make here chargeback logic when payment is failure
+    public void chargeBack(String customerName, double totalPrice) {
+        // there is method for emulation charge back function
+        log.info("Customer {} received a refund of the average amount {}", customerName, totalPrice);
+    }
 
     private boolean checkIsExpiredPayment(Payment payment) {
         return LocalDateTime.now().isAfter(payment.getPaymentDate().plusMinutes(payment.getMinutesBeforeExpiration()));
