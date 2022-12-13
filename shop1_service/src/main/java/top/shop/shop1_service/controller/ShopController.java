@@ -39,8 +39,8 @@ public class ShopController {
     }
 
     @GetMapping("/delivery/accepting/{orderNumber}")
-    public ResponseEntity<DeliveryStatus> acceptingDeliveryOrder(@PathVariable Long orderNumber) {
-        return ResponseEntity.ok(deliveryService.acceptingDelivery(orderNumber));
+    public ResponseEntity<DeliveryStatus> acceptingDeliveryOrder(@PathVariable Long orderNumber, @RequestParam boolean isAccept) {
+        return ResponseEntity.ok(deliveryService.acceptingDelivery(orderNumber, isAccept));
     }
 
     @PostMapping("/payment")

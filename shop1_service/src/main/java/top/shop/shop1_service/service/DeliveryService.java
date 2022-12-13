@@ -22,14 +22,18 @@ public class DeliveryService {
         //TODO here need email notification customer - order delivered
     }
 
-    public DeliveryStatus acceptingDelivery(Long orderNumber) {
+    public DeliveryStatus acceptingDelivery(Long orderNumber, boolean isAccept) {
         DeliveryOrder deliveryOrder = mongoTemplate.findById(orderNumber, DeliveryOrder.class);
         if (deliveryOrder == null) return DeliveryStatus.NOT_FOUND;
 
-        if (!deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED)) {
+        if (!deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED) && isAccept) {
             deliveryOrder.setDeliveryStatus(DeliveryStatus.DELIVERED);
-            mongoTemplate.save(deliveryOrder);
+
+        } else if (!deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED)) {
+            deliveryOrder.setDeliveryStatus(DeliveryStatus.REJECTED);
+
         }
+        mongoTemplate.save(deliveryOrder);
 
         return deliveryOrder.getDeliveryStatus();
     }
