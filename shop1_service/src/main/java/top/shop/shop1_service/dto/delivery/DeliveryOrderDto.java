@@ -1,4 +1,4 @@
-package top.shop.shop1_service.dto;
+package top.shop.shop1_service.dto.delivery;
 
 import lombok.Data;
 import top.shop.shop1_service.util.DeliveryStatus;

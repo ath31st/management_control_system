@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import top.shop.shop1_service.dto.DeliveryOrderDto;
+import top.shop.shop1_service.dto.delivery.DeliveryOrderDto;
 import top.shop.shop1_service.entity.DeliveryOrder;
 import top.shop.shop1_service.util.DeliveryStatus;
 

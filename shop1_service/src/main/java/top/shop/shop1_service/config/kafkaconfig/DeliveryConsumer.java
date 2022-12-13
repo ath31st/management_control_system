@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import top.shop.shop1_service.dto.DeliveryOrderDto;
+import top.shop.shop1_service.dto.delivery.DeliveryOrderDto;
 import top.shop.shop1_service.service.DeliveryService;
 
 @Slf4j
