@@ -30,12 +30,17 @@ public class DeliveryService {
     public DeliveryStatus acceptingDelivery(Long orderNumber, boolean isAccept) {
         DeliveryOrder deliveryOrder = mongoTemplate.findById(orderNumber, DeliveryOrder.class);
         if (deliveryOrder == null) return DeliveryStatus.NOT_FOUND;
+        if (deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED) |
+                deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.REJECTED)) {
+            throw new DeliveryServiceException(HttpStatus.BAD_REQUEST, "Order with number " + orderNumber + " already closed!");
+        }
 
-        if (!deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED) && isAccept) {
+        if (isAccept) {
             deliveryOrder.setDeliveryStatus(DeliveryStatus.DELIVERED);
-        } else if (!deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED)) {
+        } else {
             deliveryOrder.setDeliveryStatus(DeliveryStatus.REJECTED);
         }
+
         mongoTemplate.save(deliveryOrder);
 
         try {
