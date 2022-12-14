@@ -37,8 +37,9 @@ public class OrderService {
         orderDto.setOrderDate(LocalDateTime.now());
 
         try {
-            orderProducer.sendMessage(orderDto);
-        } catch (JsonProcessingException e) {
+            //orderProducer.sendMessage(orderDto);
+            orderProducer.sendMessageWithCallback(orderDto);
+        } catch (JsonProcessingException | OrderServiceException e) {
             throw new OrderServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         return paymentDto;

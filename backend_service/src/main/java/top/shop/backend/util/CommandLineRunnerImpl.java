@@ -24,6 +24,8 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     }
 
     private void createDefaultShop() {
+        if (shopService.shopExists("shop1")) return;
+
         ShopDto shop1 = new ShopDto();
         shop1.setServiceName("shop1");
         shop1.setName("DEFAULT");
@@ -33,6 +35,8 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     }
 
     private void createDefaultCategory() {
+        if (categoryService.categoryExists("default_category")) return;
+
         CategoryDto defaultCategory = new CategoryDto();
         defaultCategory.setServiceName("default_category");
         defaultCategory.setName("DEFAULT");

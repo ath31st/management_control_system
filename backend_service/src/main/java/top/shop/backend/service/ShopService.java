@@ -84,4 +84,8 @@ public class ShopService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public boolean shopExists(String shopServiceName) {
+        return shopRepository.existsByServiceName(shopServiceName);
+    }
+
 }
