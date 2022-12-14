@@ -55,6 +55,7 @@ public class PaymentService {
 
         Payment payment = getPayment(paymentRequestDto.getPaymentUuid());
 
+        checkPaymentStatus(payment);
         checkIsExpiredPayment(payment);
         checkIsRightTotalPrice(payment, paymentRequestDto);
 
@@ -68,9 +69,23 @@ public class PaymentService {
         mongoTemplate.save(payment);
     }
 
+    public void cancelPayment(String paymentUuid) {
+        Payment payment = getPayment(paymentUuid);
+        payment.setPaymentStatus(PaymentStatus.CANCELED);
+
+        mongoTemplate.save(payment);
+    }
+
     private void checkExistingPayment(String paymentUuid) {
         if (!mongoTemplate.exists(Query.query(Criteria.where("paymentUuid").is(paymentUuid)), Payment.class))
             throw new PaymentServiceException(HttpStatus.NOT_FOUND, "Payment with " + paymentUuid + " UUID not found!");
+    }
+
+    private void checkPaymentStatus(Payment payment) {
+        if (!payment.getPaymentStatus().equals(PaymentStatus.PROCESSING)) {
+            throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Payment with " + payment.getPaymentUuid() +
+                    " UUID has status: " + payment.getPaymentStatus());
+        }
     }
 
     private void checkIsExpiredPayment(Payment payment) {

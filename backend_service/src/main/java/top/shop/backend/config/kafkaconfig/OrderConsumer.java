@@ -15,7 +15,6 @@ import top.shop.backend.service.OrderService;
 @RequiredArgsConstructor
 public class OrderConsumer {
     private static final String ORDER_TOPIC = "${topic.order.name}";
-
     private final ObjectMapper objectMapper;
     private final OrderService orderService;
 

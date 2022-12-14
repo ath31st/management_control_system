@@ -20,6 +20,8 @@ import top.shop.backend.service.event.PaymentEvent;
 import top.shop.backend.util.DeliveryStatus;
 import top.shop.backend.util.OrderStatus;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -94,6 +96,7 @@ public class OrderService {
             }
         }
 
+        order.setExecutionDate(LocalDateTime.now());
         orderRepository.save(order);
     }
 

@@ -40,7 +40,8 @@ public class OrderService {
             //orderProducer.sendMessage(orderDto);
             orderProducer.sendMessageWithCallback(orderDto);
         } catch (JsonProcessingException | OrderServiceException e) {
-            throw new OrderServiceException(HttpStatus.BAD_REQUEST, e.getMessage());
+            paymentService.cancelPayment(paymentDto.getPaymentUuid());
+            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "Payment and order was closed.");
         }
         return paymentDto;
     }
