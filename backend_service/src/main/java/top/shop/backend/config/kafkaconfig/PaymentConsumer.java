@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import top.shop.backend.dto.payment.PaymentRequestDto;
+import top.shop.backend.entity.Payment;
+import top.shop.backend.service.OrderService;
 import top.shop.backend.service.PaymentService;
 
 @Slf4j
@@ -18,6 +20,7 @@ public class PaymentConsumer {
 
     private final ObjectMapper objectMapper;
     private final PaymentService paymentService;
+    private final OrderService orderService;
 
 
     @KafkaListener(topics = PAYMENT_TOPIC)
@@ -25,7 +28,8 @@ public class PaymentConsumer {
         log.info("message consumed {}", message);
 
         PaymentRequestDto paymentRequestDto = objectMapper.readValue(message, PaymentRequestDto.class);
-        paymentService.receivePaymentRequest(paymentRequestDto);
+        Payment payment = paymentService.receivePaymentRequest(paymentRequestDto);
+        orderService.processingOrder(payment);
     }
 
 }

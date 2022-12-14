@@ -5,18 +5,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.config.kafkaconfig.DeliveryProducer;
-import top.shop.backend.dto.delivery.DeliveryOrderDto;
 import top.shop.backend.dto.OrderDto;
+import top.shop.backend.dto.delivery.DeliveryOrderDto;
 import top.shop.backend.entity.Order;
 import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.BalanceEvent;
-import top.shop.backend.service.event.PaymentEvent;
 import top.shop.backend.util.DeliveryStatus;
 import top.shop.backend.util.OrderStatus;
 
@@ -63,9 +61,7 @@ public class OrderService {
         log.info("delivery {} processed and send to {}", deliveryOrderDto, deliveryOrderDto.getShopServiceName());
     }
 
-    @EventListener
-    public void processingOrder(PaymentEvent event) {
-        Payment payment = (Payment) event.getSource();
+    public void processingOrder(Payment payment) {
         Order order = orderRepository.findByPayment_PaymentUuid(payment.getPaymentUuid());
 
         switch (payment.getPaymentStatus()) {

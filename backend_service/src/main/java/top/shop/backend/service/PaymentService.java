@@ -2,14 +2,12 @@ package top.shop.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.dto.payment.PaymentRequestDto;
 import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.PaymentServiceException;
 import top.shop.backend.repository.PaymentRepository;
-import top.shop.backend.service.event.PaymentEvent;
 import top.shop.backend.util.PaymentStatus;
 
 import java.time.LocalDateTime;
@@ -19,7 +17,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
     public Payment getPayment(String paymentUuid) {
         return paymentRepository.findByPaymentUuid(paymentUuid).orElseThrow(
@@ -27,10 +24,10 @@ public class PaymentService {
         );
     }
 
-    public void receivePaymentRequest(PaymentRequestDto paymentRequestDto) {
+    public Payment receivePaymentRequest(PaymentRequestDto paymentRequestDto) {
         Payment payment = getPayment(paymentRequestDto.getPaymentUuid());
 
-        if(checkIsExpiredPayment(payment)) {
+        if (checkIsExpiredPayment(payment)) {
             payment.setPaymentStatus(PaymentStatus.EXPIRED);
         } else if (checkIsRightTotalPrice(payment, paymentRequestDto)) {
             payment.setPaymentStatus(PaymentStatus.REJECTION);
@@ -38,9 +35,7 @@ public class PaymentService {
             payment.setPaymentStatus(PaymentStatus.EXECUTED);
         }
 
-        paymentRepository.save(payment);
-
-        eventPublisher.publishEvent(new PaymentEvent(payment));
+        return paymentRepository.save(payment);
     }
 
     public void chargeBack(String customerName, double totalPrice) {
