@@ -19,6 +19,8 @@ import top.shop.backend.util.DeliveryStatus;
 import top.shop.backend.util.OrderStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -77,6 +79,14 @@ public class OrderService {
             eventPublisher.publishEvent(new BalanceEvent(order));
             sendDelivery(order);
         }
+    }
+
+    public Order saveOrderChanges(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public List<Order> getOrdersByStatus(OrderStatus status) {
+        return new ArrayList<>(orderRepository.findByStatus(status));
     }
 
     public void processingDeliveryResult(DeliveryOrderDto dto) {
