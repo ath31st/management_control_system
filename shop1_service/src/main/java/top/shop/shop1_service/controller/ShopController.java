@@ -13,6 +13,7 @@ import top.shop.shop1_service.util.DeliveryStatus;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -32,14 +33,20 @@ public class ShopController {
         return ResponseEntity.ok(orderService.createOrder(orderDto));
     }
 
-    @GetMapping("/delivery/status/{orderNumber}")
-    public ResponseEntity<DeliveryStatus> checkDeliveryOrderStatus(@PathVariable Long orderNumber) {
-        return ResponseEntity.ok(deliveryService.checkDeliveryStatus(orderNumber));
+    @GetMapping("/delivery/status/{orderUuidNumber}")
+    public ResponseEntity<Map<String, Enum>> checkDeliveryOrderStatus(@PathVariable String orderUuidNumber) {
+        paymentService.checkPaymentStatus(orderUuidNumber);
+        deliveryService.checkDeliveryStatus(orderUuidNumber);
+        Map<String, Enum> response = Map.of(
+                "Payment status", paymentService.checkPaymentStatus(orderUuidNumber),
+                "Delivery status", deliveryService.checkDeliveryStatus(orderUuidNumber));
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/delivery/accepting/{orderNumber}")
-    public ResponseEntity<DeliveryStatus> acceptingDeliveryOrder(@PathVariable Long orderNumber, @RequestParam boolean isAccept) {
-        return ResponseEntity.ok(deliveryService.acceptingDelivery(orderNumber, isAccept));
+    @GetMapping("/delivery/accepting/{orderUuidNumber}")
+    public ResponseEntity<DeliveryStatus> acceptingDeliveryOrder(@PathVariable String orderUuidNumber, @RequestParam boolean isAccept) {
+        return ResponseEntity.ok(deliveryService.acceptingDelivery(orderUuidNumber, isAccept));
     }
 
     @PostMapping("/payment")

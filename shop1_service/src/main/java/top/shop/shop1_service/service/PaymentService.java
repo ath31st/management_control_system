@@ -35,7 +35,7 @@ public class PaymentService {
 
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentUuid(UUID.randomUUID().toString());
-        payment.setPaymentStatus(PaymentStatus.PROCESSING);
+        payment.setPaymentStatus(PaymentStatus.UNPAID);
         payment.setMinutesBeforeExpiration(MINUTES_BEFORE_EXPIRATION);
         payment.setTotalPrice(BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(pp.getPrice())));
 
@@ -69,6 +69,13 @@ public class PaymentService {
         mongoTemplate.save(payment);
     }
 
+    public PaymentStatus checkPaymentStatus(String paymentUuid) {
+        Payment payment = getPayment(paymentUuid);
+        if (payment == null) return PaymentStatus.NOT_FOUND;
+
+        return payment.getPaymentStatus();
+    }
+
     public void cancelPayment(String paymentUuid) {
         Payment payment = getPayment(paymentUuid);
         payment.setPaymentStatus(PaymentStatus.CANCELED);
@@ -82,7 +89,7 @@ public class PaymentService {
     }
 
     private void checkPaymentStatus(Payment payment) {
-        if (!payment.getPaymentStatus().equals(PaymentStatus.PROCESSING)) {
+        if (!payment.getPaymentStatus().equals(PaymentStatus.UNPAID)) {
             throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Payment with " + payment.getPaymentUuid() +
                     " UUID has status: " + payment.getPaymentStatus());
         }

@@ -5,7 +5,7 @@ import top.shop.shop1_service.util.DeliveryStatus;
 
 @Data
 public class DeliveryOrderDto {
-    private Long orderNumber;
+    private String orderUuidNumber;
     private String shopServiceName;
     private String shopName;
     private String productName;

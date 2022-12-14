@@ -1,9 +1,10 @@
 package top.shop.backend.util;
 
 public enum PaymentStatus {
-    PROCESSING,
+    UNPAID,
     CANCELED,
     EXPIRED,
     EXECUTED,
+    NOT_FOUND,
     REJECTION
 }

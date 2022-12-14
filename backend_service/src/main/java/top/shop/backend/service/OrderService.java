@@ -80,7 +80,7 @@ public class OrderService {
     }
 
     public void processingDeliveryResult(DeliveryOrderDto dto) {
-        Order order = getOrderById(dto.getOrderNumber());
+        Order order = orderRepository.findByPayment_PaymentUuid(dto.getOrderUuidNumber());
 
         switch (dto.getDeliveryStatus()) {
             case DELIVERED -> order.setStatus(OrderStatus.DELIVERED);
@@ -99,7 +99,7 @@ public class OrderService {
     private DeliveryOrderDto processingDelivery(Order order) {
         return DeliveryOrderDto.builder()
                 .deliveryStatus(DeliveryStatus.IN_TRANSIT)
-                .orderNumber(order.getId())
+                .orderUuidNumber(order.getPayment().getPaymentUuid())
                 .amount(order.getAmount())
                 .customerName(order.getCustomerName())
                 .shopServiceName(order.getShop().getServiceName())

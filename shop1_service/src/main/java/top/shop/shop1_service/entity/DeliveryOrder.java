@@ -13,7 +13,7 @@ import top.shop.shop1_service.util.DeliveryStatus;
 @Document("deliveries")
 public class DeliveryOrder {
     @Id
-    private Long orderNumber;
+    private String orderUuidNumber;
     private String shopServiceName;
     private String shopName;
     private String productName;

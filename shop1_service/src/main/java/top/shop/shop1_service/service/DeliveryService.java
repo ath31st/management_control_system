@@ -27,12 +27,12 @@ public class DeliveryService {
         //TODO here need email notification customer - order delivered
     }
 
-    public DeliveryStatus acceptingDelivery(Long orderNumber, boolean isAccept) {
-        DeliveryOrder deliveryOrder = mongoTemplate.findById(orderNumber, DeliveryOrder.class);
+    public DeliveryStatus acceptingDelivery(String orderUuidNumber, boolean isAccept) {
+        DeliveryOrder deliveryOrder = mongoTemplate.findById(orderUuidNumber, DeliveryOrder.class);
         if (deliveryOrder == null) return DeliveryStatus.NOT_FOUND;
         if (deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.DELIVERED) |
                 deliveryOrder.getDeliveryStatus().equals(DeliveryStatus.REJECTED)) {
-            throw new DeliveryServiceException(HttpStatus.BAD_REQUEST, "Order with number " + orderNumber + " already closed!");
+            throw new DeliveryServiceException(HttpStatus.BAD_REQUEST, "Order with number " + orderUuidNumber + " already closed!");
         }
 
         if (isAccept) {
@@ -52,8 +52,8 @@ public class DeliveryService {
         return deliveryOrder.getDeliveryStatus();
     }
 
-    public DeliveryStatus checkDeliveryStatus(Long orderNumber) {
-        DeliveryOrder deliveryOrder = mongoTemplate.findById(orderNumber, DeliveryOrder.class);
+    public DeliveryStatus checkDeliveryStatus(String orderUuidNumber) {
+        DeliveryOrder deliveryOrder = mongoTemplate.findById(orderUuidNumber, DeliveryOrder.class);
 
         if (deliveryOrder == null) return DeliveryStatus.NOT_FOUND;
 
