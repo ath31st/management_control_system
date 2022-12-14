@@ -15,6 +15,7 @@ import top.shop.backend.entity.Payment;
 import top.shop.backend.exceptionhandler.exception.OrderServiceException;
 import top.shop.backend.repository.OrderRepository;
 import top.shop.backend.service.event.BalanceEvent;
+import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.util.DeliveryStatus;
 import top.shop.backend.util.OrderStatus;
 
@@ -48,6 +49,8 @@ public class OrderService {
         Order persistedOrder = orderRepository.save(order);
         productService.reduceAmountProduct(order.getAmount(), order.getProductName());
 
+        // add order to scheduler list
+        eventPublisher.publishEvent(new OrderEvent(order));
         log.info("order received and persisted {}", persistedOrder);
     }
 
@@ -74,6 +77,8 @@ public class OrderService {
         }
 
         orderRepository.save(order);
+        // remove order from scheduler list
+        eventPublisher.publishEvent(new OrderEvent(order));
 
         if (order.getStatus().equals(OrderStatus.IS_PAID)) {
             eventPublisher.publishEvent(new BalanceEvent(order));

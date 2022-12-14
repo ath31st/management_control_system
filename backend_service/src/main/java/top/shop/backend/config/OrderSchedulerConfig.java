@@ -3,15 +3,18 @@ package top.shop.backend.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import top.shop.backend.entity.Order;
 import top.shop.backend.service.OrderService;
+import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.util.OrderStatus;
+import top.shop.backend.util.PaymentStatus;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Configuration
 @EnableScheduling
@@ -19,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @RequiredArgsConstructor
 public class OrderSchedulerConfig {
     private final OrderService orderService;
-    private static final CopyOnWriteArraySet<Order> orders = new CopyOnWriteArraySet<>();
+    private static final CopyOnWriteArrayList<Order> orders = new CopyOnWriteArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -39,6 +42,17 @@ public class OrderSchedulerConfig {
 //                    o.setPayment(p);
                     orderService.saveOrderChanges(o);
                 });
+    }
+
+    @EventListener
+    public void updateOrdersList(OrderEvent event) {
+        Order order = (Order) event.getSource();
+
+        if (!orders.contains(order) && order.getPayment().getPaymentStatus().equals(PaymentStatus.UNPAID)) {
+            orders.add(order);
+        } else if (orders.contains(order) && !order.getPayment().getPaymentStatus().equals(PaymentStatus.UNPAID)) {
+            orders.remove(order);
+        }
     }
 
     private boolean checkIsExpiredOrder(Order order) {
