@@ -31,6 +31,8 @@ public class OrderSchedulerConfig {
 
     @Scheduled(fixedDelay = 5000)
     private void checkAndUpdateOrderStatus() {
+        if (orders.isEmpty()) return;
+
         orders.stream()
                 .filter(this::checkIsExpiredOrder)
                 .forEach(o -> {

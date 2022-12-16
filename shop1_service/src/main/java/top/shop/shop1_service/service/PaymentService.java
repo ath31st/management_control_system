@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.config.kafkaconfig.PaymentProducer;
@@ -18,6 +19,7 @@ import top.shop.shop1_service.util.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -48,6 +50,12 @@ public class PaymentService {
 
     public Payment getPayment(String paymentUuid) {
         return mongoTemplate.findById(paymentUuid, Payment.class);
+    }
+
+    public List<Payment> getPaymentsByStatus(PaymentStatus status) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("paymentStatus").is(status));
+        return mongoTemplate.find(query, Payment.class);
     }
 
     public void receivePaymentRequestDto(PaymentRequestDto paymentRequestDto) {
