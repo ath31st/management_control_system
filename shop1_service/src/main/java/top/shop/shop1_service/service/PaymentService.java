@@ -3,10 +3,10 @@ package top.shop.shop1_service.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.config.kafkaconfig.PaymentProducer;
@@ -15,6 +15,7 @@ import top.shop.shop1_service.dto.payment.PaymentRequestDto;
 import top.shop.shop1_service.entity.Payment;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.PaymentServiceException;
+import top.shop.shop1_service.service.event.PaymentEvent;
 import top.shop.shop1_service.util.PaymentStatus;
 
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ public class PaymentService {
     private final PaymentProducer paymentProducer;
     private final MongoTemplate mongoTemplate;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
     private static final int MINUTES_BEFORE_EXPIRATION = 5; // after that time order will close like expired
 
     public Payment createPayment(String productName, int amount) {
@@ -40,6 +42,8 @@ public class PaymentService {
         payment.setPaymentStatus(PaymentStatus.UNPAID);
         payment.setMinutesBeforeExpiration(MINUTES_BEFORE_EXPIRATION);
         payment.setTotalPrice(BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(pp.getPrice())));
+
+        eventPublisher.publishEvent(new PaymentEvent(payment));
 
         return mongoTemplate.save(payment);
     }
@@ -75,6 +79,8 @@ public class PaymentService {
 
         payment.setPaymentStatus(PaymentStatus.EXECUTED);
         mongoTemplate.save(payment);
+
+        eventPublisher.publishEvent(new PaymentEvent(payment));
     }
 
     public PaymentStatus checkPaymentStatus(String paymentUuid) {
@@ -89,6 +95,8 @@ public class PaymentService {
         payment.setPaymentStatus(PaymentStatus.CANCELED);
 
         mongoTemplate.save(payment);
+
+        eventPublisher.publishEvent(new PaymentEvent(payment));
     }
 
     private void checkExistingPayment(String paymentUuid) {
@@ -108,6 +116,8 @@ public class PaymentService {
             payment.setPaymentStatus(PaymentStatus.EXPIRED);
             mongoTemplate.save(payment);
 
+            eventPublisher.publishEvent(new PaymentEvent(payment));
+
             throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Payment is expired, please try place an order again.");
         }
     }
@@ -116,6 +126,8 @@ public class PaymentService {
         if (!(payment.getTotalPrice().compareTo(paymentRequestDto.getTotalPrice()) == 0)) {
             payment.setPaymentStatus(PaymentStatus.CANCELED);
             mongoTemplate.save(payment);
+
+            eventPublisher.publishEvent(new PaymentEvent(payment));
 
             throw new PaymentServiceException(HttpStatus.BAD_REQUEST, "Your total price not equals total price in your order.");
         }

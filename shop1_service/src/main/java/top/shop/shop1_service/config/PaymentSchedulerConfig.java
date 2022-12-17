@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import top.shop.shop1_service.entity.Payment;
 import top.shop.shop1_service.service.PaymentService;
+import top.shop.shop1_service.service.event.PaymentEvent;
 import top.shop.shop1_service.util.PaymentStatus;
 
 import javax.annotation.PostConstruct;
@@ -42,7 +43,9 @@ public class PaymentSchedulerConfig {
     }
 
     @EventListener
-    public void updatePaymentsList(Payment payment) {
+    public void updatePaymentsList(PaymentEvent event) {
+        Payment payment = (Payment) event.getSource();
+
         if (!payments.contains(payment) && payment.getPaymentStatus().equals(PaymentStatus.UNPAID)) {
             payments.add(payment);
         } else if (payments.contains(payment) && !payment.getPaymentStatus().equals(PaymentStatus.UNPAID)) {
