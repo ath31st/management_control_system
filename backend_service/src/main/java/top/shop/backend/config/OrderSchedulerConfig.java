@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import top.shop.backend.entity.Order;
 import top.shop.backend.service.OrderService;
+import top.shop.backend.service.ProductService;
 import top.shop.backend.service.event.OrderEvent;
 import top.shop.backend.util.OrderStatus;
 import top.shop.backend.util.PaymentStatus;
@@ -22,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequiredArgsConstructor
 public class OrderSchedulerConfig {
     private final OrderService orderService;
+    private final ProductService productService;
     private static final CopyOnWriteArrayList<Order> orders = new CopyOnWriteArrayList<>();
 
     @PostConstruct
@@ -38,12 +40,22 @@ public class OrderSchedulerConfig {
                 .forEach(o -> {
                     o.setStatus(OrderStatus.EXPIRED);
                     o.setExecutionDate(LocalDateTime.now());
-//                    Payment p = o.getPayment();
-//                    if (p.getPaymentStatus().equals(PaymentStatus.UNPAID))
-//                        p.setPaymentStatus(PaymentStatus.EXPIRED);
-//                    o.setPayment(p);
+                    productService.increaseAmountProduct(o.getAmount(), o.getProductName());
                     orderService.saveOrderChanges(o);
                 });
+        orders.removeIf(o -> o.getStatus().equals(OrderStatus.EXPIRED));
+
+//        while (orders.listIterator().hasNext()) {
+//            Order o = orders.listIterator().next();
+//            if (checkIsExpiredOrder(o)) {
+//                o.setStatus(OrderStatus.EXPIRED);
+//                o.setExecutionDate(LocalDateTime.now());
+//                productService.increaseAmountProduct(o.getAmount(), o.getProductName());
+//                orderService.saveOrderChanges(o);
+//
+//                orders.listIterator().remove();
+//            }
+//        }
     }
 
     @EventListener

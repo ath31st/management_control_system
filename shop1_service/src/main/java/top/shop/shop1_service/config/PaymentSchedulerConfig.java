@@ -33,6 +33,7 @@ public class PaymentSchedulerConfig {
     @Scheduled(fixedDelay = 5000)
     private void checkAndUpdateOrderStatus() {
         if (payments.isEmpty()) return;
+
         payments.stream()
                 .filter(this::checkIsExpiredPayment)
                 .forEach(p -> {
@@ -40,6 +41,18 @@ public class PaymentSchedulerConfig {
                     p.setPaymentDate(LocalDateTime.now());
                     mongoTemplate.save(p);
                 });
+        payments.removeIf(p-> p.getPaymentStatus().equals(PaymentStatus.EXPIRED));
+
+//        while (payments.listIterator().hasNext()) {
+//            Payment p = payments.listIterator().next();
+//            if (checkIsExpiredPayment(p)) {
+//                p.setPaymentStatus(PaymentStatus.EXPIRED);
+//                p.setPaymentDate(LocalDateTime.now());
+//                mongoTemplate.save(p);
+//
+//                payments.listIterator().remove();
+//            }
+//        }
     }
 
     @EventListener
