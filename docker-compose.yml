@@ -109,7 +109,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: keycloakDB
-    restart: always
+    restart: on-failure
     networks:
       - kafka-net
 
@@ -123,14 +123,13 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgresDB
-    restart: always
+    restart: on-failure
     networks:
       - kafka-net
 
   mongodb-shop1:
     image: mongo:latest
     container_name: mongo-container-shop1
-    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo
@@ -139,13 +138,13 @@ services:
       - "27017:27017"
     volumes:
       - ./shop1_service/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    restart: on-failure
     networks:
       - kafka-net
 
   mongo-express:
     image: mongo-express
     container_name: mongo-express
-    restart: always
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo-container-shop1
       ME_CONFIG_MONGODB_ADMINUSERNAME: mongo
@@ -158,6 +157,7 @@ services:
       - "8081:8081"
     depends_on:
       - mongodb-shop1
+    restart: on-failure
     networks:
       - kafka-net
 
