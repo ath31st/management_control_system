@@ -3,13 +3,26 @@
 Microservice training project with Apache Kafka and Keycloak auth.
 
 ## Project objectives
+### What has already been implemented
 
-Work in progress
+ - Backend service (receiving, processing, delivering orders, making payments, refunding funds, creating, updating, mailing catalogs)
+ - Shop service (providing catalogs, placing orders, issuing deliveries, returning deliveries, initial payment processing)
+ - Gateway service ()
+ - Project security (Keycloak for user registration, authentication and authorization, Kafka SASL authentication for services)
+
+### Planned
+
+ - Implement the discount system
+ - Integrate Apache Cassandra for logging events from all project modules
+ - Collecting and displaying statistics for managers and administrators in the web interface
+ - Make a simple but visual web interface for customers (registration, purchases, refunds, viewing purchase history)
 
 ## Table of Contents
 
 * [Application 'Management control system'](#management-control-system)
     * [Project objectives](#project-objectives)
+        * [What has already been implemented](#what-has-already-been-implemented)
+        * [Planned](#planned)
     * [Architecture](#architecture)
     * [Services](#services)
         * [Gateway service](#gateway)
@@ -19,6 +32,7 @@ Work in progress
         * [Zookeeper](#zookeeper)
         * [Keycloak with PostgresQL database](#keycloak-with-PostgresQL-database)
         * [Mongo-express](#mongo-express)
+    * [Security](#security)
     * [Running Instructions](#running-instructions)
         * [Via docker](#via-docker)
             * [Usage](#usage)
@@ -53,16 +67,24 @@ Kafka is a distributed system consisting of servers and clients that communicate
 It can be deployed on bare-metal hardware, virtual machines, and containers in on-premise as well as cloud environments.
 
 Servers: Kafka is run as a cluster of one or more servers that can span multiple datacenters or cloud regions.
-Some of these servers form the storage layer, called the brokers. Other servers run Kafka Connect to continuously 
-import and export data as event streams to integrate Kafka with your existing systems such as relational databases as 
-well as other Kafka clusters. To let you implement mission-critical use cases, a Kafka cluster is highly scalable and 
+Some of these servers form the storage layer, called the brokers. Other servers run Kafka Connect to continuously
+import and export data as event streams to integrate Kafka with your existing systems such as relational databases as
+well as other Kafka clusters. To let you implement mission-critical use cases, a Kafka cluster is highly scalable and
 fault-tolerant: if any of its servers fails, the other servers will take over their work to ensure continuous operations without any data loss.
 
 Clients: They allow you to write distributed applications and microservices that read, write, and process streams of events
-in parallel, at scale, and in a fault-tolerant manner even in the case of network problems or machine failures. Kafka ships 
+in parallel, at scale, and in a fault-tolerant manner even in the case of network problems or machine failures. Kafka ships
 with some such clients included, which are augmented by dozens of clients provided by the Kafka community: clients are available
-for Java and Scala including the higher-level Kafka Streams library, for Go, Python, C/C++, and many other programming languages 
+for Java and Scala including the higher-level Kafka Streams library, for Go, Python, C/C++, and many other programming languages
 as well as REST APIs.
+
+In this project I created the following topics:
+ - t.amount (in this topic, the producer is the backend service, and the consumers are all shop services. information about the amount of remaining products is transmitted in the published messages)
+ - t.catalogue (in this topic, the producer is the backend service, and the consumers are the specific shop and gateway services. information about catalogs is transmitted in published messages)
+ - t.delivery (delivery topic, producer backend service, consumers shop services. the messages transmit information about the delivered product, the customer, the purchase amount, and so on)
+ - t.order (the topic of ordering, producers shop services, consumer backend service. the messages transmit information about the order received from the customer)
+ - t.payment (order payment topic, producers shop services, consumer backend service. the messages contain information about the payment (or non-payment) of the order)
+ - t.delivery-result (the topic of the results of order delivery, here the producers are shop services, and the consumer is a backend service. the messages transmit information about the results of delivery, including unsuccessful)
 
 ### Zookeeper
 
@@ -101,6 +123,10 @@ In this project I used the following features:
 ### Mongo-express
 
 Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3
+
+## Security
+
+Work in progress
 
 ## Running Instructions
 ### Via docker
