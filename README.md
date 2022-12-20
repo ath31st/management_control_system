@@ -1,7 +1,10 @@
 # Management control system
 
 Microservice training project with Apache Kafka and Keycloak auth.
-
+The project represents my vision of a multi-store administration system. 
+Since I have no practical experience in designing and developing projects of this scale, some services have been rewritten repeatedly, 
+the project scheme has also changed over time.
+Despite the shortcomings and errors (including architectural ones), this is a great experience for me after a year of starting my Java self-study.
 
 ## Table of Contents
 
@@ -63,6 +66,9 @@ Each of the backing services must be located using a statically defined route
 ### Gateway
 
 Implementation of an API gateway that is the single entry point for all managers and administrator.
+For the administrator - editing users, adding storage. For managers - creating and editing catalogs.
+Since my skills in frontend are negligible, I used the Thymeleaf template engine.
+The pages look very poor and empty, but they perform the task of visual and convenient management.
 
 ### Backend with PostgresQL database
 
@@ -144,6 +150,8 @@ Work in progress
 ## Running Instructions
 ### Via docker
 
+At the moment, to start, you need to uncomment the services in docker-compose and edit application.yml in the services (localhost is currently set there)
+
 ```bash
 $ cd management_control_system
 $ mvn clean install
@@ -151,10 +159,6 @@ $ docker-compose up --build -d
 ```
 
 #### Usage
-
-Work in progress
-
-#### Results
 
 Work in progress
 
