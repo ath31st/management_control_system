@@ -2,20 +2,6 @@
 
 Microservice training project with Apache Kafka and Keycloak auth.
 
-## Project objectives
-### What has already been implemented
-
- - Backend service (receiving, processing, delivering orders, making payments, refunding funds, creating, updating, mailing catalogs)
- - Shop service (providing catalogs, placing orders, issuing deliveries, returning deliveries, initial payment processing)
- - Gateway service ()
- - Project security (Keycloak for user registration, authentication and authorization, Kafka SASL authentication for services)
-
-### Planned
-
- - Implement the discount system
- - Integrate Apache Cassandra for logging events from all project modules
- - Collecting and displaying statistics for managers and administrators in the web interface
- - Make a simple but visual web interface for customers (registration, purchases, refunds, viewing purchase history)
 
 ## Table of Contents
 
@@ -24,6 +10,7 @@ Microservice training project with Apache Kafka and Keycloak auth.
         * [What has already been implemented](#what-has-already-been-implemented)
         * [Planned](#planned)
     * [Architecture](#architecture)
+        * [The history of the development of the project scheme](#the-history-of-the-development-of-the-project-scheme)
     * [Services](#services)
         * [Gateway service](#gateway)
         * [Backend service with PostgresQL database](#backend-with-PostgresQL-database)
@@ -36,14 +23,38 @@ Microservice training project with Apache Kafka and Keycloak auth.
     * [Running Instructions](#running-instructions)
         * [Via docker](#via-docker)
             * [Usage](#usage)
-                * [Get a token:](#get-a-token)
-                * [Backend service:](#backend-service)
     * [References and further reading](#references-and-further-reading)
+
+## Project objectives
+### What has already been implemented
+
+- Backend service (receiving, processing, delivering orders, making payments, refunding funds, creating, updating, mailing catalogs)
+- Shop service (providing catalogs, placing orders, issuing deliveries, returning deliveries, initial payment processing)
+- Gateway service (for the administrator - editing users, adding storage. for managers - creating and editing catalogs)
+- Integrating in project a message broker Apache Kafka
+- Integration authentication server where users can centrally login, logout, register, and manage their user accounts. 
+- Project security (Keycloak for user registration, authentication and authorization, Kafka SASL authentication for services)
+
+### Planned
+
+- Implement the discount system
+- Integrate Apache Cassandra for logging events from all project modules
+- Collecting and displaying statistics for managers and administrator in the web interface
+- Make a simple but visual web interface for customers (registration, purchases, refunds, viewing purchase history)
 
 ## Architecture
 
 The microservice architectural style is an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API.
 ![image info](images/image01.jpg)
+
+### The history of the development of the project scheme
+ - [Early version 001](images/early_version001.jpg)
+ - [Early version 002](images/early_version002.jpg)
+ - [Early version 003](images/early_version003.jpg)
+ - [Early version 004](images/early_version004.jpg)
+ - [Early version 005](images/early_version005.jpg)
+ - [Early version 006](images/early_version006.jpg)
+
 
 ## Services
 
@@ -114,6 +125,8 @@ logout, register, and manage their user accounts. The Keycloak admin UI can mana
 The Keycloak Server can also be used to perform social logins via the user's favorite social media site i.e. Google, Facebook, Twitter etc.
 
 In this project I used the following features:
+
+ - Single-Sign On and Single-Sign Out for browsers
  - OAuth Bearer token auth for REST Services
  - OAuth 2.0 Grant requests
  - Deployable as a WAR, appliance, or on Openshift. Completely clusterable
