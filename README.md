@@ -72,8 +72,22 @@ Since my skills in frontend are negligible, I used the Thymeleaf template engine
 The pages look very poor and empty, but they perform the task of visual and convenient management.
 
 ### Backend with PostgresQL database
+This service is the core of the project. It looks like a monolith inside a microservice project, 
+but in the future it can be divided into separate services, it is not so difficult, but very voluminous and time-consuming. 
+Communication with other services takes place via HTTP and the Kafka message broker. REST controllers for working with Gateway service,
+topics for working with shops.
 
-Work in progress
+Its tasks include:
+ - accepting orders from shops
+ - accepting payment information from shops
+ - processing orders according to payment information
+ - sending products delivery to shops
+ - processing expired payments and orders
+ - working with storage (expanding the assortment, restocking)
+ - adding, deleting, changing data about products, catalogs, categories
+
+The service provides storage of information about catalogs, categories, products, stores, orders and payments.
+Since entities have relationships, the popular Postgresql database was chosen to store them.
 
 ### Shop1-n with Mongo database
 
@@ -157,6 +171,7 @@ In this project I used the following features:
  - Deployable as a WAR, appliance, or on Openshift. Completely clusterable
  - Token claim, assertion, and attribute mappings 
  - Completely centrally managed user and role mapping metadata. Minimal configuration at the application side
+ - Storing users in a database PostgresQL
 
 ### Mongo-express
 
@@ -165,7 +180,14 @@ clarity and convenience of monitoring the contents of the database.
 
 ## Security
 
-Work in progress
+The security of the project is provided by two mechanisms:
+ - [Keycloak](#keycloak-with-PostgresQL-database)
+ - Authentication in Kafka.
+   The following sequence is used for SASL authentication:
+   - Kafka ApiVersionsRequest may be sent by the client to obtain the version ranges of requests supported by the broker. This is optional.
+   - Kafka SaslHandshakeRequest containing the SASL mechanism for authentication is sent by the client. If the requested mechanism is not enabled in the server, the server responds with the list of supported mechanisms and closes the client connection. If the mechanism is enabled in the server, the server sends a successful response and continues with SASL authentication.
+   - The actual SASL authentication is now performed. If SaslHandshakeRequest version is v0, a series of SASL client and server tokens corresponding to the mechanism are sent as opaque packets without wrapping the messages with Kafka protocol headers. If SaslHandshakeRequest version is v1, the SaslAuthenticate request/response are used, where the actual SASL tokens are wrapped in the Kafka protocol. The error code in the final message from the broker will indicate if authentication succeeded or failed.
+   - If authentication succeeds, subsequent packets are handled as Kafka API requests. Otherwise, the client connection is closed
 
 ## Running Instructions
 ### Via docker
