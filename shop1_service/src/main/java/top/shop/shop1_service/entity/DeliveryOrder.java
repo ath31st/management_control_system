@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import top.shop.shop1_service.util.DeliveryStatus;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -21,4 +23,17 @@ public class DeliveryOrder {
     private int amount;
     private double totalPrice;
     private DeliveryStatus deliveryStatus;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryOrder that = (DeliveryOrder) o;
+        return Objects.equals(orderUuidNumber, that.orderUuidNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderUuidNumber);
+    }
 }

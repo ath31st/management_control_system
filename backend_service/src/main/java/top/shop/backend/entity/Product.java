@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -34,4 +35,16 @@ public class Product {
     @ToString.Exclude
     private Set<Catalogue> catalogs;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(serviceName, product.serviceName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, serviceName);
+    }
 }
