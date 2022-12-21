@@ -61,7 +61,8 @@ The microservice architectural style is an approach to developing a single appli
 
 ## Services
 
-Each of the backing services must be located using a statically defined route
+The services communicate with each other via HTTP and by sending messages via Kafka.
+Each of the services located using a statically defined route and packed in a docker container.
 
 ### Gateway
 
@@ -76,7 +77,25 @@ Work in progress
 
 ### Shop1-n with Mongo database
 
-Work in progress
+The service is designed to serve customers. This service is managed by managers, they make a catalog of products available in the storage, 
+set prices, change prices. Each such service stores information about the catalog, delivered products, payments and current prices. 
+MongoDB is used as the database. Stored entities have no relationships, so it was decided to use a NoSQL database. Here, as well as on 
+the backend service, the order expiration mechanism works - after a certain time (now it is 5 minutes), 
+the payment and the order are considered expired and become unavailable for payment. The structure of the Shop service is built so that you can make the required
+number of them with minimal settings (change the marked fields in application.yml, add new service in docker-compose and register a new service on the Gateway service). 
+At the moment, the service has only a REST api for working with customers, but in the future I plan to add a web interface.
+
+Its tasks include:
+ - store and provide a product catalog for customers
+ - accept orders
+ - transfer orders for processing to the backend service
+ - make payments on orders
+ - transfer payments for processing to the backend service
+ - accept payments on orders
+ - transfer information about the received payment to the backend service
+ - accept delivery of products from the backend service
+ - issue orders to customers
+ - provision of order and payment status
 
 ### Kafka
 
@@ -141,7 +160,8 @@ In this project I used the following features:
 
 ### Mongo-express
 
-Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3
+Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3. This service is optional and is used for
+clarity and convenience of monitoring the contents of the database.
 
 ## Security
 
