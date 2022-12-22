@@ -142,6 +142,21 @@ services:
     networks:
       - kafka-net
 
+#  mongodb-shop2:
+#    image: mongo:latest
+#    container_name: mongo-container-shop2
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: mongo
+#      MONGO_INITDB_ROOT_PASSWORD: mongo
+#      MONGO_INITDB_DATABASE: mongoDBshop2
+#    ports:
+#      - "27018:27018"
+#    volumes:
+#      - ./shop2_service/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+#    restart: on-failure
+#    networks:
+#      - kafka-net
+
   mongo-express:
     image: mongo-express
     container_name: mongo-express
@@ -188,3 +203,13 @@ services:
 #      - kafka-net
 #    depends_on:
 #      - mongodb-shop1
+
+#  shop2-service:
+#    container_name: shop2-service
+#    build: ./shop2_service/
+#    ports:
+#      - "28881:28881"
+#    networks:
+#      - kafka-net
+#    depends_on:
+#      - mongodb-shop2

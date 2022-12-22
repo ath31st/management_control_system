@@ -8,14 +8,23 @@
     <link rel="icon" th:href="@{/icon/flavicon.png}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
 </head>
 <body>
 <div class="wrapper">
     <div lang="en" th:replace="fragments/header :: header"></div>
-
-    <h1 class="text-center">Test test</h1>
-    <h2 class="text-center" th:text="${message}">Whats up?!</h2>
-    <p>Some text</p>
+    <h1 class="text-center">Welcome!</h1>
+    <h4 class="text-center">This is a multi-store management system with a web interface for administrators and managers</h4>
+    <br>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMINISTRATOR'')')}">
+        Admin section
+    </div>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
+        Manager section
+    </div>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+        User section
+    </div>
     <br>
     <br>
     <br>
