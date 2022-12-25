@@ -32,4 +32,5 @@ public class Discount {
     private LocalDateTime startingDate;
     private LocalDateTime endingDate;
     private float percentageDiscount;
+    private boolean isClosed;
 }
