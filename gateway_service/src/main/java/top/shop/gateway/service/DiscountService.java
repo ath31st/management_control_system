@@ -5,14 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import top.shop.gateway.dto.discount.CommonDiscountDto;
-import top.shop.gateway.dto.discount.DiscountDto;
-import top.shop.gateway.dto.discount.PrivateDiscountDto;
 import top.shop.gateway.util.TokenExtractor;
 import top.shop.gateway.util.wrapper.DiscountWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
