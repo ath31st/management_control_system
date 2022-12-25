@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Discounts</title>
@@ -8,6 +8,7 @@
     <link rel="icon" th:href="@{/icon/flavicon.png}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
     <style>
         table {
             width: 100%; /* Ширина таблицы */
@@ -69,6 +70,7 @@
                                                    th:href="@{/new-discount}">Create
                     new discount</a></button>
             </div>
+            <br>
 
             <p><span style="font-size: 22px !important"> List of private discounts </span></p>
             <table th:if="${not #lists.isEmpty(privateDiscounts)}">
@@ -106,6 +108,7 @@
                                                    th:href="@{/new-private-discount}">Create
                     new private discount</a></button>
             </div>
+            <br>
 
             <p><span style="font-size: 22px !important"> List of common discounts </span></p>
             <table th:if="${not #lists.isEmpty(commonDiscounts)}">
@@ -145,6 +148,8 @@
                                                    th:href="@{/new-common-discount}">Create
                     new common discount</a></button>
             </div>
+            <br>
+
         </div>
     </div>
     <div lang="en" th:replace="fragments/footer :: footer"></div>
