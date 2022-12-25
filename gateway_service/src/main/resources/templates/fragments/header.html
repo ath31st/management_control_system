@@ -28,6 +28,9 @@
                     <li sec:authorize="hasRole('ROLE_MANAGER')" class="nav-item">
                         <a class="nav-link" th:href="@{/catalogue}">Catalogue</a>
                     </li>
+                    <li sec:authorize="hasRole('ROLE_MANAGER')" class="nav-item">
+                        <a class="nav-link" th:href="@{/discounts}">Discounts</a>
+                    </li>
                     <li sec:authorize="hasRole('ROLE_ADMINISTRATOR')" class="nav-item">
                         <a class="nav-link" th:href="@{/categories}">Categories</a>
                     </li>

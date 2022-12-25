@@ -61,9 +61,13 @@
                     </td>
                 </tr>
             </table>
-            <p><span style="font-size: 22px !important"> List of discounts </span></p>
             <div th:if="${#lists.isEmpty(discounts)}">
                 <h4>No discount data found</h4>
+            </div>
+            <div>
+                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                   th:href="@{/new-discount}">Create
+                    new discount</a></button>
             </div>
 
             <p><span style="font-size: 22px !important"> List of private discounts </span></p>
@@ -96,6 +100,11 @@
             </table>
             <div th:if="${#lists.isEmpty(privateDiscounts)}">
                 <h4>No private discount data found</h4>
+            </div>
+            <div>
+                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                   th:href="@{/new-private-discount}">Create
+                    new private discount</a></button>
             </div>
 
             <p><span style="font-size: 22px !important"> List of common discounts </span></p>
@@ -130,18 +139,6 @@
             </table>
             <div th:if="${#lists.isEmpty(commonDiscounts)}">
                 <h4>No common discount data found</h4>
-            </div>
-
-            <br>
-            <div>
-                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                   th:href="@{/new-discount}">Create
-                    new discount</a></button>
-            </div>
-            <div>
-                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                   th:href="@{/new-private-discount}">Create
-                    new private discount</a></button>
             </div>
             <div>
                 <button class="btn btn-primary"><a style="color: white;text-decoration: none"

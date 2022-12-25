@@ -8,6 +8,7 @@ import top.shop.gateway.dto.discount.CommonDiscountDto;
 import top.shop.gateway.dto.discount.DiscountDto;
 import top.shop.gateway.dto.discount.PrivateDiscountDto;
 import top.shop.gateway.service.DiscountService;
+import top.shop.gateway.util.wrapper.DiscountWrapper;
 
 import java.util.List;
 
@@ -18,9 +19,10 @@ public class DiscountController {
 
     @GetMapping("/discounts")
     public String discounts(Model model) {
-        List<DiscountDto> discounts = discountService.getDiscounts();
-        List<PrivateDiscountDto> privateDiscounts = discountService.getPrivateDiscounts();
-        List<CommonDiscountDto> commonDiscounts = discountService.getCommonDiscounts();
+        DiscountWrapper discountWrapper = discountService.getDiscounts();
+        List<DiscountDto> discounts = discountWrapper.getDiscountList();
+        List<PrivateDiscountDto> privateDiscounts = discountWrapper.getPrivateDiscountList();
+        List<CommonDiscountDto> commonDiscounts = discountWrapper.getCommonDiscountList();
         model.addAttribute("discounts", discounts);
         model.addAttribute("privateDiscounts", privateDiscounts);
         model.addAttribute("commonDiscounts", commonDiscounts);
