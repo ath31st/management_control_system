@@ -26,7 +26,7 @@
                 <table>
                     <tr>
                         <td>Product from catalogue:</td>
-                        <td><select type="text" th:list="${productListFromCatalogue}" th:field="*{productServiceName}">
+                        <td><select class="form-control" type="text" th:list="${productListFromCatalogue}" th:field="*{productServiceName}">
                             <option th:each="product : ${productListFromCatalogue}"
                                     th:value="${product.serviceName}"
                                     th:label="${product.name}">
@@ -34,18 +34,13 @@
                         <td th:if="${#fields.hasErrors('productServiceName')}" th:errors="*{productServiceName}">Product service name Error</td>
                     </tr>
                     <tr>
-                        <td>Shop service name:</td>
-                        <td><input type="hidden" th:value="${shopServiceName}" th:field="*{shopServiceName}"></td>
-                        <td th:if="${#fields.hasErrors('shopServiceName')}" th:errors="*{shopServiceName}">Shop service name Error</td>
-                    </tr>
-                    <tr>
                         <td>Starting date:</td>
-                        <td><input type="text" th:field="*{startingDate}"></td>
+                        <td><input type="datetime-local" th:field="*{startingDate}"></td>
                         <td th:if="${#fields.hasErrors('startingDate')}" th:errors="*{startingDate}">Starting date Error</td>
                     </tr>
                     <tr>
                         <td>Ending date:</td>
-                        <td><input type="text" th:field="*{endingDate}"></td>
+                        <td><input type="datetime-local" th:field="*{endingDate}"></td>
                         <td th:if="${#fields.hasErrors('endingDate')}" th:errors="*{endingDate}">Ending date Error</td>
                     </tr>
                     <tr>

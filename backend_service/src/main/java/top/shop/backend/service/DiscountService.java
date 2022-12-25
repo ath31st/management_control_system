@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import top.shop.backend.dto.discount.CommonDiscountDto;
 import top.shop.backend.dto.discount.DiscountDto;
 import top.shop.backend.dto.discount.PrivateDiscountDto;
+import top.shop.backend.entity.Product;
 import top.shop.backend.entity.discount.CommonDiscount;
 import top.shop.backend.entity.discount.Discount;
 import top.shop.backend.entity.discount.PrivateDiscount;
@@ -23,6 +24,8 @@ public class DiscountService {
     private final DiscountRepository discountRepository;
     private final PrivateDiscountRepository privateDiscountRepository;
     private final CommonDiscountRepository commonDiscountRepository;
+    private final ProductService productService;
+    private final ShopService shopService;
 
     public DiscountWrapper getDiscountWrapper() {
         DiscountWrapper discountWrapper = new DiscountWrapper();
@@ -77,5 +80,9 @@ public class DiscountService {
         CommonDiscountDto dto = (CommonDiscountDto) privateDiscountObjectMapper(commonDiscount);
         dto.setNumberOfAvailable(commonDiscount.getNumberOfAvailable());
         return dto;
+    }
+
+    public void saveDiscount(DiscountDto discountDto) {
+        ....
     }
 }

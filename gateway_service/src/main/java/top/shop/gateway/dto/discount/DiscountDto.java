@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class DiscountDto {
-
-    //TODO make validation on fields
-    private String productServiceName;
+    private String productServiceName;  //TODO make validation on fields
     private String productName;
     private String shopServiceName;
     private String shopName;
