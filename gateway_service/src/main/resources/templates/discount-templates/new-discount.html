@@ -9,6 +9,7 @@
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/bootstrap-select-1.13.18/dist/css/bootstrap-select.css}"/>
 </head>
 <body>
 <div class="wrapper">
@@ -26,7 +27,11 @@
                 <table>
                     <tr>
                         <td>Product from catalogue:</td>
-                        <td><select class="form-control" type="text" th:list="${productListFromCatalogue}" th:field="*{productServiceName}">
+                        <td><select class="selectpicker" th:list="${productListFromCatalogue}" th:field="*{productServiceName}" multiple>
+                            <script th:inline="javascript">
+                                $('.selectpicker').selectpicker('destroy');
+                                $('.selectpicker').selectpicker('refresh');
+                            </script>
                             <option th:each="product : ${productListFromCatalogue}"
                                     th:value="${product.serviceName}"
                                     th:label="${product.name}">
@@ -60,5 +65,11 @@
     </div>
     <div lang="en" th:replace="fragments/footer :: footer"></div>
 </div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/bootstrap-select-1.13.18/dist/js/bootstrap-select.js}"></script>
+
 </body>
 </html>

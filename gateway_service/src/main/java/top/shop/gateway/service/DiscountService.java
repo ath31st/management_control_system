@@ -27,6 +27,7 @@ public class DiscountService {
 
     public void createDiscount(DiscountDto discountDto) {
         String url = backendUrl + "/api/new-discount";
+
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(discountDto), DiscountDto.class);
     }
 }

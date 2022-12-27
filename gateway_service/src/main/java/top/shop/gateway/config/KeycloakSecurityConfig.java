@@ -51,7 +51,7 @@ class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/shops", "/edit-shop/*", "/new-shop").hasAuthority("ROLE_ADMINISTRATOR")
                 .antMatchers("/storage", "/edit-product/*", "/new-product").hasAuthority("ROLE_ADMINISTRATOR")
                 .antMatchers("/catalogue", "/edit-catalogue/*", "/new-catalogue").hasAuthority("ROLE_MANAGER")
-                .antMatchers("/css/**","/font-awesome/**", "/webjars/**").permitAll()
+                .antMatchers("/css/**","/font-awesome/**", "/webjars/**", "/assets/**").permitAll()
                 .anyRequest().fullyAuthenticated();
     }
 }

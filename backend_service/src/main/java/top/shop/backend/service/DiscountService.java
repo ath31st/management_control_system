@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import top.shop.backend.dto.discount.CommonDiscountDto;
 import top.shop.backend.dto.discount.DiscountDto;
 import top.shop.backend.dto.discount.PrivateDiscountDto;
-import top.shop.backend.entity.Product;
 import top.shop.backend.entity.discount.CommonDiscount;
 import top.shop.backend.entity.discount.Discount;
 import top.shop.backend.entity.discount.PrivateDiscount;
@@ -83,6 +82,6 @@ public class DiscountService {
     }
 
     public void saveDiscount(DiscountDto discountDto) {
-        ....
+       // TODO relocate this service to shop
     }
 }
