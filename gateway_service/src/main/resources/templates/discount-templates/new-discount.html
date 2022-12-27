@@ -9,7 +9,7 @@
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/bootstrap-select-1.13.18/dist/css/bootstrap-select.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/bootstrap-select-1.14.0-beta2/dist/css/bootstrap-select.css}"/>
 </head>
 <body>
 <div class="wrapper">
@@ -27,11 +27,7 @@
                 <table>
                     <tr>
                         <td>Product from catalogue:</td>
-                        <td><select class="selectpicker" th:list="${productListFromCatalogue}" th:field="*{productServiceName}" multiple>
-                            <script th:inline="javascript">
-                                $('.selectpicker').selectpicker('destroy');
-                                $('.selectpicker').selectpicker('refresh');
-                            </script>
+                        <td><select class="form-control selectpicker" th:field="*{productServiceName}" multiple title="Choose products for discount">
                             <option th:each="product : ${productListFromCatalogue}"
                                     th:value="${product.serviceName}"
                                     th:label="${product.name}">
@@ -69,7 +65,10 @@
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-<script th:src="@{/assets/bootstrap-select-1.13.18/dist/js/bootstrap-select.js}"></script>
-
+<script th:src="@{/assets/bootstrap-select-1.14.0-beta2/dist/js/bootstrap-select.js}"></script>
+<!--<script th:inline="javascript">-->
+<!--    $('.selectpicker').selectpicker('destroy');-->
+<!--    $('.selectpicker').selectpicker('refresh');-->
+<!--</script>-->
 </body>
 </html>
