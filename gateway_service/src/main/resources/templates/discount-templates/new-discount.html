@@ -27,7 +27,7 @@
                 <table>
                     <tr>
                         <td>Product from catalogue:</td>
-                        <td><select class="form-control selectpicker" th:field="*{productServiceName}" multiple title="Choose products for discount">
+                        <td><select class="form-control selectpicker" name="productServiceNames" multiple title="Choose products for discount">
                             <option th:each="product : ${productListFromCatalogue}"
                                     th:value="${product.serviceName}"
                                     th:text="${product.name}">
