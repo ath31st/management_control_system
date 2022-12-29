@@ -3,10 +3,12 @@ package top.shop.shop1_service.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import top.shop.shop1_service.util.DeliveryStatus;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -26,17 +28,14 @@ public class DeliveryOrder {
     private int amount;
     private double totalPrice;
     private DeliveryStatus deliveryStatus;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DeliveryOrder that = (DeliveryOrder) o;
-        return Objects.equals(orderUuidNumber, that.orderUuidNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(orderUuidNumber);
-    }
+    @ManyToMany(mappedBy = "deliveryOrders")
+    @ToString.Exclude
+    private Set<Product> products;
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
+    @ToString.Exclude
+    private Customer customer;
 }

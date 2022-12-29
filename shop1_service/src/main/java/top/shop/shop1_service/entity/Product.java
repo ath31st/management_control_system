@@ -4,6 +4,7 @@ import lombok.*;
 import top.shop.shop1_service.entity.discount.Discount;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,4 +34,11 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;
+    @ManyToMany
+    @JoinTable(
+            name = "product_deliveryOrder",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "deliveryOrder_id"))
+    @ToString.Exclude
+    private Set<DeliveryOrder> deliveryOrders;
 }
