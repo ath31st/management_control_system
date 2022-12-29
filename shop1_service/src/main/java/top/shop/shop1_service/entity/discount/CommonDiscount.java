@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 @Entity
 @ToString
 @NoArgsConstructor
-public class CommonDiscount extends PrivateDiscount {
+public class CommonDiscount extends Discount {
+    private String promoCode;
+    private boolean isStacking;
     private Long numberOfAvailable;
 }

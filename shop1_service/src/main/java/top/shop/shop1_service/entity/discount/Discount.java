@@ -24,8 +24,7 @@ public class Discount {
     private LocalDateTime endingDate;
     private float percentageDiscount;
     private boolean isActive;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    @ToString.Exclude
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 }

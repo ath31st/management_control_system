@@ -1,7 +1,9 @@
 package top.shop.shop1_service.entity;
 
 import lombok.*;
+import top.shop.shop1_service.entity.discount.CommonDiscount;
 import top.shop.shop1_service.entity.discount.Discount;
+import top.shop.shop1_service.entity.discount.PrivateDiscount;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -31,9 +33,19 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "productPricing_id")
     private ProductPricing productPricing;
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "discount_id")
     private Discount discount;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "commonDiscount_id")
+    private CommonDiscount commonDiscount;
+    @ManyToMany
+    @JoinTable(
+            name = "product_privateDiscount",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "privateDiscount_id"))
+    @ToString.Exclude
+    private Set<PrivateDiscount> privateDiscounts;
     @ManyToMany
     @JoinTable(
             name = "product_deliveryOrder",

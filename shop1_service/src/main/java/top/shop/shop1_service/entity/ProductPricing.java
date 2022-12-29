@@ -1,11 +1,8 @@
 package top.shop.shop1_service.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
-import java.util.Objects;
-
 
 @Getter
 @Setter
@@ -15,7 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "prices")
 public class ProductPricing {
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
