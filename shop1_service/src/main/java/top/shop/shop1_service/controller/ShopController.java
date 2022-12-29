@@ -33,39 +33,39 @@ public class ShopController {
         return ResponseEntity.ok(orderService.createOrder(orderDto));
     }
 
-    @GetMapping("/delivery/status/{orderUuidNumber}")
-    public ResponseEntity<Map<String, Enum>> checkDeliveryOrderStatus(@PathVariable String orderUuidNumber) {
-        paymentService.checkPaymentStatus(orderUuidNumber);
-        deliveryService.checkDeliveryStatus(orderUuidNumber);
-        Map<String, Enum> response = Map.of(
-                "Payment status", paymentService.checkPaymentStatus(orderUuidNumber),
-                "Delivery status", deliveryService.checkDeliveryStatus(orderUuidNumber));
+//    @GetMapping("/delivery/status/{orderUuidNumber}")
+//    public ResponseEntity<Map<String, Enum>> checkDeliveryOrderStatus(@PathVariable String orderUuidNumber) {
+//        paymentService.checkPaymentStatus(orderUuidNumber);
+//        deliveryService.checkDeliveryStatus(orderUuidNumber);
+//        Map<String, Enum> response = Map.of(
+//                "Payment status", paymentService.checkPaymentStatus(orderUuidNumber),
+//                "Delivery status", deliveryService.checkDeliveryStatus(orderUuidNumber));
+//
+//        return ResponseEntity.ok(response);
+//    }
 
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/delivery/accepting/{orderUuidNumber}")
+//    public ResponseEntity<DeliveryStatus> acceptingDeliveryOrder(@PathVariable String orderUuidNumber, @RequestParam boolean isAccept) {
+//        return ResponseEntity.ok(deliveryService.acceptingDelivery(orderUuidNumber, isAccept));
+//    }
 
-    @GetMapping("/delivery/accepting/{orderUuidNumber}")
-    public ResponseEntity<DeliveryStatus> acceptingDeliveryOrder(@PathVariable String orderUuidNumber, @RequestParam boolean isAccept) {
-        return ResponseEntity.ok(deliveryService.acceptingDelivery(orderUuidNumber, isAccept));
-    }
+//    @PostMapping("/payment")
+//    public String orderHandler(@Valid @RequestBody PaymentRequestDto paymentRequestDto) {
+//        log.info("payment request received");
+//        paymentService.receivePaymentRequestDto(paymentRequestDto);
+//        return "Payment with UUID " + paymentRequestDto.getPaymentUuid() + " accepted";
+//    }
 
-    @PostMapping("/payment")
-    public String orderHandler(@Valid @RequestBody PaymentRequestDto paymentRequestDto) {
-        log.info("payment request received");
-        paymentService.receivePaymentRequestDto(paymentRequestDto);
-        return "Payment with UUID " + paymentRequestDto.getPaymentUuid() + " accepted";
-    }
+//    @GetMapping("/catalogue")
+//    public ResponseEntity<CatalogueDto> catalogueForCustomersHandler() {
+//        return ResponseEntity.ok(catalogueService.getCatalogueForCustomers());
+//    }
 
-    @GetMapping("/catalogue")
-    public ResponseEntity<CatalogueDto> catalogueForCustomersHandler() {
-        return ResponseEntity.ok(catalogueService.getCatalogueForCustomers());
-    }
-
-    @GetMapping("/manager/prices")
-    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler() {
-        return ResponseEntity.ok(new ProductPricingWrapper(
-                productPricingService.getProductPricingDtoList(catalogueService.getProductServiceNameList())));
-    }
+//    @GetMapping("/manager/prices")
+//    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler() {
+//        return ResponseEntity.ok(new ProductPricingWrapper(
+//                productPricingService.getProductPricingDtoList(catalogueService.getProductServiceNameList())));
+//    }
 
     @PostMapping("/manager/prices")
     public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler(@RequestBody ProductPricingWrapper wrapper) {

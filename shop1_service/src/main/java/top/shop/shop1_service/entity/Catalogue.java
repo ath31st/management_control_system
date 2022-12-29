@@ -1,12 +1,9 @@
 package top.shop.shop1_service.entity;
 
 import lombok.*;
-import top.shop.shop1_service.dto.product.ProductDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -24,5 +21,8 @@ public class Catalogue {
     private Long id;
     private String shopServiceName;
     private LocalDateTime catalogueOnDate;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    @ToString.Exclude
     private Set<Product> products;
 }

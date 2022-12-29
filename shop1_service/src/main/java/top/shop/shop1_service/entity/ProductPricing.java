@@ -19,6 +19,8 @@ public class ProductPricing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
     private String productServiceName;
     private double price;

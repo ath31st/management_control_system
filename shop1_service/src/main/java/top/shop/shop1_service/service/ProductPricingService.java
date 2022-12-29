@@ -2,10 +2,6 @@ package top.shop.shop1_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
@@ -22,9 +18,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductPricingService {
-
     private final ModelMapper modelMapper;
-    private final MongoTemplate mongoTemplate;
 
     public void receiveProductPricingWrapperFromGateway(ProductPricingWrapper wrapper) {
         wrapper.getPricingDtoList().forEach(p -> {

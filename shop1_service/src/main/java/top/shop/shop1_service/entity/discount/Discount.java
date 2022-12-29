@@ -20,12 +20,12 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    @ToString.Exclude
-    private Product product;
     private LocalDateTime startingDate;
     private LocalDateTime endingDate;
     private float percentageDiscount;
     private boolean isActive;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    @ToString.Exclude
+    private Product product;
 }
