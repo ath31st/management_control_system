@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.dto.product.ProductPricingDto;
+import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException;
 import top.shop.shop1_service.repository.ProductPricingRepository;
@@ -70,6 +71,11 @@ public class ProductPricingService {
             pp.setPrice(0);
             return productPricingRepository.save(pp);
         }
+    }
+
+    public void setProductInPp(ProductPricing pp, Product product) {
+        pp.setProduct(product);
+        productPricingRepository.save(pp);
     }
 
     public boolean productPricingExists(String productServiceName) {

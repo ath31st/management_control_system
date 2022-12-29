@@ -33,7 +33,7 @@ public class Product {
     @JoinColumn(name = "catalogue_id")
     @ToString.Exclude
     private Catalogue catalogue;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "productPricing_id")
     private ProductPricing productPricing;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

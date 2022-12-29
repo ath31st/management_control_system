@@ -8,6 +8,7 @@ import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.dto.payment.PaymentRequestDto;
+import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.service.*;
 import top.shop.shop1_service.util.DeliveryStatus;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;

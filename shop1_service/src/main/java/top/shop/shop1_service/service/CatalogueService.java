@@ -6,9 +6,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
-import top.shop.shop1_service.dto.product.ProductAmountDto;
 import top.shop.shop1_service.entity.Catalogue;
 import top.shop.shop1_service.entity.Product;
+import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.repository.CatalogueRepository;
 
 import java.time.LocalDateTime;
@@ -43,15 +43,20 @@ public class CatalogueService {
 //                .build();
 //    }
 
-    public void saveCatalogueFromStorage(CatalogueDto catalogueDto) {
-        Catalogue catalogue = Catalogue.builder()
-                .catalogueOnDate(catalogueDto.getCatalogueOnDate())
-                .shopServiceName(catalogueDto.getShopServiceName())
-                .products(catalogueDto.getProducts()
-                        .stream()
-                        .map(productDto -> productService.saveProductFromStorage(productDto, productPricingService.addMockProductPricing(productDto)))
-                        .toList())
-                .build();
+    public void saveCatalogueFromStorage(CatalogueDto dto) {
+        List<Product> products = dto.getProducts().stream()
+                .map(pDto -> {
+                    ProductPricing pp = productPricingService.addMockProductPricing(pDto);
+                    Product product = productService.saveProductFromStorage(pDto, pp);
+                    productPricingService.setProductInPp(pp, product);
+                    return product;
+                })
+                .toList();
+
+        Catalogue catalogue = new Catalogue();
+        catalogue.setCatalogueOnDate(dto.getCatalogueOnDate());
+        catalogue.setShopServiceName(dto.getShopServiceName());
+        catalogue.setProducts(products);
 
         catalogueRepository.save(catalogue);
     }

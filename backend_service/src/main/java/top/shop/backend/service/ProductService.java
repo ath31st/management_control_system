@@ -32,28 +32,28 @@ public class ProductService {
     private final ApplicationEventPublisher eventPublisher;
 
     public void receiveProducts(ProductWrapper productWrapper) {
-        productWrapper.getProductDtoList().forEach(p -> {
-            if (productRepository.getProduct(p.getServiceName()).isPresent() && p.getAmount() != 0) {
-                Product product = getProduct(p.getServiceName());
-                product.setAmount(product.getAmount() + p.getAmount());
+        productWrapper.getProductDtoList().forEach(pDto -> {
+            if (productRepository.getProduct(pDto.getServiceName()).isPresent() && pDto.getAmount() != 0) {
+                Product product = getProduct(pDto.getServiceName());
+                product.setAmount(product.getAmount() + pDto.getAmount());
 
                 productRepository.save(product);
                 eventPublisher.publishEvent(new ProductAmountEvent(
                         new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
             } else {
                 Category category;
-                if (categoryService.categoryExists(p.getCategory().getServiceName())) {
-                    category = categoryService.getCategory(p.getCategory().getServiceName());
+                if (categoryService.categoryExists(pDto.getCategory().getServiceName())) {
+                    category = categoryService.getCategory(pDto.getCategory().getServiceName());
                 } else {
-                    category = categoryService.saveCategory(p.getCategory());
+                    category = categoryService.saveCategory(pDto.getCategory());
                 }
 
                 Product product = Product.builder()
-                        .name(p.getName())
-                        .serviceName(p.getServiceName())
-                        .description(p.getDescription())
-                        .price(p.getPrice())
-                        .amount(p.getAmount())
+                        .name(pDto.getName())
+                        .serviceName(pDto.getServiceName())
+                        .description(pDto.getDescription())
+                        .price(pDto.getPrice())
+                        .amount(pDto.getAmount())
                         .category(category)
                         .build();
 
