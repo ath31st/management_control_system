@@ -25,9 +25,12 @@ public class Product {
     private String serviceName;
     private String description;
     private long amount;
-    private String category;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalogue_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    @ToString.Exclude
+    private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalogue_id")
     @ToString.Exclude
     private Catalogue catalogue;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

@@ -9,6 +9,7 @@ import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.dto.product.ProductPricingDto;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException;
+import top.shop.shop1_service.repository.ProductPricingRepository;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
 import java.util.Comparator;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductPricingService {
+    private final ProductPricingRepository productPricingRepository;
     private final ModelMapper modelMapper;
 
     public void receiveProductPricingWrapperFromGateway(ProductPricingWrapper wrapper) {
@@ -64,16 +66,14 @@ public class ProductPricingService {
 //                .toList();
 //    }
 
-    public void addMockProductPricing(CatalogueDto catalogueDto) {
-//        catalogueDto.getProducts()
-//                .stream()
-//                .filter(p -> !productPricingExists(p.getServiceName()))
-//                .forEach(p -> {
-//                    ProductPricing pp = new ProductPricing();
-//                    pp.setProductServiceName(p.getServiceName());
-//                    pp.setPrice(0);
-//                    mongoTemplate.save(pp);
-//                });
+    public ProductPricing addMockProductPricing(ProductDto productDto) {
+        if (productPricingRepository.existsByProduct_ServiceName(productDto.getServiceName())) {
+            return productPricingRepository.findByProduct_ServiceName(productDto.getServiceName());
+        } else {
+            ProductPricing pp = new ProductPricing();
+            pp.setPrice(0);
+            return productPricingRepository.save(pp);
+        }
     }
 
 //    public boolean productPricingExists(String productServiceName) {

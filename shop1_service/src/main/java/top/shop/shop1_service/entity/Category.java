@@ -1,9 +1,8 @@
-package top.shop.backend.entity;
+package top.shop.shop1_service.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,8 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "products")
-public class Product {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,22 +23,16 @@ public class Product {
     @Column(unique = true)
     private String serviceName;
     private String description;
-    private double price;
-    private long amount;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private Category category;
-    @ManyToMany(mappedBy = "products")
-    @ToString.Exclude
-    private Set<Catalogue> catalogs;
+    private Set<Product> products;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(serviceName, product.serviceName);
+        Category category = (Category) o;
+        return Objects.equals(id, category.id) && Objects.equals(serviceName, category.serviceName);
     }
 
     @Override

@@ -6,4 +6,7 @@ import top.shop.shop1_service.entity.ProductPricing;
 
 @Repository
 public interface ProductPricingRepository extends JpaRepository<ProductPricing, Long> {
+    boolean existsByProduct_ServiceName(String serviceName);
+    ProductPricing findByProduct_ServiceName(String serviceName);
+
 }
