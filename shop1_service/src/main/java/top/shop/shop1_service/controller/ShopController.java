@@ -61,11 +61,11 @@ public class ShopController {
 //        return ResponseEntity.ok(catalogueService.getCatalogueForCustomers());
 //    }
 
-//    @GetMapping("/manager/prices")
-//    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler() {
-//        return ResponseEntity.ok(new ProductPricingWrapper(
-//                productPricingService.getProductPricingDtoList(catalogueService.getProductServiceNameList())));
-//    }
+    @GetMapping("/manager/prices")
+    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler() {
+        return ResponseEntity.ok(new ProductPricingWrapper(
+                productPricingService.getProductPricingDtoList(catalogueService.getProductServiceNameList())));
+    }
 
     @PostMapping("/manager/prices")
     public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler(@RequestBody ProductPricingWrapper wrapper) {

@@ -19,7 +19,6 @@ public class ProductPricing {
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    private String productServiceName;
     private double price;
 
 }

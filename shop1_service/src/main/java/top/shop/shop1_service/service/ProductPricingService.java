@@ -1,26 +1,21 @@
 package top.shop.shop1_service.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.dto.product.ProductPricingDto;
 import top.shop.shop1_service.entity.ProductPricing;
-import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException;
 import top.shop.shop1_service.repository.ProductPricingRepository;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductPricingService {
     private final ProductPricingRepository productPricingRepository;
-    private final ModelMapper modelMapper;
+    private final ProductService productService;
 
     public void receiveProductPricingWrapperFromGateway(ProductPricingWrapper wrapper) {
 //        wrapper.getPricingDtoList().forEach(p -> {
@@ -58,13 +53,13 @@ public class ProductPricingService {
 //        return productDto;
 //    }
 
-//    public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
-//        return productPricingRepository.findAll().stream()
-//                .filter(pp -> productServiceName.contains(pp.getProductServiceName()))
-//                .map(pp -> modelMapper.map(pp, ProductPricingDto.class))
-//                .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
-//                .toList();
-//    }
+    public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
+        return productPricingRepository.findAll().stream()
+                .filter(pp -> productServiceName.contains(pp.getProduct().getServiceName()))
+                .map(this::productPricingMapper)
+                .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
+                .toList();
+    }
 
     public ProductPricing addMockProductPricing(ProductDto productDto) {
         if (productPricingRepository.existsByProduct_ServiceName(productDto.getServiceName())) {
@@ -80,5 +75,12 @@ public class ProductPricingService {
 //        return mongoTemplate.exists(Query.query(Criteria.where("productServiceName")
 //                .is(productServiceName)), ProductPricing.class);
 //    }
+
+    private ProductPricingDto productPricingMapper(ProductPricing pp) {
+        ProductPricingDto dto = new ProductPricingDto();
+        dto.setPrice(pp.getPrice());
+        dto.setProductServiceName(pp.getProduct().getServiceName());
+        return dto;
+    }
 
 }

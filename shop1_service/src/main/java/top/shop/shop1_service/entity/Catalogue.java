@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,5 +24,5 @@ public class Catalogue {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @ToString.Exclude
-    private Set<Product> products;
+    private List<Product> products;
 }

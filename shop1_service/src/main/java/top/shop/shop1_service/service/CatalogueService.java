@@ -7,17 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
 import top.shop.shop1_service.dto.product.ProductAmountDto;
-import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.entity.Catalogue;
+import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.repository.CatalogueRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,6 +23,7 @@ public class CatalogueService {
     @Value("${shop.service-name}")
     private String serviceName;
     private final ProductPricingService productPricingService;
+    private final ProductService productService;
     private final CatalogueRepository catalogueRepository;
     private final ModelMapper modelMapper;
 
@@ -47,27 +44,27 @@ public class CatalogueService {
 //    }
 
     public void saveCatalogueFromStorage(CatalogueDto catalogueDto) {
-//        Catalogue catalogue = Catalogue.builder()
-//                .catalogueOnDate(catalogueDto.getCatalogueOnDate())
-//                .shopServiceName(catalogueDto.getShopServiceName())
-//                .products(catalogueDto.getProducts()
-//                        .stream()
-//                        .collect(Collectors.toMap(ProductDto::getServiceName, Function.identity())))
-//                .build();
-//
-//        catalogueRepository.save(catalogue);
-//        productPricingService.addMockProductPricing(catalogueDto);
+        Catalogue catalogue = Catalogue.builder()
+                .catalogueOnDate(catalogueDto.getCatalogueOnDate())
+                .shopServiceName(catalogueDto.getShopServiceName())
+                .products(catalogueDto.getProducts()
+                        .stream()
+                        .map(productDto -> productService.saveProductFromStorage(productDto, productPricingService.addMockProductPricing(productDto)))
+                        .toList())
+                .build();
+
+        catalogueRepository.save(catalogue);
     }
-//
-//    public Catalogue getCatalogue() {
-//        return catalogueRepository.findCatalogueByShopServiceName(serviceName)
-//                .orElse(Catalogue.builder()
-//                        .products(Collections.emptyMap())
-//                        .shopServiceName(serviceName)
-//                        .catalogueOnDate(LocalDateTime.now())
-//                        .build());
-//    }
-//
+
+    public Catalogue getCatalogue() {
+        return catalogueRepository.findCatalogueByShopServiceName(serviceName)
+                .orElse(Catalogue.builder()
+                        .products(Collections.emptyList())
+                        .shopServiceName(serviceName)
+                        .catalogueOnDate(LocalDateTime.now())
+                        .build());
+    }
+
 //    public CatalogueDto getCatalogueDto() {
 //        Catalogue catalogue = getCatalogue();
 //        CatalogueDto catalogueDto = modelMapper.map(catalogue, CatalogueDto.class);
@@ -77,27 +74,13 @@ public class CatalogueService {
 //                .toList());
 //        return catalogueDto;
 //    }
-//
-//    public List<String> getProductServiceNameList() {
-//        return getCatalogue().getProducts()
-//                .values()
-//                .stream()
-//                .map(ProductDto::getServiceName)
-//                .toList();
-//    }
 
-    public void updateAmountProductInCatalogue(ProductAmountDto pAmountDto) {
-//        Catalogue catalogue = getCatalogue();
-//        if (catalogue.getProducts().isEmpty()) return;
-//
-//        Map<String, ProductDto> products = catalogue.getProducts();
-//        products.computeIfPresent(pAmountDto.getProductServiceName(), (s, pDto) -> {
-//            pDto.setAmount(pAmountDto.getAmount());
-//            return pDto;
-//        });
-//        catalogue.setProducts(products);
-//
-//        catalogueRepository.save(catalogue);
+    public List<String> getProductServiceNameList() {
+        return getCatalogue()
+                .getProducts()
+                .stream()
+                .map(Product::getServiceName)
+                .toList();
     }
 
 //    public long getAmountProductFromCatalogue(String productServiceName) {
