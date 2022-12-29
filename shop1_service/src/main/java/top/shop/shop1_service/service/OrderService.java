@@ -24,36 +24,36 @@ public class OrderService {
 
     private final PaymentService paymentService;
 
-    @Transactional
-    public PaymentDto createOrder(OrderDto orderDto) {
-        checkAvailableProductForSale(orderDto.getProductName());
-        checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
+//    @Transactional
+//    public PaymentDto createOrder(OrderDto orderDto) {
+//        checkAvailableProductForSale(orderDto.getProductName());
+//        checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
+//
+//        PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(
+//                paymentService.createPayment(orderDto.getProductName(), orderDto.getAmount()));
+//
+//        orderDto.setPaymentDto(paymentDto);
+//        orderDto.setShopServiceName(serviceName);
+//        orderDto.setOrderDate(LocalDateTime.now());
+//
+//        try {
+//            //orderProducer.sendMessage(orderDto);
+//            orderProducer.sendMessageWithCallback(orderDto);
+//        } catch (JsonProcessingException | OrderServiceException e) {
+//            paymentService.cancelPayment(paymentDto.getPaymentUuid());
+//            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "Payment and order was closed.");
+//        }
+//        return paymentDto;
+//    }
 
-        PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(
-                paymentService.createPayment(orderDto.getProductName(), orderDto.getAmount()));
-
-        orderDto.setPaymentDto(paymentDto);
-        orderDto.setShopServiceName(serviceName);
-        orderDto.setOrderDate(LocalDateTime.now());
-
-        try {
-            //orderProducer.sendMessage(orderDto);
-            orderProducer.sendMessageWithCallback(orderDto);
-        } catch (JsonProcessingException | OrderServiceException e) {
-            paymentService.cancelPayment(paymentDto.getPaymentUuid());
-            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "Payment and order was closed.");
-        }
-        return paymentDto;
-    }
-
-    private void checkAvailableProductForSale(String productServiceName) {
-        if (!catalogueService.getProductServiceNameList().contains(productServiceName))
-            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is absent in the catalogue");
-    }
-
-    private void checkAvailableAmountProductForSale(String productServiceName, int orderAmount) {
-        if (!((catalogueService.getAmountProductFromCatalogue(productServiceName) - orderAmount) >= 0))
-            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is not enough for the order");
-    }
+//    private void checkAvailableProductForSale(String productServiceName) {
+//        if (!catalogueService.getProductServiceNameList().contains(productServiceName))
+//            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is absent in the catalogue");
+//    }
+//
+//    private void checkAvailableAmountProductForSale(String productServiceName, int orderAmount) {
+//        if (!((catalogueService.getAmountProductFromCatalogue(productServiceName) - orderAmount) >= 0))
+//            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is not enough for the order");
+//    }
 
 }

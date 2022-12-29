@@ -21,71 +21,64 @@ public class ProductPricingService {
     private final ModelMapper modelMapper;
 
     public void receiveProductPricingWrapperFromGateway(ProductPricingWrapper wrapper) {
-        wrapper.getPricingDtoList().forEach(p -> {
-                    if (productPricingExists(p.getProductServiceName())) {
-                        updateProductPricing(p);
-                    } else {
-                        mongoTemplate.save(ProductPricing.builder()
-                                .productServiceName(p.getProductServiceName())
-                                .price(p.getPrice())
-                                .build());
-                    }
-                }
-        );
+//        wrapper.getPricingDtoList().forEach(p -> {
+//                    if (productPricingExists(p.getProductServiceName())) {
+//                        updateProductPricing(p);
+//                    } else {
+//                        mongoTemplate.save(ProductPricing.builder()
+//                                .productServiceName(p.getProductServiceName())
+//                                .price(p.getPrice())
+//                                .build());
+//                    }
+//                }
+//        );
     }
 
-    public ProductPricing getProductPricing(String productServiceName) {
-        Optional<ProductPricing> pp = Optional.ofNullable(mongoTemplate.findById(productServiceName, ProductPricing.class));
-        return pp.orElseThrow(() -> new ProductPricingException(HttpStatus.NOT_FOUND, "Product price with " + productServiceName + " not found!"));
-    }
+//    public ProductPricing getProductPricing(String productServiceName) {
+//        Optional<ProductPricing> pp = Optional.ofNullable(mongoTemplate.findById(productServiceName, ProductPricing.class));
+//        return pp.orElseThrow(() -> new ProductPricingException(HttpStatus.NOT_FOUND, "Product price with " + productServiceName + " not found!"));
+//    }
 
-    public ProductPricingDto getProductPricingDto(String productServiceName) {
-        return modelMapper.map(getProductPricing(productServiceName), ProductPricingDto.class);
-    }
+//    public ProductPricingDto getProductPricingDto(String productServiceName) {
+//        return modelMapper.map(getProductPricing(productServiceName), ProductPricingDto.class);
+//    }
 
-    public void updateProductPricing(ProductPricingDto ppDto) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("productServiceName").is(ppDto.getProductServiceName()));
-        Update update = new Update();
-        update.set("price", ppDto.getPrice());
-        mongoTemplate.findAndModify(query, update, ProductPricing.class);
-    }
+//    public void updateProductPricing(ProductPricingDto ppDto) {
+//        Query query = new Query();
+//        query.addCriteria(Criteria.where("productServiceName").is(ppDto.getProductServiceName()));
+//        Update update = new Update();
+//        update.set("price", ppDto.getPrice());
+//        mongoTemplate.findAndModify(query, update, ProductPricing.class);
+//    }
 
-    public ProductDto updatePriceOfProductDto(ProductDto productDto) {
-        productDto.setPrice(getProductPricingDto(productDto.getServiceName()).getPrice());
-        return productDto;
-    }
+//    public ProductDto updatePriceOfProductDto(ProductDto productDto) {
+//        productDto.setPrice(getProductPricingDto(productDto.getServiceName()).getPrice());
+//        return productDto;
+//    }
 
-    public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("productServiceName").in(productServiceName));
-        return mongoTemplate.find(query, ProductPricing.class)
-                .stream()
-                .map(pp -> modelMapper.map(pp, ProductPricingDto.class))
-                .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
-                .toList();
+//    public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
 //        return productPricingRepository.findAll().stream()
 //                .filter(pp -> productServiceName.contains(pp.getProductServiceName()))
 //                .map(pp -> modelMapper.map(pp, ProductPricingDto.class))
 //                .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
 //                .toList();
-    }
+//    }
 
     public void addMockProductPricing(CatalogueDto catalogueDto) {
-        catalogueDto.getProducts()
-                .stream()
-                .filter(p -> !productPricingExists(p.getServiceName()))
-                .forEach(p -> {
-                    ProductPricing pp = new ProductPricing();
-                    pp.setProductServiceName(p.getServiceName());
-                    pp.setPrice(0);
-                    mongoTemplate.save(pp);
-                });
+//        catalogueDto.getProducts()
+//                .stream()
+//                .filter(p -> !productPricingExists(p.getServiceName()))
+//                .forEach(p -> {
+//                    ProductPricing pp = new ProductPricing();
+//                    pp.setProductServiceName(p.getServiceName());
+//                    pp.setPrice(0);
+//                    mongoTemplate.save(pp);
+//                });
     }
 
-    public boolean productPricingExists(String productServiceName) {
-        return mongoTemplate.exists(Query.query(Criteria.where("productServiceName")
-                .is(productServiceName)), ProductPricing.class);
-    }
+//    public boolean productPricingExists(String productServiceName) {
+//        return mongoTemplate.exists(Query.query(Criteria.where("productServiceName")
+//                .is(productServiceName)), ProductPricing.class);
+//    }
 
 }

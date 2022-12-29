@@ -27,11 +27,11 @@ public class ShopController {
     private final PaymentService paymentService;
     private final DeliveryService deliveryService;
 
-    @PostMapping("/order")
-    public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody OrderDto orderDto) {
-        log.info("order request received");
-        return ResponseEntity.ok(orderService.createOrder(orderDto));
-    }
+//    @PostMapping("/order")
+//    public ResponseEntity<PaymentDto> orderHandler(@Valid @RequestBody OrderDto orderDto) {
+//        log.info("order request received");
+//        return ResponseEntity.ok(orderService.createOrder(orderDto));
+//    }
 
 //    @GetMapping("/delivery/status/{orderUuidNumber}")
 //    public ResponseEntity<Map<String, Enum>> checkDeliveryOrderStatus(@PathVariable String orderUuidNumber) {
