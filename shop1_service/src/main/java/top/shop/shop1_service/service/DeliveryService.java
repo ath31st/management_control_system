@@ -3,7 +3,6 @@ package top.shop.shop1_service.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.config.kafkaconfig.DeliveryResultProducer;
@@ -16,7 +15,6 @@ import top.shop.shop1_service.util.DeliveryStatus;
 @RequiredArgsConstructor
 public class DeliveryService {
     private final DeliveryResultProducer deliveryResultProducer;
-    private final MongoTemplate mongoTemplate;
     private final ModelMapper modelMapper;
 
     public void receiveDeliveryFromStorage(DeliveryOrderDto deliveryOrderDto) {

@@ -38,16 +38,29 @@ spring:
       #for every new shop-service change this field
       group-id: "shop1"
 
-  data:
-    mongodb:
-      #for every new shop-service change this field
-      database: mongoDBshop1
-      #host: mongo-container-shop
-      host: localhost
-      port: 27017
-      username: mongo
-      password: mongo
-      authentication-database: admin
+#  data:
+#    mongodb:
+#      #for every new shop-service change this field
+#      database: mongoDBshop1
+#      #host: mongo-container-shop
+#      host: localhost
+#      port: 27017
+#      username: mongo
+#      password: mongo
+#      authentication-database: admin
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgresShop1DB
+    #url: jdbc:postgresql://postgres-container-backend:5433/postgresShop1DB
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: update
 
 keycloak:
   auth-server-url: http://127.0.0.1:8080/auth

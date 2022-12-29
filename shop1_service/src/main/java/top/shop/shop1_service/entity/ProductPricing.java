@@ -2,8 +2,8 @@ package top.shop.shop1_service.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 
@@ -12,23 +12,15 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Document("prices")
+@Entity
+@Table(name = "prices")
 public class ProductPricing {
-    @Id
+    @javax.persistence.Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+    private Product product;
     private String productServiceName;
     private double price;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductPricing that = (ProductPricing) o;
-        return Objects.equals(productServiceName, that.productServiceName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(productServiceName);
-    }
 }

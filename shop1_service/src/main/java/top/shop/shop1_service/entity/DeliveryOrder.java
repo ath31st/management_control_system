@@ -3,18 +3,21 @@ package top.shop.shop1_service.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import top.shop.shop1_service.util.DeliveryStatus;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
 @Setter
-@Document("deliveries")
+@Entity
+@Table(name = "deliveries")
 public class DeliveryOrder {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
     private String orderUuidNumber;
     private String shopServiceName;
     private String shopName;

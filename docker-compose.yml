@@ -62,23 +62,6 @@ services:
     depends_on:
       - zookeeper
 
-#  kafdrop:
-#      container_name: kafdrop
-#      image: obsidiandynamics/kafdrop:latest
-#      restart: "no"
-#      ports:
-#        - "9000:9000"
-#      environment:
-#        KAFKA_PROPERTIES: "$(cat kafka.properties | base64)"
-#        KAFKA_BROKERCONNECT: "kafka:9092"
-#        SERVER_SERVLET_CONTEXTPATH: "/"
-#      volumes:
-#        - './kafka-configs/kafka.properties:/kafka.properties'
-#      networks:
-#        - kafka-net
-#      depends_on:
-#        - kafka
-
   keycloak:
     image: jboss/keycloak:latest
     container_name: keycloak
@@ -127,54 +110,33 @@ services:
     networks:
       - kafka-net
 
-  mongodb-shop1:
-    image: mongo:latest
-    container_name: mongo-container-shop1
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo
-      MONGO_INITDB_DATABASE: mongoDBshop1
+  postgres-shop1:
+    image: postgres:15.0
+    container_name: postgres-container-shop1
     ports:
-      - "27017:27017"
-    volumes:
-      - ./shop1_service/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - "5434:5434"
+    command: -p 5434
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgresShop1DB
     restart: on-failure
     networks:
       - kafka-net
 
-#  mongodb-shop2:
-#    image: mongo:latest
-#    container_name: mongo-container-shop2
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: mongo
-#      MONGO_INITDB_ROOT_PASSWORD: mongo
-#      MONGO_INITDB_DATABASE: mongoDBshop2
+#  postgres-shop2:
+#    image: postgres:15.0
+#    container_name: postgres-container-shop2
 #    ports:
-#      - "27018:27018"
-#    volumes:
-#      - ./shop2_service/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+#      - "5435:5435"
+#    command: -p 5435
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_DB: postgresShop2DB
 #    restart: on-failure
 #    networks:
 #      - kafka-net
-
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongo-container-shop1
-      ME_CONFIG_MONGODB_ADMINUSERNAME: mongo
-      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo
-      ME_CONFIG_MONGODB_ENABLE_ADMIN: true
-      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: 123
-    ports:
-      - "8081:8081"
-    depends_on:
-      - mongodb-shop1
-    restart: on-failure
-    networks:
-      - kafka-net
 
 #  gateway-service:
 #    container_name: gateway-service
@@ -202,7 +164,7 @@ services:
 #    networks:
 #      - kafka-net
 #    depends_on:
-#      - mongodb-shop1
+#      - postgres-shop2
 
 #  shop2-service:
 #    container_name: shop2-service
@@ -212,4 +174,4 @@ services:
 #    networks:
 #      - kafka-net
 #    depends_on:
-#      - mongodb-shop2
+#      - postgres-shop2

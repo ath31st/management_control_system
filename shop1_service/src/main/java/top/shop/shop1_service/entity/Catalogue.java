@@ -1,13 +1,13 @@
 package top.shop.shop1_service.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import top.shop.shop1_service.dto.product.ProductDto;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,23 +15,14 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document("catalogs")
+@Entity
+@Table(name = "catalogs")
 public class Catalogue {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
     private String shopServiceName;
     private LocalDateTime catalogueOnDate;
-    private Map<String, ProductDto> products;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Catalogue catalogue = (Catalogue) o;
-        return Objects.equals(shopServiceName, catalogue.shopServiceName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(shopServiceName);
-    }
+    private Set<Product> products;
 }

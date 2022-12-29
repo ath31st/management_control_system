@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import top.shop.backend.entity.Product;
-import top.shop.backend.entity.Shop;
+import top.shop.shop1_service.entity.Product;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,10 +24,6 @@ public class Discount {
     @JoinColumn(name = "product_id", nullable = false)
     @ToString.Exclude
     private Product product;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shop_id", nullable = false)
-    @ToString.Exclude
-    private Shop shop;
     private LocalDateTime startingDate;
     private LocalDateTime endingDate;
     private float percentageDiscount;
