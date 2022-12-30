@@ -95,6 +95,13 @@ public class PaymentService {
         }
     }
 
+    public void updatePaymentStatus(Payment payment, PaymentStatus status) {
+        payment.setPaymentStatus(status);
+        payment.setPaymentDate(LocalDateTime.now());
+
+        paymentRepository.save(payment);
+    }
+
     public void cancelPayment(String paymentUuid) {
         Payment payment = getPayment(paymentUuid);
         payment.setPaymentStatus(PaymentStatus.CANCELED);

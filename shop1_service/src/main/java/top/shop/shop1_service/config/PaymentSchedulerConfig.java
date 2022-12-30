@@ -23,24 +23,20 @@ public class PaymentSchedulerConfig {
     private final PaymentService paymentService;
     private static final CopyOnWriteArrayList<Payment> payments = new CopyOnWriteArrayList<>();
 
-//    @PostConstruct
-//    public void init() {
-//        payments.addAll(paymentService.getPaymentsByStatus(PaymentStatus.UNPAID));
-//    }
-//
-//    @Scheduled(fixedDelay = 5000)
-//    private void checkAndUpdateOrderStatus() {
-//        if (payments.isEmpty()) return;
-//
-//        payments.stream()
-//                .filter(this::checkIsExpiredPayment)
-//                .forEach(p -> {
-//                    p.setPaymentStatus(PaymentStatus.EXPIRED);
-//                    p.setPaymentDate(LocalDateTime.now());
-//                    mongoTemplate.save(p);
-//                });
-//        payments.removeIf(p-> p.getPaymentStatus().equals(PaymentStatus.EXPIRED));
-//    }
+    @PostConstruct
+    public void init() {
+        payments.addAll(paymentService.getPaymentsByStatus(PaymentStatus.UNPAID));
+    }
+
+    @Scheduled(fixedDelay = 5000)
+    private void checkAndUpdateOrderStatus() {
+        if (payments.isEmpty()) return;
+
+        payments.stream()
+                .filter(this::checkIsExpiredPayment)
+                .forEach(p -> paymentService.updatePaymentStatus(p, PaymentStatus.EXPIRED));
+        payments.removeIf(p-> p.getPaymentStatus().equals(PaymentStatus.EXPIRED));
+    }
 
     @EventListener
     public void updatePaymentsList(PaymentEvent event) {

@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.product.ProductAmountDto;
 import top.shop.shop1_service.dto.product.ProductDto;
-import top.shop.shop1_service.entity.Category;
 import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.ProductServiceException;

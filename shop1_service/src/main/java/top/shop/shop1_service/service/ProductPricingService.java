@@ -58,7 +58,7 @@ public class ProductPricingService {
     public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
         // TODO this is crutch!!!
         try {
-            Thread.sleep(300);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
