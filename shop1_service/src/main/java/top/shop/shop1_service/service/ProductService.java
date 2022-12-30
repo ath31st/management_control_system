@@ -24,7 +24,7 @@ public class ProductService {
         p.setServiceName(dto.getServiceName());
         p.setDescription(dto.getDescription());
         p.setAmount(dto.getAmount());
-        p.setCategory(categoryService.getCategory(dto.getCategory()));
+        p.setCategory(categoryService.categoryDtoToCategoryConverter(dto.getCategory()));
         p.setProductPricing(pp);
 
         return productRepository.save(p);
@@ -40,5 +40,15 @@ public class ProductService {
     public Product getProduct(String productServiceName) {
         return productRepository.findByServiceName(productServiceName).orElseThrow(
                 () -> new ProductServiceException(HttpStatus.NOT_FOUND, "Product with service name: " + productServiceName + " not found!"));
+    }
+
+    public ProductDto productToDtoConverter(Product p) {
+        ProductDto dto = new ProductDto();
+        dto.setServiceName(p.getServiceName());
+        dto.setName(p.getName());
+        dto.setDescription(p.getDescription());
+        dto.setPrice(p.getProductPricing().getPrice());
+        dto.setCategory(categoryService.categoryToDtoConverter(p.getCategory()));
+        return dto;
     }
 }

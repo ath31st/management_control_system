@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.CatalogueDto;
+import top.shop.shop1_service.dto.product.ProductDto;
 import top.shop.shop1_service.entity.Catalogue;
 import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.entity.ProductPricing;
@@ -13,6 +14,7 @@ import top.shop.shop1_service.repository.CatalogueRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -25,23 +27,22 @@ public class CatalogueService {
     private final ProductPricingService productPricingService;
     private final ProductService productService;
     private final CatalogueRepository catalogueRepository;
-    private final ModelMapper modelMapper;
 
-//    public CatalogueDto getCatalogueForCustomers() {
-//        List<ProductDto> updatedProducts = getCatalogueDto().getProducts()
-//                .stream()
-//                .filter(p -> productPricingService.productPricingExists(p.getServiceName()) &&
-//                        productPricingService.getProductPricingDto(p.getServiceName()).getPrice() != 0)
-//                .map(productPricingService::updatePriceOfProductDto)
-//                .sorted(Comparator.comparing(ProductDto::getServiceName))
-//                .toList();
-//
-//        return CatalogueDto.builder()
-//                .catalogueOnDate(LocalDateTime.now())
-//                .products(updatedProducts)
-//                .shopServiceName(serviceName)
-//                .build();
-//    }
+    public CatalogueDto getCatalogueForCustomers() {
+        List<ProductDto> updatedProducts = getCatalogueDto().getProducts()
+                .stream()
+                .filter(p -> productPricingService.productPricingExists(p.getServiceName()) &&
+                        productPricingService.getProductPricingDto(p.getServiceName()).getPrice() != 0)
+                .map(productPricingService::updatePriceOfProductDto)
+                .sorted(Comparator.comparing(ProductDto::getServiceName))
+                .toList();
+
+        return CatalogueDto.builder()
+                .catalogueOnDate(LocalDateTime.now())
+                .products(updatedProducts)
+                .shopServiceName(serviceName)
+                .build();
+    }
 
     public void saveCatalogueFromStorage(CatalogueDto dto) {
         List<Product> products = dto.getProducts().stream()
@@ -70,15 +71,16 @@ public class CatalogueService {
                         .build());
     }
 
-//    public CatalogueDto getCatalogueDto() {
-//        Catalogue catalogue = getCatalogue();
-//        CatalogueDto catalogueDto = modelMapper.map(catalogue, CatalogueDto.class);
-//        catalogueDto.setProducts(catalogue.getProducts()
-//                .values()
-//                .stream()
-//                .toList());
-//        return catalogueDto;
-//    }
+    public CatalogueDto getCatalogueDto() {
+        Catalogue catalogue = getCatalogue();
+        return CatalogueDto.builder()
+                .catalogueOnDate(catalogue.getCatalogueOnDate())
+                .shopServiceName(catalogue.getShopServiceName())
+                .products(catalogue.getProducts().stream()
+                        .map(productService::productToDtoConverter)
+                        .toList())
+                .build();
+    }
 
     public List<String> getProductServiceNameList() {
         return getCatalogue()
@@ -88,9 +90,9 @@ public class CatalogueService {
                 .toList();
     }
 
-//    public long getAmountProductFromCatalogue(String productServiceName) {
-//        return getCatalogue().getProducts().get(productServiceName).getAmount();
-//    }
+    public long getAmountProductFromCatalogue(String productServiceName) {
+        return catalogueRepository.getAmountProductFromCatalogue(productServiceName);
+    }
 
 }
 

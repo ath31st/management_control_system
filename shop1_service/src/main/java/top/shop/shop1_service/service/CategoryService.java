@@ -13,7 +13,7 @@ import top.shop.shop1_service.repository.CategoryRepository;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    public Category getCategory(CategoryDto dto) {
+    public Category categoryDtoToCategoryConverter(CategoryDto dto) {
         if (categoryRepository.existsByServiceName(dto.getServiceName()))
             return categoryRepository.findByServiceName(dto.getServiceName());
         else {
@@ -23,5 +23,26 @@ public class CategoryService {
                     .description(dto.getDescription())
                     .build());
         }
+    }
+
+    public Category getCategory(String categoryServiceName) {
+        return categoryRepository.findByServiceName(categoryServiceName);
+    }
+
+    public CategoryDto getCategoryDto(String categoryServiceName) {
+        Category c = getCategory(categoryServiceName);
+        CategoryDto dto = new CategoryDto();
+        dto.setName(c.getName());
+        dto.setServiceName(c.getServiceName());
+        dto.setDescription(c.getDescription());
+        return dto;
+    }
+
+    public CategoryDto categoryToDtoConverter(Category c) {
+        CategoryDto dto = new CategoryDto();
+        dto.setName(c.getName());
+        dto.setServiceName(c.getServiceName());
+        dto.setDescription(c.getDescription());
+        return dto;
     }
 }
