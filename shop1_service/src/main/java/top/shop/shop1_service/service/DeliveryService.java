@@ -8,21 +8,30 @@ import org.springframework.stereotype.Service;
 import top.shop.shop1_service.config.kafkaconfig.DeliveryResultProducer;
 import top.shop.shop1_service.dto.delivery.DeliveryOrderDto;
 import top.shop.shop1_service.entity.DeliveryOrder;
+import top.shop.shop1_service.entity.Payment;
 import top.shop.shop1_service.exceptionhandler.exception.DeliveryServiceException;
+import top.shop.shop1_service.repository.DeliveryOrderRepository;
 import top.shop.shop1_service.util.DeliveryStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DeliveryService {
+    private final DeliveryOrderRepository deliveryOrderRepository;
     private final DeliveryResultProducer deliveryResultProducer;
-    private final ModelMapper modelMapper;
+    private final PaymentService paymentService;
+    private final ProductService productService;
+    private final CustomerService customerService;
 
     public void receiveDeliveryFromStorage(DeliveryOrderDto deliveryOrderDto) {
 
-//        deliveryOrderDto.setDeliveryStatus(DeliveryStatus.READY_FOR_RECIPIENT);
-//
-//        mongoTemplate.save(modelMapper.map(deliveryOrderDto, DeliveryOrder.class));
-//        //TODO here need email notification customer - order delivered
+        deliveryOrderDto.setDeliveryStatus(DeliveryStatus.READY_FOR_RECIPIENT);
+
+        DeliveryOrder deliveryOrder = saveDeliveryFromDto(deliveryOrderDto);
+        paymentService.setDeliveryOrderInPayment(deliveryOrder);
+        //TODO here need email notification customer - order delivered
     }
 
 //    public DeliveryStatus acceptingDelivery(String orderUuidNumber, boolean isAccept) {
@@ -49,12 +58,32 @@ public class DeliveryService {
 //
 //        return deliveryOrder.getDeliveryStatus();
 //    }
-//
-//    public DeliveryStatus checkDeliveryStatus(String orderUuidNumber) {
-//        DeliveryOrder deliveryOrder = mongoTemplate.findById(orderUuidNumber, DeliveryOrder.class);
-//
-//        if (deliveryOrder == null) return DeliveryStatus.NOT_FOUND;
-//
-//        return deliveryOrder.getDeliveryStatus();
-//    }
+
+    public DeliveryOrder getDeliveryOrder(String orderUuidNumber) {
+        return deliveryOrderRepository.findByOrderUuidNumber(orderUuidNumber).orElseThrow(
+                () -> new DeliveryServiceException(HttpStatus.NOT_FOUND, "Delivery with UUID: " + orderUuidNumber + " no found."));
+    }
+
+    public DeliveryStatus checkDeliveryStatus(String orderUuidNumber) {
+        if (deliveryOrderRepository.existsByOrderUuidNumber(orderUuidNumber)) {
+            return getDeliveryOrder(orderUuidNumber).getDeliveryStatus();
+        } else {
+            return DeliveryStatus.NOT_FOUND;
+        }
+    }
+
+    public DeliveryOrder saveDeliveryFromDto(DeliveryOrderDto dto) {
+        DeliveryOrder deliveryOrder = new DeliveryOrder();
+        deliveryOrder.setOrderUuidNumber(dto.getOrderUuidNumber());
+        deliveryOrder.setShopServiceName(dto.getShopServiceName());
+        deliveryOrder.setShopName(dto.getShopName());
+        deliveryOrder.setAmount(dto.getAmount());
+        deliveryOrder.setTotalPrice(dto.getTotalPrice());
+        deliveryOrder.setDeliveryStatus(dto.getDeliveryStatus());
+        deliveryOrder.setProducts(List.of(productService.getProduct(dto.getProductName())));
+        deliveryOrder.setPayment(paymentService.getPayment(dto.getOrderUuidNumber()));
+        deliveryOrder.setCustomer(customerService.getCustomer(dto.getCustomerName()));
+
+        return deliveryOrderRepository.save(deliveryOrder);
+    }
 }

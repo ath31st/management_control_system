@@ -9,6 +9,7 @@ import top.shop.shop1_service.config.kafkaconfig.PaymentProducer;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.dto.payment.PaymentRequestDto;
 import top.shop.shop1_service.entity.Customer;
+import top.shop.shop1_service.entity.DeliveryOrder;
 import top.shop.shop1_service.entity.Payment;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.PaymentServiceException;
@@ -109,6 +110,13 @@ public class PaymentService {
         paymentRepository.save(payment);
 
         eventPublisher.publishEvent(new PaymentEvent(payment));
+    }
+
+    public void setDeliveryOrderInPayment(DeliveryOrder order) {
+        Payment p = getPayment(order.getOrderUuidNumber());
+        p.setDeliveryOrder(order);
+
+        paymentRepository.save(p);
     }
 
     private void checkExistingPayment(String paymentUuid) {

@@ -7,8 +7,7 @@ import lombok.ToString;
 import top.shop.shop1_service.util.DeliveryStatus;
 
 import javax.persistence.*;
-import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -23,14 +22,12 @@ public class DeliveryOrder {
     private String orderUuidNumber;
     private String shopServiceName;
     private String shopName;
-    private String productName;
-    private String customerName;
     private int amount;
     private double totalPrice;
     private DeliveryStatus deliveryStatus;
     @ManyToMany(mappedBy = "deliveryOrders")
     @ToString.Exclude
-    private Set<Product> products;
+    private List<Product> products;
     @OneToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
