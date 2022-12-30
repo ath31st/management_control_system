@@ -23,8 +23,6 @@ import java.util.Map;
 public class ShopController {
 
     private final OrderService orderService;
-    private final CatalogueService catalogueService;
-    private final ProductPricingService productPricingService;
     private final PaymentService paymentService;
     private final DeliveryService deliveryService;
 
@@ -56,22 +54,5 @@ public class ShopController {
 //        paymentService.receivePaymentRequestDto(paymentRequestDto);
 //        return "Payment with UUID " + paymentRequestDto.getPaymentUuid() + " accepted";
 //    }
-
-//    @GetMapping("/catalogue")
-//    public ResponseEntity<CatalogueDto> catalogueForCustomersHandler() {
-//        return ResponseEntity.ok(catalogueService.getCatalogueForCustomers());
-//    }
-
-    @GetMapping("/manager/prices")
-    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler() {
-        return ResponseEntity.ok(new ProductPricingWrapper(
-                productPricingService.getProductPricingDtoList(catalogueService.getProductServiceNameList())));
-    }
-
-    @PostMapping("/manager/prices")
-    public ResponseEntity<ProductPricingWrapper> catalogueForGatewayHandler(@RequestBody ProductPricingWrapper wrapper) {
-        productPricingService.receiveProductPricingWrapperFromGateway(wrapper);
-        return ResponseEntity.ok().build();
-    }
 
 }

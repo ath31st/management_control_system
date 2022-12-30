@@ -54,7 +54,7 @@ public class CatalogueService {
                 })
                 .toList();
 
-        Catalogue catalogue = new Catalogue();
+        Catalogue catalogue = getCatalogue();
         catalogue.setCatalogueOnDate(dto.getCatalogueOnDate());
         catalogue.setShopServiceName(dto.getShopServiceName());
         catalogue.setProducts(products);

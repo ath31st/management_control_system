@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.product.ProductAmountDto;
 import top.shop.shop1_service.dto.product.ProductDto;
+import top.shop.shop1_service.entity.Category;
 import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.ProductServiceException;
@@ -19,15 +20,22 @@ public class ProductService {
     private final CategoryService categoryService;
 
     public Product saveProductFromStorage(ProductDto dto, ProductPricing pp) {
-        Product p = new Product();
-        p.setName(dto.getName());
-        p.setServiceName(dto.getServiceName());
-        p.setDescription(dto.getDescription());
-        p.setAmount(dto.getAmount());
-        p.setCategory(categoryService.categoryDtoToCategoryConverter(dto.getCategory()));
-        p.setProductPricing(pp);
+        if (productRepository.existsByServiceName(dto.getServiceName()) && dto.getAmount() != 0) {
+            Product product = getProduct(dto.getServiceName());
+            product.setAmount(product.getAmount() + dto.getAmount());
 
-        return productRepository.save(p);
+            return productRepository.save(product);
+        } else {
+            Product p = new Product();
+            p.setName(dto.getName());
+            p.setServiceName(dto.getServiceName());
+            p.setDescription(dto.getDescription());
+            p.setAmount(dto.getAmount());
+            p.setCategory(categoryService.categoryDtoToCategoryConverter(dto.getCategory()));
+            p.setProductPricing(pp);
+
+            return productRepository.save(p);
+        }
     }
 
     public void updateAmountProduct(ProductAmountDto pAmountDto) {

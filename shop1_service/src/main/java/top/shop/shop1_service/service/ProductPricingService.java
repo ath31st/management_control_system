@@ -41,12 +41,12 @@ public class ProductPricingService {
     }
 
     public ProductPricingDto getProductPricingDto(String productServiceName) {
-        return productPricingMapper(getProductPricing(productServiceName));
+        return productPricingToDtoConverter(getProductPricing(productServiceName));
     }
 
     public void updateProductPricing(ProductPricingDto ppDto) {
         ProductPricing pp = getProductPricing(ppDto.getProductServiceName());
-        pp.setPrice(pp.getPrice());
+        pp.setPrice(ppDto.getPrice());
         productPricingRepository.save(pp);
     }
 
@@ -58,7 +58,7 @@ public class ProductPricingService {
     public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
         return productPricingRepository.findAll().stream()
                 .filter(pp -> productServiceName.contains(pp.getProduct().getServiceName()))
-                .map(this::productPricingMapper)
+                .map(this::productPricingToDtoConverter)
                 .sorted(Comparator.comparing(ProductPricingDto::getProductServiceName))
                 .toList();
     }
@@ -74,15 +74,17 @@ public class ProductPricingService {
     }
 
     public void setProductInPp(ProductPricing pp, Product product) {
-        pp.setProduct(product);
-        productPricingRepository.save(pp);
+        if (pp.getProduct() == null) {
+            pp.setProduct(product);
+            productPricingRepository.save(pp);
+        }
     }
 
     public boolean productPricingExists(String productServiceName) {
         return productPricingRepository.existsByProduct_ServiceName(productServiceName);
     }
 
-    private ProductPricingDto productPricingMapper(ProductPricing pp) {
+    private ProductPricingDto productPricingToDtoConverter(ProductPricing pp) {
         ProductPricingDto dto = new ProductPricingDto();
         dto.setPrice(pp.getPrice());
         dto.setProductServiceName(pp.getProduct().getServiceName());

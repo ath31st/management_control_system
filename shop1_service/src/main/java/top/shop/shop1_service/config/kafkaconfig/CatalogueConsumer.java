@@ -22,7 +22,6 @@ public class CatalogueConsumer {
     private final ObjectMapper objectMapper;
     private final CatalogueService catalogueService;
 
-
     @KafkaListener(topics = CATALOGUE_TOPIC)
     public void consumeMessage(String message) throws JsonProcessingException {
         log.info("message consumed {}", message);
