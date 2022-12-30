@@ -4,6 +4,7 @@ import lombok.*;
 import top.shop.shop1_service.entity.discount.PrivateDiscount;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Getter
@@ -20,6 +21,7 @@ public class Customer {
     @Column(name = "id", nullable = false)
     private Long id;
     private String username;
+    private BigDecimal balance;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<PrivateDiscount> privateDiscounts;

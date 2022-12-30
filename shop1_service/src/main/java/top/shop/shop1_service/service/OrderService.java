@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.dto.payment.PaymentDto;
+import top.shop.shop1_service.entity.Customer;
+import top.shop.shop1_service.exceptionhandler.exception.CustomerServiceException;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
 
 import java.time.LocalDateTime;
@@ -21,39 +23,47 @@ public class OrderService {
     private String serviceName;
     private final CatalogueService catalogueService;
     private final OrderProducer orderProducer;
-
+    private final CustomerService customerService;
     private final PaymentService paymentService;
 
-//    @Transactional
-//    public PaymentDto createOrder(OrderDto orderDto) {
-//        checkAvailableProductForSale(orderDto.getProductName());
-//        checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
-//
-//        PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(
-//                paymentService.createPayment(orderDto.getProductName(), orderDto.getAmount()));
-//
-//        orderDto.setPaymentDto(paymentDto);
-//        orderDto.setShopServiceName(serviceName);
-//        orderDto.setOrderDate(LocalDateTime.now());
-//
-//        try {
-//            //orderProducer.sendMessage(orderDto);
-//            orderProducer.sendMessageWithCallback(orderDto);
-//        } catch (JsonProcessingException | OrderServiceException e) {
-//            paymentService.cancelPayment(paymentDto.getPaymentUuid());
-//            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "Payment and order was closed.");
-//        }
-//        return paymentDto;
-//    }
+    @Transactional
+    public PaymentDto createOrder(OrderDto orderDto) {
+        checkAvailableProductForSale(orderDto.getProductName());
+        checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
+        checkExistsCustomer(orderDto.getCustomerName());
 
-//    private void checkAvailableProductForSale(String productServiceName) {
-//        if (!catalogueService.getProductServiceNameList().contains(productServiceName))
-//            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is absent in the catalogue");
-//    }
-//
-//    private void checkAvailableAmountProductForSale(String productServiceName, int orderAmount) {
-//        if (!((catalogueService.getAmountProductFromCatalogue(productServiceName) - orderAmount) >= 0))
-//            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is not enough for the order");
-//    }
+        Customer customer = customerService.getCustomer(orderDto.getCustomerName());
+
+        PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(
+                paymentService.createPayment(customer, orderDto.getProductName(), orderDto.getAmount()));
+
+        orderDto.setPaymentDto(paymentDto);
+        orderDto.setShopServiceName(serviceName);
+        orderDto.setOrderDate(LocalDateTime.now());
+
+        try {
+            //orderProducer.sendMessage(orderDto);
+            orderProducer.sendMessageWithCallback(orderDto);
+        } catch (JsonProcessingException | OrderServiceException e) {
+            paymentService.cancelPayment(paymentDto.getPaymentUuid());
+            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "Payment and order was closed.");
+        }
+        return paymentDto;
+    }
+
+    private void checkAvailableProductForSale(String productServiceName) {
+        if (!catalogueService.getProductServiceNameList().contains(productServiceName))
+            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is absent in the catalogue");
+    }
+
+    private void checkAvailableAmountProductForSale(String productServiceName, int orderAmount) {
+        if (!((catalogueService.getAmountProductFromCatalogue(productServiceName) - orderAmount) >= 0))
+            throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is not enough for the order");
+    }
+
+    private void checkExistsCustomer(String username) {
+        if (!customerService.isExistsCustomer(username))
+            throw new CustomerServiceException(HttpStatus.NOT_FOUND, "The customer with username: " + username + " not found.");
+    }
 
 }
