@@ -8,6 +8,4 @@ import java.util.Optional;
 
 public interface CatalogueRepository extends JpaRepository<Catalogue, Long> {
     Optional<Catalogue> findCatalogueByShopServiceName(String shopServiceName);
-    @Query( "SELECT p.amount FROM Catalogue c JOIN Product p where p.serviceName = :productServiceName")
-    Long getAmountProductFromCatalogue(String productServiceName);
 }

@@ -23,7 +23,7 @@ public class OrderDto {
     private String customerName;
     private LocalDateTime orderDate;
     @Min(value = 1, message = "Amount must be minimum 1")
-    @Max(value = 10000, message = "Amount must be maximum 10000")
+    @Max(value = 100000, message = "Amount must be maximum 100000")
     private int amount;
     private PaymentDto paymentDto;
 }

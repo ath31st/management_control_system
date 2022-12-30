@@ -40,7 +40,6 @@ public class PaymentService {
         payment.setMinutesBeforeExpiration(MINUTES_BEFORE_EXPIRATION);
         payment.setTotalPrice(BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(pp.getPrice())));
         payment.setCustomer(customer);
-        payment.setDeliveryOrder();
 
         eventPublisher.publishEvent(new PaymentEvent(payment));
 

@@ -56,7 +56,12 @@ public class ProductService {
         dto.setName(p.getName());
         dto.setDescription(p.getDescription());
         dto.setPrice(p.getProductPricing().getPrice());
+        dto.setAmount(p.getAmount());
         dto.setCategory(categoryService.categoryToDtoConverter(p.getCategory()));
         return dto;
+    }
+
+    public long getAmountProductFromCatalogue(String productServiceName) {
+        return productRepository.getAmountProductFromCatalogue(productServiceName);
     }
 }

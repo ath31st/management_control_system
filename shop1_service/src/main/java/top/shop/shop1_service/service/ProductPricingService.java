@@ -56,6 +56,12 @@ public class ProductPricingService {
     }
 
     public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
+        // TODO this is crutch!!!
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return productPricingRepository.findAll().stream()
                 .filter(pp -> productServiceName.contains(pp.getProduct().getServiceName()))
                 .map(this::productPricingToDtoConverter)

@@ -91,7 +91,7 @@ public class CatalogueService {
     }
 
     public long getAmountProductFromCatalogue(String productServiceName) {
-        return catalogueRepository.getAmountProductFromCatalogue(productServiceName);
+        return productService.getAmountProductFromCatalogue(productServiceName);
     }
 
 }
