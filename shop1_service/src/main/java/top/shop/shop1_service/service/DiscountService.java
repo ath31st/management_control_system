@@ -6,6 +6,12 @@ import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.discount.CommonDiscountDto;
 import top.shop.shop1_service.dto.discount.DiscountDto;
 import top.shop.shop1_service.dto.discount.PrivateDiscountDto;
+import top.shop.shop1_service.entity.discount.CommonDiscount;
+import top.shop.shop1_service.entity.discount.Discount;
+import top.shop.shop1_service.entity.discount.PrivateDiscount;
+import top.shop.shop1_service.repository.discount.CommonDiscountRepository;
+import top.shop.shop1_service.repository.discount.DiscountRepository;
+import top.shop.shop1_service.repository.discount.PrivateDiscountRepository;
 import top.shop.shop1_service.util.wrapper.DiscountWrapper;
 
 import java.util.List;
@@ -14,68 +20,106 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DiscountService {
-//    private final DiscountRepository discountRepository;
-//    private final PrivateDiscountRepository privateDiscountRepository;
-//    private final CommonDiscountRepository commonDiscountRepository;
-//    private final ProductService productService;
-//    private final ShopService shopService;
+    private final DiscountRepository discountRepository;
+    private final PrivateDiscountRepository privateDiscountRepository;
+    private final CommonDiscountRepository commonDiscountRepository;
+    private final ProductService productService;
+    private final CustomerService customerService;
 
-//    public DiscountWrapper getDiscountWrapper() {
-//        DiscountWrapper discountWrapper = new DiscountWrapper();
-//        discountWrapper.setDiscountList(getDiscountDtoList());
-//        discountWrapper.setPrivateDiscountList(getPrivateDiscountDtoList());
-//        discountWrapper.setCommonDiscountList(getCommonDiscountDtoList());
-//        return discountWrapper;
-//    }
-//
-//    public List<DiscountDto> getDiscountDtoList() {
-//        return discountRepository.findAll()
-//                .stream()
-//                .map(this::discountObjectMapper)
-//                .toList();
-//    }
-//
-//    public List<PrivateDiscountDto> getPrivateDiscountDtoList() {
-//        return privateDiscountRepository.findAll()
-//                .stream()
-//                .map(this::privateDiscountObjectMapper)
-//                .toList();
-//    }
-//
-//    public List<CommonDiscountDto> getCommonDiscountDtoList() {
-//        return commonDiscountRepository.findAll()
-//                .stream()
-//                .map(this::commonDiscountDtoObjectMapper)
-//                .toList();
-//    }
-//
-//    private DiscountDto discountObjectMapper(Discount discount) {
-//        DiscountDto dto = new DiscountDto();
-//        dto.setProductServiceName(discount.getProduct().getServiceName());
-//        dto.setProductName(discount.getProduct().getName());
-//        dto.setShopServiceName(discount.getShop().getServiceName());
-//        dto.setShopName(discount.getShop().getName());
-//        dto.setStartingDate(discount.getStartingDate());
-//        dto.setEndingDate(discount.getEndingDate());
-//        dto.setPercentageDiscount(discount.getPercentageDiscount());
-//        dto.setActive(discount.isActive());
-//        return dto;
-//    }
-//
-//    private PrivateDiscountDto privateDiscountObjectMapper(PrivateDiscount privateDiscount) {
-//        PrivateDiscountDto dto = (PrivateDiscountDto) discountObjectMapper(privateDiscount);
-//        dto.setPromoCode(privateDiscount.getPromoCode());
-//        dto.setStacking(privateDiscount.isStacking());
-//        return dto;
-//    }
-//
-//    private CommonDiscountDto commonDiscountDtoObjectMapper(CommonDiscount commonDiscount) {
-//        CommonDiscountDto dto = (CommonDiscountDto) privateDiscountObjectMapper(commonDiscount);
-//        dto.setNumberOfAvailable(commonDiscount.getNumberOfAvailable());
-//        return dto;
-//    }
-//
-//    public void saveDiscount(DiscountDto discountDto) {
-//       // TODO relocate this service to shop
-//    }
+    public DiscountWrapper getDiscountWrapper() {
+        DiscountWrapper discountWrapper = new DiscountWrapper();
+        discountWrapper.setDiscountList(getDiscountDtoList());
+        discountWrapper.setPrivateDiscountList(getPrivateDiscountDtoList());
+        discountWrapper.setCommonDiscountList(getCommonDiscountDtoList());
+        return discountWrapper;
+    }
+
+    public List<DiscountDto> getDiscountDtoList() {
+        return discountRepository.findAll()
+                .stream()
+                .map(this::discountToDtoConverter)
+                .toList();
+    }
+
+    public List<PrivateDiscountDto> getPrivateDiscountDtoList() {
+        return privateDiscountRepository.findAll()
+                .stream()
+                .map(this::privateDiscountToDtoConverter)
+                .toList();
+    }
+
+    public List<CommonDiscountDto> getCommonDiscountDtoList() {
+        return commonDiscountRepository.findAll()
+                .stream()
+                .map(this::commonDiscountToDtoConverter)
+                .toList();
+    }
+
+    private DiscountDto discountToDtoConverter(Discount discount) {
+        DiscountDto dto = new DiscountDto();
+        dto.setProductServiceName(discount.getProduct().getServiceName());
+        dto.setProductName(discount.getProduct().getName());
+        dto.setStartingDate(discount.getStartingDate());
+        dto.setEndingDate(discount.getEndingDate());
+        dto.setPercentageDiscount(discount.getPercentageDiscount());
+        dto.setActive(discount.isActive());
+
+        return dto;
+    }
+
+    private PrivateDiscountDto privateDiscountToDtoConverter(PrivateDiscount privateDiscount) {
+        PrivateDiscountDto dto = (PrivateDiscountDto) discountToDtoConverter(privateDiscount);
+        dto.setPromoCode(privateDiscount.getPromoCode());
+        dto.setStacking(privateDiscount.isStacking());
+
+        return dto;
+    }
+
+    private CommonDiscountDto commonDiscountToDtoConverter(CommonDiscount commonDiscount) {
+        CommonDiscountDto dto = (CommonDiscountDto) discountToDtoConverter(commonDiscount);
+        dto.setNumberOfAvailable(commonDiscount.getNumberOfAvailable());
+
+        return dto;
+    }
+
+    public void saveDiscount(DiscountDto dto) {
+        Discount d = new Discount();
+        d.setStartingDate(dto.getStartingDate());
+        d.setEndingDate(dto.getEndingDate());
+        d.setPercentageDiscount(dto.getPercentageDiscount());
+        d.setActive(dto.isActive());
+        d.setProduct(productService.getProduct(dto.getProductServiceName()));
+
+        discountRepository.save(d);
+    }
+
+    public void saveCommonDiscount(CommonDiscountDto dto) {
+        CommonDiscount d = new CommonDiscount();
+        d.setStartingDate(dto.getStartingDate());
+        d.setEndingDate(dto.getEndingDate());
+        d.setPercentageDiscount(dto.getPercentageDiscount());
+        d.setActive(dto.isActive());
+        d.setProduct(productService.getProduct(dto.getProductServiceName()));
+
+        d.setNumberOfAvailable(d.getNumberOfAvailable());
+        d.setPromoCode(dto.getPromoCode());
+        d.setStacking(dto.isStacking());
+
+        commonDiscountRepository.save(d);
+    }
+
+    public void savePrivateDiscount(PrivateDiscountDto dto) {
+        PrivateDiscount d = new PrivateDiscount();
+        d.setStartingDate(dto.getStartingDate());
+        d.setEndingDate(dto.getEndingDate());
+        d.setPercentageDiscount(dto.getPercentageDiscount());
+        d.setActive(dto.isActive());
+        d.setProduct(productService.getProduct(dto.getProductServiceName()));
+
+        d.setCustomer(customerService.getCustomer(dto.getCustomerUsername()));
+        d.setPromoCode(dto.getPromoCode());
+        d.setStacking(dto.isStacking());
+
+        privateDiscountRepository.save(d);
+    }
 }

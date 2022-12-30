@@ -42,13 +42,9 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "commonDiscount_id")
     private CommonDiscount commonDiscount;
-    @ManyToMany
-    @JoinTable(
-            name = "product_privateDiscount",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "privateDiscount_id"))
-    @ToString.Exclude
-    private Set<PrivateDiscount> privateDiscounts;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "privateDiscount_id")
+    private PrivateDiscount privateDiscount;
     @ManyToMany
     @JoinTable(
             name = "product_deliveryOrder",

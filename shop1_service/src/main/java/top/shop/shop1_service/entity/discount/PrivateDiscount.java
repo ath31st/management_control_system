@@ -5,10 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import top.shop.shop1_service.entity.Customer;
-import top.shop.shop1_service.entity.Product;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Getter
 @Setter
@@ -22,7 +23,4 @@ public class PrivateDiscount extends Discount {
     @JoinColumn(name = "customer_id", nullable = false)
     @ToString.Exclude
     private Customer customer;
-    @ManyToMany(mappedBy = "privateDiscounts")
-    @ToString.Exclude
-    private Set<Product> products;
 }

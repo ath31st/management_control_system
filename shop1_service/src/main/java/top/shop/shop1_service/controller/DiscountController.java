@@ -16,13 +16,12 @@ public class DiscountController {
 
     @GetMapping("/discounts")
     public ResponseEntity<DiscountWrapper> getDiscounts() {
-       // return ResponseEntity.ok(discountService.getDiscountWrapper());
-        return ResponseEntity.ok(new DiscountWrapper());
+        return ResponseEntity.ok(discountService.getDiscountWrapper());
     }
 
     @PostMapping("/new-discount")
     public ResponseEntity<HttpStatus> discountHandler(@RequestBody DiscountDto discountDto) {
-       // discountService.saveDiscount(discountDto);
+        discountService.saveDiscount(discountDto);
 
         return ResponseEntity.ok().build();
     }
