@@ -49,7 +49,11 @@
                         <td><input type="text" th:field="*{percentageDiscount}"></td>
                         <td th:if="${#fields.hasErrors('percentageDiscount')}" th:errors="*{percentageDiscount}">Percentage discount Error</td>
                     </tr>
-
+                    <tr>
+                        <td>Activate discount:</td>
+                        <td><input type="checkbox" th:field="*{active}"></td>
+                        <td th:if="${#fields.hasErrors('active')}" th:errors="*{active}">activate discount Error</td>
+                    </tr>
                 </table>
                 <br/>
                 <input type="submit" class="btn btn-primary" value="Create"/>

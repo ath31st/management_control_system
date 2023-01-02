@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import top.shop.shop1_service.dto.discount.DiscountDto;
 import top.shop.shop1_service.service.DiscountService;
 import top.shop.shop1_service.util.wrapper.DiscountWrapper;
 
@@ -20,8 +19,15 @@ public class DiscountController {
     }
 
     @PostMapping("/new-discount")
-    public ResponseEntity<HttpStatus> discountHandler(@RequestBody DiscountDto discountDto) {
-        discountService.saveDiscount(discountDto);
+    public ResponseEntity<HttpStatus> discountHandler(@RequestBody DiscountWrapper discountWrapper) {
+        if (discountWrapper.getDiscountList() != null)
+            discountWrapper.getDiscountList().forEach(discountService::saveDiscount);
+
+        if (discountWrapper.getPrivateDiscountList() != null)
+            discountWrapper.getPrivateDiscountList().forEach(discountService::savePrivateDiscount);
+
+        if (discountWrapper.getCommonDiscountList() != null)
+            discountWrapper.getCommonDiscountList().forEach(discountService::saveCommonDiscount);
 
         return ResponseEntity.ok().build();
     }

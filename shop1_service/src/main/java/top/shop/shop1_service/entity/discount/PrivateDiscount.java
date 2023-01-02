@@ -6,16 +6,14 @@ import lombok.Setter;
 import lombok.ToString;
 import top.shop.shop1_service.entity.Customer;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
 @ToString
 @NoArgsConstructor
+@Table(name = "private_discounts")
 public class PrivateDiscount extends Discount {
     private String promoCode;
     private boolean isStacking;

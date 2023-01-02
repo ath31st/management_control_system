@@ -30,17 +30,18 @@ public class DiscountService {
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(discountWrapper), DiscountWrapper.class);
     }
 
-    public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, DiscountDto dto, String shopServiceName) {
+    public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, DiscountDto dtoFromForm, String shopServiceName) {
         DiscountWrapper discountWrapper = new DiscountWrapper();
 
         List<DiscountDto> dtoList = Arrays.stream(productServiceNames)
                 .map(s -> {
                     DiscountDto discountDto = new DiscountDto();
-                    discountDto.setProductServiceName(dto.getProductServiceName());
+                    discountDto.setProductServiceName(s);
                     discountDto.setShopServiceName(shopServiceName);
-                    discountDto.setStartingDate(dto.getStartingDate());
-                    discountDto.setEndingDate(dto.getEndingDate());
-                    discountDto.setPercentageDiscount(dto.getPercentageDiscount());
+                    discountDto.setStartingDate(dtoFromForm.getStartingDate());
+                    discountDto.setEndingDate(dtoFromForm.getEndingDate());
+                    discountDto.setPercentageDiscount(dtoFromForm.getPercentageDiscount());
+                    discountDto.setActive(dtoFromForm.isActive());
                     return discountDto;
                 })
                 .toList();

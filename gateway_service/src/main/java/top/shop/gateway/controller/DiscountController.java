@@ -16,6 +16,7 @@ import top.shop.gateway.service.UserService;
 import top.shop.gateway.util.wrapper.DiscountWrapper;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class DiscountController {
             DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, discountDto, shopServiceName);
             discountService.sendDiscountWrapper(discountWrapper, shopUrl);
         } catch (HttpClientErrorException e) {
-            bindingResult.rejectValue("productServiceName", "discountDto.productServiceName", "Discount already exists for this product service name.");
+            bindingResult.rejectValue("productServiceName", "discountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
             model.addAttribute("discountDto", discountDto);
             return "discount-templates/new-discount";
         }
