@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Entity
 @ToString
 @NoArgsConstructor
-@Table(name = "private_discounts")
 public class PrivateDiscount extends Discount {
     private String promoCode;
     private boolean isStacking;

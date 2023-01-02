@@ -50,8 +50,8 @@
                 </tr>
                 <tr th:each="discount: ${discounts}">
                     <td th:text="${discount.productName}">product name</td>
-                    <td th:text="${discount.startingDate}">starting date</td>
-                    <td th:text="${discount.endingDate}">ending date</td>
+                    <td th:text="${#temporals.format(discount.startingDate, 'dd MMM yyyy HH:mm')}">starting date</td>
+                    <td th:text="${#temporals.format(discount.endingDate, 'dd MMM yyyy HH:mm')}">ending date</td>
                     <td th:text="${discount.percentageDiscount}">percentage discount</td>
                     <td th:text="${discount.isActive}">active</td>
                     <td>
@@ -65,6 +65,7 @@
             <div th:if="${#lists.isEmpty(discounts)}">
                 <h4>No discount data found</h4>
             </div>
+            <br>
             <div>
                 <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                    th:href="@{/new-discount}">Create

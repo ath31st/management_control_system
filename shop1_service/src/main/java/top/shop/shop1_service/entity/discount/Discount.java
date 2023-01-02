@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @Table(name = "discounts")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
