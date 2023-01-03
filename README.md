@@ -17,11 +17,11 @@ Despite the shortcomings and errors (including architectural ones), this is a gr
     * [Services](#services)
         * [Gateway service](#gateway)
         * [Backend service with PostgresQL database](#backend-with-PostgresQL-database)
-        * [Shop1-n with Mongo database](#Shop1-n-with-Mongo-database)
+        * [Shop1-n with Mongo database](#Shop1-n-with-PostgresQL-database)
         * [Kafka](#kafka)
         * [Zookeeper](#zookeeper)
         * [Keycloak with PostgresQL database](#keycloak-with-PostgresQL-database)
-        * [Mongo-express](#mongo-express)
+        * [~~Mongo-express~~](#mongo-express)
     * [Security](#security)
     * [Running Instructions](#running-instructions)
         * [Via docker](#via-docker)
@@ -40,7 +40,7 @@ Despite the shortcomings and errors (including architectural ones), this is a gr
 
 ### Planned
 
-- Implement the discount system
+- Implement the discount system (in progress)
 - Integrate Apache Cassandra for logging events from all project modules
 - Collecting and displaying statistics for managers and administrator in the web interface
 - Make a simple but visual web interface for customers (registration, purchases, refunds, viewing purchase history)
@@ -57,6 +57,7 @@ The microservice architectural style is an approach to developing a single appli
  - [Early version 004](images/early_version004.jpg)
  - [Early version 005](images/early_version005.jpg)
  - [Early version 006](images/early_version006.jpg)
+ - [Early version 007](images/early_version007.jpg)
 
 
 ## Services
@@ -89,15 +90,17 @@ Its tasks include:
 The service provides storage of information about catalogs, categories, products, stores, orders and payments.
 Since entities have relationships, the popular Postgresql database was chosen to store them.
 
-### Shop1-n with Mongo database
+### Shop1-n with PostgresQL database
 
 The service is designed to serve customers. This service is managed by managers, they make a catalog of products available in the storage, 
-set prices, change prices. Each such service stores information about the catalog, delivered products, payments and current prices. 
-MongoDB is used as the database. Stored entities have no relationships, so it was decided to use a NoSQL database. Here, as well as on 
+set prices, change prices. ~~Each such service stores information about the catalog, delivered products, payments and current prices. 
+MongoDB is used as the database. Stored entities have no relationships, so it was decided to use a NoSQL database.~~ Here, as well as on 
 the backend service, the order expiration mechanism works - after a certain time (now it is 5 minutes), 
 the payment and the order are considered expired and become unavailable for payment. The structure of the Shop service is built so that you can make the required
 number of them with minimal settings (change the marked fields in application.yml, add new service in docker-compose and register a new service on the Gateway service). 
 At the moment, the service has only a REST api for working with customers, but in the future I plan to add a web interface.
+
+Update(03.01.2023) The service has been rewritten to use the PostgresQL database. The addition of the discount system led to relationships between stored entities.
 
 Its tasks include:
  - store and provide a product catalog for customers
@@ -175,8 +178,10 @@ In this project I used the following features:
 
 ### Mongo-express
 
-Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3. This service is optional and is used for
-clarity and convenience of monitoring the contents of the database.
+~~Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3. This service is optional and is used for
+clarity and convenience of monitoring the contents of the database.~~
+
+This module has lost relevance due to the transition to PostgresQL database in the shop services.
 
 ## Security
 
