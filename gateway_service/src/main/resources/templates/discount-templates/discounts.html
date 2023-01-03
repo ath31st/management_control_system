@@ -107,6 +107,7 @@
             <div th:if="${#lists.isEmpty(privateDiscounts)}">
                 <h4>No private discount data found</h4>
             </div>
+            <br>
             <div>
                 <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                    th:href="@{/new-private-discount}">Create
@@ -147,6 +148,7 @@
             <div th:if="${#lists.isEmpty(commonDiscounts)}">
                 <h4>No common discount data found</h4>
             </div>
+            <br>
             <div>
                 <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                    th:href="@{/new-common-discount}">Create

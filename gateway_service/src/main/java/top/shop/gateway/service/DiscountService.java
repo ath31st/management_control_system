@@ -47,17 +47,12 @@ public class DiscountService {
     public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, String[] customers, PrivateDiscountDto dtoFromForm, String shopServiceName) {
         DiscountWrapper discountWrapper = new DiscountWrapper();
 
-        List<PrivateDiscountDto> dtoList = Arrays.stream(productServiceNames)
-                .map(s -> preparePrivateDiscountDto(s, dtoFromForm, shopServiceName))
-                .toList();
-
         List<PrivateDiscountDto> pDtoList = new ArrayList<>();
-        Arrays.stream(customers).forEach(c -> dtoList.forEach(dto -> {
-            dto.setCustomerUsername(c);
-            dto.setStacking(dtoFromForm.isStacking());
-            dto.setPromoCode(dtoFromForm.getPromoCode());
-            pDtoList.add(dto);
-        }));
+        Arrays.stream(customers)
+                .map(c -> Arrays.stream(productServiceNames)
+                        .map(p -> preparePrivateDiscountDto(p, c, dtoFromForm, shopServiceName))
+                        .toList())
+                .forEach(pDtoList::addAll);
 
         discountWrapper.setPrivateDiscountList(pDtoList);
         return discountWrapper;
@@ -82,7 +77,7 @@ public class DiscountService {
         return dto;
     }
 
-    private PrivateDiscountDto preparePrivateDiscountDto(String productServiceName, PrivateDiscountDto dtoFromForm, String shopServiceName) {
+    private PrivateDiscountDto preparePrivateDiscountDto(String productServiceName, String customerUsername, PrivateDiscountDto dtoFromForm, String shopServiceName) {
         PrivateDiscountDto dto = new PrivateDiscountDto();
         dto.setProductServiceName(productServiceName);
         dto.setShopServiceName(shopServiceName);
@@ -90,6 +85,9 @@ public class DiscountService {
         dto.setEndingDate(dtoFromForm.getEndingDate());
         dto.setPercentageDiscount(dtoFromForm.getPercentageDiscount());
         dto.setActive(dtoFromForm.isActive());
+        dto.setStacking(dtoFromForm.isStacking());
+        dto.setPromoCode(dtoFromForm.getPromoCode());
+        dto.setCustomerUsername(customerUsername);
         return dto;
     }
 }
