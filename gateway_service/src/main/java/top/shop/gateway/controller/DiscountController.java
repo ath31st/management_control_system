@@ -95,7 +95,7 @@ public class DiscountController {
             return "discount-templates/new-private-discount";
         }
         try {
-            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, privateDiscountDto, shopServiceName);
+            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, customers, privateDiscountDto, shopServiceName);
             discountService.sendDiscountWrapper(discountWrapper, shopUrl);
         } catch (HttpClientErrorException e) {
             bindingResult.rejectValue("productServiceName", "privateDiscountDto.productServiceName", Objects.requireNonNull(e.getMessage()));

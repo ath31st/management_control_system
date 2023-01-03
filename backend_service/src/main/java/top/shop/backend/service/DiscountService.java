@@ -76,7 +76,7 @@ public class DiscountService {
     }
 
     private CommonDiscountDto commonDiscountDtoObjectMapper(CommonDiscount commonDiscount) {
-        CommonDiscountDto dto = (CommonDiscountDto) privateDiscountObjectMapper(commonDiscount);
+        CommonDiscountDto dto = (CommonDiscountDto) discountObjectMapper(commonDiscount);
         dto.setNumberOfAvailable(commonDiscount.getNumberOfAvailable());
         return dto;
     }
