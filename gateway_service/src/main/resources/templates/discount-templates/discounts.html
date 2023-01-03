@@ -11,6 +11,7 @@
     <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
     <style>
         table {
+            font-size: 14px;
             width: 100%; /* Ширина таблицы */
             border-collapse: collapse; /* Убираем двойные линии */
             text-align: justify;
@@ -78,6 +79,7 @@
                 <tr>
                     <th> Product name</th>
                     <th> Promo code</th>
+                    <th> Customer username</th>
                     <th> Starting date</th>
                     <th> Ending date</th>
                     <th> Percentage discount</th>
@@ -88,8 +90,9 @@
                 <tr th:each="privateDiscount: ${privateDiscounts}">
                     <td th:text="${privateDiscount.productName}">product name</td>
                     <td th:text="${privateDiscount.promoCode}">promo code</td>
-                    <td th:text="${privateDiscount.startingDate}">starting date</td>
-                    <td th:text="${privateDiscount.endingDate}">ending date</td>
+                    <td th:text="${privateDiscount.customerUsername}">customer username</td>
+                    <td th:text="${#temporals.format(privateDiscount.startingDate, 'dd MMM yyyy HH:mm')}">starting date</td>
+                    <td th:text="${#temporals.format(privateDiscount.endingDate, 'dd MMM yyyy HH:mm')}">ending date</td>
                     <td th:text="${privateDiscount.percentageDiscount}">percentage discount</td>
                     <td th:text="${privateDiscount.isActive}">active</td>
                     <td th:text="${privateDiscount.isStacking}">stacking</td>
@@ -128,8 +131,8 @@
                     <td th:text="${commonDiscount.productName}">product name</td>
                     <td th:text="${commonDiscount.promoCode}">promo code</td>
                     <td th:text="${commonDiscount.numberOfAvailable}">number of available</td>
-                    <td th:text="${commonDiscount.startingDate}">starting date</td>
-                    <td th:text="${commonDiscount.endingDate}">ending date</td>
+                    <td th:text="${#temporals.format(commonDiscount.startingDate, 'dd MMM yyyy HH:mm')}">starting date</td>
+                    <td th:text="${#temporals.format(commonDiscount.endingDate, 'dd MMM yyyy HH:mm')}">ending date</td>
                     <td th:text="${commonDiscount.percentageDiscount}">percentage discount</td>
                     <td th:text="${commonDiscount.isActive}">active</td>
                     <td th:text="${commonDiscount.isStacking}">stacking</td>

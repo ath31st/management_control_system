@@ -68,7 +68,15 @@ public class DiscountService {
     }
 
     private PrivateDiscountDto privateDiscountToDtoConverter(PrivateDiscount privateDiscount) {
-        PrivateDiscountDto dto = (PrivateDiscountDto) discountToDtoConverter(privateDiscount);
+        PrivateDiscountDto dto = new PrivateDiscountDto();
+        dto.setProductServiceName(privateDiscount.getProduct().getServiceName());
+        dto.setProductName(privateDiscount.getProduct().getName());
+        dto.setStartingDate(privateDiscount.getStartingDate());
+        dto.setEndingDate(privateDiscount.getEndingDate());
+        dto.setPercentageDiscount(privateDiscount.getPercentageDiscount());
+        dto.setActive(privateDiscount.isActive());
+
+        dto.setCustomerUsername(privateDiscount.getCustomer().getUsername());
         dto.setPromoCode(privateDiscount.getPromoCode());
         dto.setStacking(privateDiscount.isStacking());
 
@@ -76,7 +84,16 @@ public class DiscountService {
     }
 
     private CommonDiscountDto commonDiscountToDtoConverter(CommonDiscount commonDiscount) {
-        CommonDiscountDto dto = (CommonDiscountDto) discountToDtoConverter(commonDiscount);
+        CommonDiscountDto dto = new CommonDiscountDto();
+        dto.setProductServiceName(commonDiscount.getProduct().getServiceName());
+        dto.setProductName(commonDiscount.getProduct().getName());
+        dto.setStartingDate(commonDiscount.getStartingDate());
+        dto.setEndingDate(commonDiscount.getEndingDate());
+        dto.setPercentageDiscount(commonDiscount.getPercentageDiscount());
+        dto.setActive(commonDiscount.isActive());
+
+        dto.setStacking(commonDiscount.isStacking());
+        dto.setPromoCode(commonDiscount.getPromoCode());
         dto.setNumberOfAvailable(commonDiscount.getNumberOfAvailable());
 
         return dto;
