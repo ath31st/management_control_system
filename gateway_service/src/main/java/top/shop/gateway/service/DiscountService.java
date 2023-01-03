@@ -47,17 +47,16 @@ public class DiscountService {
     public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, String[] customers, PrivateDiscountDto dtoFromForm, String shopServiceName) {
         DiscountWrapper discountWrapper = new DiscountWrapper();
 
-        List<DiscountDto> dtoList = Arrays.stream(productServiceNames)
-                .map(s -> prepareDiscountDto(s, dtoFromForm, shopServiceName))
+        List<PrivateDiscountDto> dtoList = Arrays.stream(productServiceNames)
+                .map(s -> preparePrivateDiscountDto(s, dtoFromForm, shopServiceName))
                 .toList();
 
         List<PrivateDiscountDto> pDtoList = new ArrayList<>();
         Arrays.stream(customers).forEach(c -> dtoList.forEach(dto -> {
-            PrivateDiscountDto pDto = (PrivateDiscountDto) dto;
-            pDto.setCustomerUsername(dtoFromForm.getCustomerUsername());
-            pDto.setStacking(dtoFromForm.isStacking());
-            pDto.setPromoCode(dtoFromForm.getPromoCode());
-            pDtoList.add(pDto);
+            dto.setCustomerUsername(c);
+            dto.setStacking(dtoFromForm.isStacking());
+            dto.setPromoCode(dtoFromForm.getPromoCode());
+            pDtoList.add(dto);
         }));
 
         discountWrapper.setPrivateDiscountList(pDtoList);
@@ -73,13 +72,24 @@ public class DiscountService {
     }
 
     private DiscountDto prepareDiscountDto(String productServiceName, DiscountDto dtoFromForm, String shopServiceName) {
-        DiscountDto discountDto = new DiscountDto();
-        discountDto.setProductServiceName(productServiceName);
-        discountDto.setShopServiceName(shopServiceName);
-        discountDto.setStartingDate(dtoFromForm.getStartingDate());
-        discountDto.setEndingDate(dtoFromForm.getEndingDate());
-        discountDto.setPercentageDiscount(dtoFromForm.getPercentageDiscount());
-        discountDto.setActive(dtoFromForm.isActive());
-        return discountDto;
+        DiscountDto dto = new DiscountDto();
+        dto.setProductServiceName(productServiceName);
+        dto.setShopServiceName(shopServiceName);
+        dto.setStartingDate(dtoFromForm.getStartingDate());
+        dto.setEndingDate(dtoFromForm.getEndingDate());
+        dto.setPercentageDiscount(dtoFromForm.getPercentageDiscount());
+        dto.setActive(dtoFromForm.isActive());
+        return dto;
+    }
+
+    private PrivateDiscountDto preparePrivateDiscountDto(String productServiceName, PrivateDiscountDto dtoFromForm, String shopServiceName) {
+        PrivateDiscountDto dto = new PrivateDiscountDto();
+        dto.setProductServiceName(productServiceName);
+        dto.setShopServiceName(shopServiceName);
+        dto.setStartingDate(dtoFromForm.getStartingDate());
+        dto.setEndingDate(dtoFromForm.getEndingDate());
+        dto.setPercentageDiscount(dtoFromForm.getPercentageDiscount());
+        dto.setActive(dtoFromForm.isActive());
+        return dto;
     }
 }
