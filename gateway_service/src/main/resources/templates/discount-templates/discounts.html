@@ -7,6 +7,7 @@
 
     <link rel="icon" th:href="@{/icon/flavicon.png}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/limiter.css}">
     <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
     <style>
@@ -38,124 +39,154 @@
         </div>
         <!-- END PAGE TITLE -->
         <div class="column">
+            <div class="block">
+                <p><span style="font-size: 22px !important"> List of discounts </span></p>
+                <input type="checkbox" id="read-more-checker" data-more-checker="read-more"/>
+                <div class="limiter">
+                    <table th:if="${not #lists.isEmpty(discounts)}">
+                        <tr>
+                            <th> Product name</th>
+                            <th> Starting date</th>
+                            <th> Ending date</th>
+                            <th> Percentage discount</th>
+                            <th> Active</th>
+                            <th></th>
+                        </tr>
+                        <tr th:each="discount: ${discounts}">
+                            <td th:text="${discount.productName}">product name</td>
+                            <td th:text="${#temporals.format(discount.startingDate, 'dd MMM yyyy HH:mm')}">starting date
+                            </td>
+                            <td th:text="${#temporals.format(discount.endingDate, 'dd MMM yyyy HH:mm')}">ending date
+                            </td>
+                            <td th:text="${discount.percentageDiscount}">percentage discount</td>
+                            <td th:text="${discount.isActive}">active</td>
+                            <td>
+                                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                                   th:href="@{|/edit-discount/${discount.productServiceName}|}">Edit
+                                    discount</a>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="bottom"></div>
+                </div>
+                <label for="read-more-checker" class="read-more-button"></label>
+                <div th:if="${#lists.isEmpty(discounts)}">
+                    <h4>No discount data found</h4>
+                </div>
+                <br>
+                <div>
+                    <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                       th:href="@{/new-discount}">Create
+                        new discount</a></button>
+                </div>
+            </div>
+            <br>
+            <div class="block">
+                <p><span style="font-size: 22px !important"> List of private discounts </span></p>
+                <input type="checkbox" id="read-more-checker-2" data-more-checker="read-more-2"/>
+                <div class="limiter">
+                    <table th:if="${not #lists.isEmpty(privateDiscounts)}">
+                        <tr>
+                            <th> Product name</th>
+                            <th> Promo code</th>
+                            <th> Customer username</th>
+                            <th> Starting date</th>
+                            <th> Ending date</th>
+                            <th> Percentage discount</th>
+                            <th> Active</th>
+                            <th> Stacking</th>
+                            <th></th>
+                        </tr>
+                        <tr th:each="privateDiscount: ${privateDiscounts}">
+                            <td th:text="${privateDiscount.productName}">product name</td>
+                            <td th:text="${privateDiscount.promoCode}">promo code</td>
+                            <td th:text="${privateDiscount.customerUsername}">customer username</td>
+                            <td th:text="${#temporals.format(privateDiscount.startingDate, 'dd MMM yyyy HH:mm')}">
+                                starting
+                                date
+                            </td>
+                            <td th:text="${#temporals.format(privateDiscount.endingDate, 'dd MMM yyyy HH:mm')}">ending
+                                date
+                            </td>
+                            <td th:text="${privateDiscount.percentageDiscount}">percentage discount</td>
+                            <td th:text="${privateDiscount.isActive}">active</td>
+                            <td th:text="${privateDiscount.isStacking}">stacking</td>
+                            <td>
+                                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                                   th:href="@{|/edit-private-discount/${privateDiscount.productServiceName}|}">Edit
+                                    private discount</a>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="bottom"></div>
+                </div>
+                <label for="read-more-checker-2" class="read-more-button"></label>
+                <div th:if="${#lists.isEmpty(privateDiscounts)}">
+                    <h4>No private discount data found</h4>
+                </div>
+                <div>
+                    <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                       th:href="@{/new-private-discount}">Create
+                        new private discount</a></button>
+                </div>
+            </div>
+            <br>
+            <div class="block">
+                <p><span style="font-size: 22px !important"> List of common discounts </span></p>
+                <input type="checkbox" id="read-more-checker-3" data-more-checker="read-more-3"/>
+                <div class="limiter">
+                    <table th:if="${not #lists.isEmpty(commonDiscounts)}">
+                        <tr>
+                            <th> Product name</th>
+                            <th> Promo code</th>
+                            <th> Number of available</th>
+                            <th> Starting date</th>
+                            <th> Ending date</th>
+                            <th> Percentage discount</th>
+                            <th> Active</th>
+                            <th> Stacking</th>
+                            <th></th>
+                        </tr>
+                        <tr th:each="commonDiscount: ${commonDiscounts}">
+                            <td th:text="${commonDiscount.productName}">product name</td>
+                            <td th:text="${commonDiscount.promoCode}">promo code</td>
+                            <td th:text="${commonDiscount.numberOfAvailable}">number of available</td>
+                            <td th:text="${#temporals.format(commonDiscount.startingDate, 'dd MMM yyyy HH:mm')}">
+                                starting
+                                date
+                            </td>
+                            <td th:text="${#temporals.format(commonDiscount.endingDate, 'dd MMM yyyy HH:mm')}">ending
+                                date
+                            </td>
+                            <td th:text="${commonDiscount.percentageDiscount}">percentage discount</td>
+                            <td th:text="${commonDiscount.isActive}">active</td>
+                            <td th:text="${commonDiscount.isStacking}">stacking</td>
+                            <td>
+                                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                                   th:href="@{|/edit-common-discount/${commonDiscount.productServiceName}|}">Edit
+                                    common discount</a>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="bottom"></div>
+                </div>
+                <label for="read-more-checker-3" class="read-more-button"></label>
 
-            <p><span style="font-size: 22px !important"> List of discounts </span></p>
-            <table th:if="${not #lists.isEmpty(discounts)}">
-                <tr>
-                    <th> Product name</th>
-                    <th> Starting date</th>
-                    <th> Ending date</th>
-                    <th> Percentage discount</th>
-                    <th> Active</th>
-                    <th></th>
-                </tr>
-                <tr th:each="discount: ${discounts}">
-                    <td th:text="${discount.productName}">product name</td>
-                    <td th:text="${#temporals.format(discount.startingDate, 'dd MMM yyyy HH:mm')}">starting date</td>
-                    <td th:text="${#temporals.format(discount.endingDate, 'dd MMM yyyy HH:mm')}">ending date</td>
-                    <td th:text="${discount.percentageDiscount}">percentage discount</td>
-                    <td th:text="${discount.isActive}">active</td>
-                    <td>
-                        <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                           th:href="@{|/edit-discount/${discount.productServiceName}|}">Edit
-                            discount</a>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-            <div th:if="${#lists.isEmpty(discounts)}">
-                <h4>No discount data found</h4>
+                <div th:if="${#lists.isEmpty(commonDiscounts)}">
+                    <h4>No common discount data found</h4>
+                </div>
+                <br>
+                <div>
+                    <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                       th:href="@{/new-common-discount}">Create
+                        new common discount</a></button>
+                </div>
             </div>
             <br>
-            <div>
-                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                   th:href="@{/new-discount}">Create
-                    new discount</a></button>
-            </div>
             <br>
-
-            <p><span style="font-size: 22px !important"> List of private discounts </span></p>
-            <table th:if="${not #lists.isEmpty(privateDiscounts)}">
-                <tr>
-                    <th> Product name</th>
-                    <th> Promo code</th>
-                    <th> Customer username</th>
-                    <th> Starting date</th>
-                    <th> Ending date</th>
-                    <th> Percentage discount</th>
-                    <th> Active</th>
-                    <th> Stacking</th>
-                    <th></th>
-                </tr>
-                <tr th:each="privateDiscount: ${privateDiscounts}">
-                    <td th:text="${privateDiscount.productName}">product name</td>
-                    <td th:text="${privateDiscount.promoCode}">promo code</td>
-                    <td th:text="${privateDiscount.customerUsername}">customer username</td>
-                    <td th:text="${#temporals.format(privateDiscount.startingDate, 'dd MMM yyyy HH:mm')}">starting date</td>
-                    <td th:text="${#temporals.format(privateDiscount.endingDate, 'dd MMM yyyy HH:mm')}">ending date</td>
-                    <td th:text="${privateDiscount.percentageDiscount}">percentage discount</td>
-                    <td th:text="${privateDiscount.isActive}">active</td>
-                    <td th:text="${privateDiscount.isStacking}">stacking</td>
-                    <td>
-                        <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                           th:href="@{|/edit-private-discount/${privateDiscount.productServiceName}|}">Edit
-                            private discount</a>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-            <div th:if="${#lists.isEmpty(privateDiscounts)}">
-                <h4>No private discount data found</h4>
-            </div>
-            <br>
-            <div>
-                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                   th:href="@{/new-private-discount}">Create
-                    new private discount</a></button>
-            </div>
-            <br>
-
-            <p><span style="font-size: 22px !important"> List of common discounts </span></p>
-            <table th:if="${not #lists.isEmpty(commonDiscounts)}">
-                <tr>
-                    <th> Product name</th>
-                    <th> Promo code</th>
-                    <th> Number of available</th>
-                    <th> Starting date</th>
-                    <th> Ending date</th>
-                    <th> Percentage discount</th>
-                    <th> Active</th>
-                    <th> Stacking</th>
-                    <th></th>
-                </tr>
-                <tr th:each="commonDiscount: ${commonDiscounts}">
-                    <td th:text="${commonDiscount.productName}">product name</td>
-                    <td th:text="${commonDiscount.promoCode}">promo code</td>
-                    <td th:text="${commonDiscount.numberOfAvailable}">number of available</td>
-                    <td th:text="${#temporals.format(commonDiscount.startingDate, 'dd MMM yyyy HH:mm')}">starting date</td>
-                    <td th:text="${#temporals.format(commonDiscount.endingDate, 'dd MMM yyyy HH:mm')}">ending date</td>
-                    <td th:text="${commonDiscount.percentageDiscount}">percentage discount</td>
-                    <td th:text="${commonDiscount.isActive}">active</td>
-                    <td th:text="${commonDiscount.isStacking}">stacking</td>
-                    <td>
-                        <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                           th:href="@{|/edit-common-discount/${commonDiscount.productServiceName}|}">Edit
-                            common discount</a>
-                        </button>
-                    </td>
-                </tr>
-            </table>
-            <div th:if="${#lists.isEmpty(commonDiscounts)}">
-                <h4>No common discount data found</h4>
-            </div>
-            <br>
-            <div>
-                <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                   th:href="@{/new-common-discount}">Create
-                    new common discount</a></button>
-            </div>
-            <br>
-
         </div>
     </div>
     <div lang="en" th:replace="fragments/footer :: footer"></div>

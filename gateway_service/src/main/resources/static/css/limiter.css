@@ -1,0 +1,42 @@
+.limiter {
+    max-height: 100px;
+    overflow: hidden;
+    position: relative;
+}
+.limiter .bottom {
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(
+            to bottom,
+            rgb(255 217 29 / 0%),
+            rgb(145, 145, 145) 85%);
+    width: 100%;
+    height: 60px;
+    opacity: 1;
+    transition: 0.3s;
+}
+
+[data-more-checker^="read-more"] {
+    opacity: 0;
+    position: absolute;
+}
+[data-more-checker^="read-more"]:checked ~ .limiter {
+    max-height: none;
+}
+[data-more-checker^="read-more"]:checked ~ .limiter .bottom {
+    opacity: 0;
+    transition: 0.3s;
+}
+[data-more-checker^="read-more"] ~ .read-more-button:before  {
+    content: "Развернуть »";
+}
+[data-more-checker^="read-more"]:checked ~ .read-more-button:before {
+    content: "Свернуть «";
+}
+
+.read-more-button {
+    cursor: pointer;
+    display: inline-block;
+    color: #777;
+    text-decoration: underline;
+}
