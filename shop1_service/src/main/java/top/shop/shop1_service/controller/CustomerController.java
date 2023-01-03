@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class ShopController {
+public class CustomerController {
 
     private final OrderService orderService;
     private final PaymentService paymentService;

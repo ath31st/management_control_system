@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New-private-discount</title>
+
+    <link rel="icon" th:href="@{/icon/flavicon.png}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/bootstrap-select-1.14.0-beta2/dist/css/bootstrap-select.css}"/>
+</head>
+<body>
+<div class="wrapper">
+    <!-- START PAGE CONTAINER -->
+    <div class="container-fluid">
+        <div lang="en" th:replace="fragments/header :: header"></div>
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Create a new private discount
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/new-private-discount}" th:object="${privateDiscountDto}" method="post">
+                <table>
+                    <tr>
+                        <td>Product from catalogue:</td>
+                        <td><select class="form-control selectpicker" name="productServiceNames" multiple title="Choose products for discount">
+                            <option th:each="product : ${productListFromCatalogue}"
+                                    th:value="${product.serviceName}"
+                                    th:text="${product.name}">
+                        </select></td>
+                        <td th:if="${#fields.hasErrors('productServiceName')}" th:errors="*{productServiceName}">Product service name Error</td>
+                    </tr>
+                    <tr>
+                        <td>List customers:</td>
+                        <td><select class="form-control selectpicker" name="customers" multiple title="Choose customers for private discount">
+                            <option th:each="customer : ${customersUsername}"
+                                    th:value="${customer}"
+                                    th:text="${customer}">
+                        </select></td>
+                        <td th:if="${#fields.hasErrors('customerUsername')}" th:errors="*{customerUsername}">Customer username Error</td>
+                    </tr>
+                    <tr>
+                        <td>Promo code:</td>
+                        <td><input type="text" th:field="*{promoCode}"></td>
+                        <td th:if="${#fields.hasErrors('promoCode')}" th:errors="*{promoCode}">Promo code Error</td>
+                    </tr>
+                    <tr>
+                        <td>Starting date:</td>
+                        <td><input type="datetime-local" th:field="*{startingDate}"></td>
+                        <td th:if="${#fields.hasErrors('startingDate')}" th:errors="*{startingDate}">Starting date Error</td>
+                    </tr>
+                    <tr>
+                        <td>Ending date:</td>
+                        <td><input type="datetime-local" th:field="*{endingDate}"></td>
+                        <td th:if="${#fields.hasErrors('endingDate')}" th:errors="*{endingDate}">Ending date Error</td>
+                    </tr>
+                    <tr>
+                        <td>Percentage discount:</td>
+                        <td><input type="text" th:field="*{percentageDiscount}"></td>
+                        <td th:if="${#fields.hasErrors('percentageDiscount')}" th:errors="*{percentageDiscount}">Percentage discount Error</td>
+                    </tr>
+                    <tr>
+                        <td>Activate discount:</td>
+                        <td><input type="checkbox" th:field="*{active}"></td>
+                        <td th:if="${#fields.hasErrors('active')}" th:errors="*{active}">activate discount Error</td>
+                    </tr>
+                    <tr>
+                        <td>Is stacking discount:</td>
+                        <td><input type="checkbox" th:field="*{stacking}"></td>
+                        <td th:if="${#fields.hasErrors('stacking')}" th:errors="*{stacking}">stacking discount Error</td>
+                    </tr>
+                </table>
+                <br/>
+                <input type="submit" class="btn btn-primary" value="Create"/>
+            </form>
+
+        </div>
+        <!-- END PAGE CONTENT -->
+        <!-- END PAGE CONTAINER -->
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/bootstrap-select-1.14.0-beta2/dist/js/bootstrap-select.js}"></script>
+
+<!--<script th:inline="javascript">-->
+<!--    $('.selectpicker').selectpicker('destroy');-->
+<!--    $('.selectpicker').selectpicker('refresh');-->
+<!--</script>-->
+</body>
+</html>

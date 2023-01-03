@@ -10,6 +10,7 @@ import top.shop.gateway.util.wrapper.DiscountWrapper;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +49,13 @@ public class DiscountService {
 
         discountWrapper.setDiscountList(dtoList);
         return discountWrapper;
+    }
+
+    public List<String> getCustomersUsername(String shopUrl) {
+        String url = shopUrl + "/api/new-private-discount";
+
+        return List.of(Objects.requireNonNull(restTemplate.exchange(RequestEntity.get(url)
+                .headers(TokenExtractor.headersWithTokenAuthUser())
+                .build(), String[].class).getBody()));
     }
 }

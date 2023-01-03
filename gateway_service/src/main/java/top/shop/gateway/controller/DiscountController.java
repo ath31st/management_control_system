@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.discount.DiscountDto;
+import top.shop.gateway.dto.discount.PrivateDiscountDto;
 import top.shop.gateway.service.CatalogueService;
 import top.shop.gateway.service.DiscountService;
 import top.shop.gateway.service.UserService;
@@ -64,6 +65,42 @@ public class DiscountController {
             bindingResult.rejectValue("productServiceName", "discountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
             model.addAttribute("discountDto", discountDto);
             return "discount-templates/new-discount";
+        }
+
+        return "redirect:/discounts";
+    }
+
+    @GetMapping("/new-private-discount")
+    public String privateDiscountHandler(Model model) {
+        String shopServiceName = userService.getUserAttribute("shopServiceName");
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        model.addAttribute("customersUsername", discountService.getCustomersUsername(shopUrl));
+        model.addAttribute("privateDiscountDto", new PrivateDiscountDto());
+        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+        return "discount-templates/new-private-discount";
+    }
+
+    @PostMapping("/new-private-discount")
+    public String discountHandler(@Valid @ModelAttribute("privateDiscountDto") PrivateDiscountDto privateDiscountDto,
+                                  @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
+                                  @RequestParam(value = "customers", required = false) String[] customers,
+                                  BindingResult bindingResult, Model model) {
+        String shopServiceName = userService.getUserAttribute("shopServiceName");
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+            model.addAttribute("privateDiscountDto", privateDiscountDto);
+            return "discount-templates/new-private-discount";
+        }
+        try {
+            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, privateDiscountDto, shopServiceName);
+            discountService.sendDiscountWrapper(discountWrapper, shopUrl);
+        } catch (HttpClientErrorException e) {
+            bindingResult.rejectValue("productServiceName", "privateDiscountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
+            model.addAttribute("privateDiscountDto", privateDiscountDto);
+            return "discount-templates/new-private-discount";
         }
 
         return "redirect:/discounts";

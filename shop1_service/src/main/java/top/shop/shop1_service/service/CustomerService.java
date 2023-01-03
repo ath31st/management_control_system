@@ -6,6 +6,8 @@ import top.shop.shop1_service.dto.CustomerDto;
 import top.shop.shop1_service.entity.Customer;
 import top.shop.shop1_service.repository.CustomerRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
@@ -25,6 +27,10 @@ public class CustomerService {
 
     public Customer getCustomer(String username) {
         return customerRepository.findByUsername(username);
+    }
+
+    public String[] getCustomersUsername() {
+        return customerRepository.customersUsername();
     }
 
     public boolean isExistsCustomer(String username) {
