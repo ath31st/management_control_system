@@ -38,10 +38,8 @@ public class ProductService {
     }
 
     public void updateAmountProduct(ProductAmountDto pAmountDto) {
-        if (productRepository.existsByServiceName(pAmountDto.getProductServiceName())) {
-            Product product = getProduct(pAmountDto.getProductServiceName());
-            product.setAmount(pAmountDto.getAmount());
-        }
+        if (productRepository.existsByServiceName(pAmountDto.getProductServiceName()))
+            productRepository.updateAmountByServiceName(pAmountDto.getAmount(), pAmountDto.getProductServiceName());
     }
 
     public Product getProduct(String productServiceName) {

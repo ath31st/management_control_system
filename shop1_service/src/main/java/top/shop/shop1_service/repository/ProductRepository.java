@@ -1,12 +1,18 @@
 package top.shop.shop1_service.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import top.shop.shop1_service.entity.Product;
 
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
+    @Transactional
+    @Modifying
+    @Query("update Product p set p.amount = ?1 where p.serviceName = ?2")
+    void updateAmountByServiceName(long amount, String serviceName);
     boolean existsByServiceName(String serviceName);
 
     Optional<Product> findByServiceName(String serviceName);
