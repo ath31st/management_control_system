@@ -118,7 +118,7 @@ public class DiscountService {
         d.setActive(dto.isActive());
         d.setProduct(productService.getProduct(dto.getProductServiceName()));
 
-        d.setNumberOfAvailable(d.getNumberOfAvailable());
+        d.setNumberOfAvailable(dto.getNumberOfAvailable());
         d.setPromoCode(dto.getPromoCode());
         d.setStacking(dto.isStacking());
 

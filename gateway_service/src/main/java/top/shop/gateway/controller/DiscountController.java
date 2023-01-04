@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
+import top.shop.gateway.dto.discount.CommonDiscountDto;
 import top.shop.gateway.dto.discount.DiscountDto;
 import top.shop.gateway.dto.discount.PrivateDiscountDto;
 import top.shop.gateway.service.CatalogueService;
@@ -101,6 +102,39 @@ public class DiscountController {
             bindingResult.rejectValue("productServiceName", "privateDiscountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
             model.addAttribute("privateDiscountDto", privateDiscountDto);
             return "discount-templates/new-private-discount";
+        }
+
+        return "redirect:/discounts";
+    }
+
+    @GetMapping("/new-common-discount")
+    public String commonDiscountHandler(Model model) {
+        String shopServiceName = userService.getUserAttribute("shopServiceName");
+
+        model.addAttribute("commonDiscountDto", new CommonDiscountDto());
+        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+        return "discount-templates/new-common-discount";
+    }
+
+    @PostMapping("/new-common-discount")
+    public String discountHandler(@Valid @ModelAttribute("commonDiscountDto") CommonDiscountDto commonDiscountDto,
+                                  @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
+                                  BindingResult bindingResult, Model model) {
+        String shopServiceName = userService.getUserAttribute("shopServiceName");
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+            model.addAttribute("commonDiscountDto", commonDiscountDto);
+            return "discount-templates/new-common-discount";
+        }
+        try {
+            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, commonDiscountDto, shopServiceName);
+            discountService.sendDiscountWrapper(discountWrapper, shopUrl);
+        } catch (HttpClientErrorException e) {
+            bindingResult.rejectValue("productServiceName", "commonDiscountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
+            model.addAttribute("commonDiscountDto", commonDiscountDto);
+            return "discount-templates/new-common-discount";
         }
 
         return "redirect:/discounts";

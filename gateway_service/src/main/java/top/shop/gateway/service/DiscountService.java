@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import top.shop.gateway.dto.discount.CommonDiscountDto;
 import top.shop.gateway.dto.discount.DiscountDto;
 import top.shop.gateway.dto.discount.PrivateDiscountDto;
 import top.shop.gateway.util.TokenExtractor;
@@ -41,6 +42,17 @@ public class DiscountService {
                 .toList();
 
         discountWrapper.setDiscountList(dtoList);
+        return discountWrapper;
+    }
+
+    public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, CommonDiscountDto dtoFromForm, String shopServiceName) {
+        DiscountWrapper discountWrapper = new DiscountWrapper();
+
+        List<CommonDiscountDto> dtoList = Arrays.stream(productServiceNames)
+                .map(s -> prepareCommonDiscountDto(s, dtoFromForm, shopServiceName))
+                .toList();
+
+        discountWrapper.setCommonDiscountList(dtoList);
         return discountWrapper;
     }
 
@@ -85,9 +97,25 @@ public class DiscountService {
         dto.setEndingDate(dtoFromForm.getEndingDate());
         dto.setPercentageDiscount(dtoFromForm.getPercentageDiscount());
         dto.setActive(dtoFromForm.isActive());
+
         dto.setStacking(dtoFromForm.isStacking());
         dto.setPromoCode(dtoFromForm.getPromoCode());
         dto.setCustomerUsername(customerUsername);
+        return dto;
+    }
+
+    private CommonDiscountDto prepareCommonDiscountDto(String productServiceName, CommonDiscountDto dtoFromForm, String shopServiceName) {
+        CommonDiscountDto dto = new CommonDiscountDto();
+        dto.setProductServiceName(productServiceName);
+        dto.setShopServiceName(shopServiceName);
+        dto.setStartingDate(dtoFromForm.getStartingDate());
+        dto.setEndingDate(dtoFromForm.getEndingDate());
+        dto.setPercentageDiscount(dtoFromForm.getPercentageDiscount());
+        dto.setActive(dtoFromForm.isActive());
+
+        dto.setStacking(dtoFromForm.isStacking());
+        dto.setPromoCode(dtoFromForm.getPromoCode());
+        dto.setNumberOfAvailable(dtoFromForm.getNumberOfAvailable());
         return dto;
     }
 }
