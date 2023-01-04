@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Entity
 @ToString
 @NoArgsConstructor
+@DiscriminatorValue("1")
 public class PrivateDiscount extends Discount {
     private String promoCode;
     private boolean isStacking;

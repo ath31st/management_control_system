@@ -1,7 +1,12 @@
 package top.shop.shop1_service.repository.discount;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import top.shop.shop1_service.entity.discount.Discount;
 
+import java.util.List;
+
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
+    @Query(value = "SELECT * FROM discounts WHERE discount_type = 0", nativeQuery = true)
+    List<Discount> findAllDiscount();
 }

@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "discounts")
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name="discount_type",
+        discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorValue("0")
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -90,7 +90,7 @@
                         <tr>
                             <th> Product name</th>
                             <th> Promo code</th>
-                            <th> Customer username</th>
+                            <th> Customer email</th>
                             <th> Starting date</th>
                             <th> Ending date</th>
                             <th> Percentage discount</th>
@@ -101,7 +101,7 @@
                         <tr th:each="privateDiscount: ${privateDiscounts}">
                             <td th:text="${privateDiscount.productName}">product name</td>
                             <td th:text="${privateDiscount.promoCode}">promo code</td>
-                            <td th:text="${privateDiscount.customerUsername}">customer username</td>
+                            <td th:text="${privateDiscount.customerEmail}">customer email</td>
                             <td th:text="${#temporals.format(privateDiscount.startingDate, 'dd MMM yyyy HH:mm')}">
                                 starting
                                 date

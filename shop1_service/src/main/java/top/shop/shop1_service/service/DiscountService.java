@@ -35,7 +35,7 @@ public class DiscountService {
     }
 
     public List<DiscountDto> getDiscountDtoList() {
-        return discountRepository.findAll()
+        return discountRepository.findAllDiscount()
                 .stream()
                 .map(this::discountToDtoConverter)
                 .toList();
