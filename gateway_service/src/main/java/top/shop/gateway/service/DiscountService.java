@@ -10,10 +10,7 @@ import top.shop.gateway.dto.discount.PrivateDiscountDto;
 import top.shop.gateway.util.TokenExtractor;
 import top.shop.gateway.util.wrapper.DiscountWrapper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,44 +26,56 @@ public class DiscountService {
     }
 
     public void sendDiscountWrapper(DiscountWrapper discountWrapper, String shopUrl) {
+        if (discountWrapper.getDiscountList().isEmpty() & discountWrapper.getPrivateDiscountList().isEmpty() &
+                discountWrapper.getCommonDiscountList().isEmpty()) return;
+
         String url = shopUrl + "/api/new-discount";
 
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(discountWrapper), DiscountWrapper.class);
     }
 
     public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, DiscountDto dtoFromForm, String shopServiceName) {
-        DiscountWrapper discountWrapper = new DiscountWrapper();
+        DiscountWrapper discountWrapper = createEmptyWrapper();
 
-        List<DiscountDto> dtoList = Arrays.stream(productServiceNames)
-                .map(s -> prepareDiscountDto(s, dtoFromForm, shopServiceName))
-                .toList();
+        if (productServiceNames != null) {
+            List<DiscountDto> dtoList = Arrays.stream(productServiceNames)
+                    .map(s -> prepareDiscountDto(s, dtoFromForm, shopServiceName))
+                    .toList();
 
-        discountWrapper.setDiscountList(dtoList);
+            discountWrapper.setDiscountList(dtoList);
+        }
+
         return discountWrapper;
     }
 
     public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, CommonDiscountDto dtoFromForm, String shopServiceName) {
-        DiscountWrapper discountWrapper = new DiscountWrapper();
+        DiscountWrapper discountWrapper = createEmptyWrapper();
 
-        List<CommonDiscountDto> dtoList = Arrays.stream(productServiceNames)
-                .map(s -> prepareCommonDiscountDto(s, dtoFromForm, shopServiceName))
-                .toList();
+        if (productServiceNames != null) {
+            List<CommonDiscountDto> dtoList = Arrays.stream(productServiceNames)
+                    .map(s -> prepareCommonDiscountDto(s, dtoFromForm, shopServiceName))
+                    .toList();
 
-        discountWrapper.setCommonDiscountList(dtoList);
+            discountWrapper.setCommonDiscountList(dtoList);
+        }
+
         return discountWrapper;
     }
 
     public DiscountWrapper prepareDiscountWrapper(String[] productServiceNames, String[] customers, PrivateDiscountDto dtoFromForm, String shopServiceName) {
-        DiscountWrapper discountWrapper = new DiscountWrapper();
+        DiscountWrapper discountWrapper = createEmptyWrapper();
 
-        List<PrivateDiscountDto> pDtoList = new ArrayList<>();
-        Arrays.stream(customers)
-                .map(c -> Arrays.stream(productServiceNames)
-                        .map(p -> preparePrivateDiscountDto(p, c, dtoFromForm, shopServiceName))
-                        .toList())
-                .forEach(pDtoList::addAll);
+        if (productServiceNames != null & customers != null) {
+            List<PrivateDiscountDto> pDtoList = new ArrayList<>();
+            Arrays.stream(customers)
+                    .map(c -> Arrays.stream(productServiceNames)
+                            .map(p -> preparePrivateDiscountDto(p, c, dtoFromForm, shopServiceName))
+                            .toList())
+                    .forEach(pDtoList::addAll);
 
-        discountWrapper.setPrivateDiscountList(pDtoList);
+            discountWrapper.setPrivateDiscountList(pDtoList);
+        }
+
         return discountWrapper;
     }
 
@@ -117,5 +126,13 @@ public class DiscountService {
         dto.setPromoCode(dtoFromForm.getPromoCode());
         dto.setNumberOfAvailable(dtoFromForm.getNumberOfAvailable());
         return dto;
+    }
+
+    private DiscountWrapper createEmptyWrapper() {
+        DiscountWrapper wrapper = new DiscountWrapper();
+        wrapper.setDiscountList(Collections.emptyList());
+        wrapper.setPrivateDiscountList(Collections.emptyList());
+        wrapper.setCommonDiscountList(Collections.emptyList());
+        return wrapper;
     }
 }

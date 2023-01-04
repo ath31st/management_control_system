@@ -6,14 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class DiscountDto {
-    private String productServiceName;  //TODO make validation on fields
+    private String productServiceName;
     private String productName;
     private String shopServiceName;
     private String shopName;
@@ -21,6 +24,8 @@ public class DiscountDto {
     private LocalDateTime startingDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endingDate;
+    @Min(value = 1, message = "Discount cannot be lower 1%")
+    @Max(value = 99, message = "Discount cannot be higher 99%")
     private float percentageDiscount;
     private boolean isActive;
 }

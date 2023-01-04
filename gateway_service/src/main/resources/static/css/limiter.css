@@ -28,10 +28,10 @@
     transition: 0.3s;
 }
 [data-more-checker^="read-more"] ~ .read-more-button:before  {
-    content: "Развернуть »";
+    content: "Expand »";
 }
 [data-more-checker^="read-more"]:checked ~ .read-more-button:before {
-    content: "Свернуть «";
+    content: "Collapse «";
 }
 
 .read-more-button {
