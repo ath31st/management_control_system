@@ -10,5 +10,5 @@ import lombok.Setter;
 public class PrivateDiscountDto extends DiscountDto {
     private String promoCode;
     private boolean isStacking;
-    private String customerUsername;
+    private String customerEmail;
 }

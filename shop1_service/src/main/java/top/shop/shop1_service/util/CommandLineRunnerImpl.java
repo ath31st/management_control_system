@@ -25,10 +25,12 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         CustomerDto dto1 = new CustomerDto();
         dto1.setBalance(BigDecimal.valueOf(106770));
         dto1.setUsername("first_customer");
+        dto1.setEmail("first@mail.com");
 
         CustomerDto dto2 = new CustomerDto();
         dto2.setBalance(BigDecimal.valueOf(550342));
         dto2.setUsername("second_customer");
+        dto2.setEmail("second@mail.com");
 
         customerService.saveCustomer(dto1);
         customerService.saveCustomer(dto2);

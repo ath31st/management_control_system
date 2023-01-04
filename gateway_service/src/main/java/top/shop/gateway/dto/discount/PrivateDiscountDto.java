@@ -17,5 +17,5 @@ public class PrivateDiscountDto extends DiscountDto {
     @Size(min = 3, max = 20, message = "Promo code string must be minimum 3 and maximum 20 characters.")
     private String promoCode;
     private boolean isStacking;
-    private String customerUsername;
+    private String customerEmail;
 }

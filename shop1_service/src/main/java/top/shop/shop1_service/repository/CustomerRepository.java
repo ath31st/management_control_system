@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 import top.shop.shop1_service.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 
-    Customer findByUsername(String username);
-    @Query(value = "select c.username from Customer c")
-    String[] customersUsername();
+    Customer findByEmail(String email);
+    @Query(value = "select c.email from Customer c")
+    String[] customersEmail();
 }

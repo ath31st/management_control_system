@@ -37,11 +37,11 @@
                     <tr>
                         <td>List customers:</td>
                         <td><select class="form-control selectpicker" name="customers" multiple title="Choose customers for private discount">
-                            <option th:each="customer : ${customersUsername}"
+                            <option th:each="customer : ${customersEmail}"
                                     th:value="${customer}"
                                     th:text="${customer}">
                         </select></td>
-                        <td th:if="${#fields.hasErrors('customerUsername')}" th:errors="*{customerUsername}">Customer username Error</td>
+                        <td th:if="${#fields.hasErrors('customersEmail')}" th:errors="*{customerEmail}">Customer email Error</td>
                     </tr>
                     <tr>
                         <td>Promo code:</td>

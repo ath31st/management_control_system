@@ -41,7 +41,7 @@ public class OrderService {
                 .status(OrderStatus.CREATED)
                 .payment(modelMapper.map(orderDto.getPaymentDto(), Payment.class))
                 .orderDate(orderDto.getOrderDate())
-                .customerName(orderDto.getCustomerName())
+                .customerEmail(orderDto.getCustomerEmail())
                 .productName(orderDto.getProductName())
                 .shop(shopService.getShop(orderDto.getShopServiceName()))
                 .build();
@@ -102,7 +102,7 @@ public class OrderService {
             case REJECTED -> {
                 productService.increaseAmountProduct(dto.getAmount(), dto.getProductName());
                 shopService.moneyBackFromBalance(dto.getTotalPrice(), dto.getShopServiceName());
-                paymentService.chargeBack(dto.getCustomerName(), dto.getTotalPrice());
+                paymentService.chargeBack(dto.getCustomerEmail(), dto.getTotalPrice());
                 order.setStatus(OrderStatus.REJECTED);
             }
         }
@@ -116,7 +116,7 @@ public class OrderService {
                 .deliveryStatus(DeliveryStatus.IN_TRANSIT)
                 .orderUuidNumber(order.getPayment().getPaymentUuid())
                 .amount(order.getAmount())
-                .customerName(order.getCustomerName())
+                .customerEmail(order.getCustomerEmail())
                 .shopServiceName(order.getShop().getServiceName())
                 .shopName(order.getShop().getName())
                 .productName(order.getProductName())

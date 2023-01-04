@@ -64,6 +64,7 @@ public class DiscountController {
             discountService.sendDiscountWrapper(discountWrapper, shopUrl);
         } catch (HttpClientErrorException e) {
             bindingResult.rejectValue("productServiceName", "discountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
+            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
             model.addAttribute("discountDto", discountDto);
             return "discount-templates/new-discount";
         }
@@ -76,7 +77,7 @@ public class DiscountController {
         String shopServiceName = userService.getUserAttribute("shopServiceName");
         String shopUrl = userService.getUserAttribute("shopUrl");
 
-        model.addAttribute("customersUsername", discountService.getCustomersUsername(shopUrl));
+        model.addAttribute("customersEmail", discountService.getCustomersEmail(shopUrl));
         model.addAttribute("privateDiscountDto", new PrivateDiscountDto());
         model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
         return "discount-templates/new-private-discount";

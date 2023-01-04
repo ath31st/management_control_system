@@ -6,18 +6,17 @@ import top.shop.shop1_service.dto.CustomerDto;
 import top.shop.shop1_service.entity.Customer;
 import top.shop.shop1_service.repository.CustomerRepository;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
 
     public Customer saveCustomer(CustomerDto dto) {
-        if (customerRepository.existsByUsername(dto.getUsername())) {
-            return getCustomer(dto.getUsername());
+        if (customerRepository.existsByEmail(dto.getEmail())) {
+            return getCustomer(dto.getEmail());
         } else {
             Customer customer = new Customer();
+            customer.setEmail(dto.getEmail());
             customer.setBalance(dto.getBalance());
             customer.setUsername(dto.getUsername());
 
@@ -25,15 +24,15 @@ public class CustomerService {
         }
     }
 
-    public Customer getCustomer(String username) {
-        return customerRepository.findByUsername(username);
+    public Customer getCustomer(String email) {
+        return customerRepository.findByEmail(email);
     }
 
-    public String[] getCustomersUsername() {
-        return customerRepository.customersUsername();
+    public String[] getCustomersEmail() {
+        return customerRepository.customersEmail();
     }
 
-    public boolean isExistsCustomer(String username) {
-        return customerRepository.existsByUsername(username);
+    public boolean isExistsCustomer(String email) {
+        return customerRepository.existsByEmail(email);
     }
 }

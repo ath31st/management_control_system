@@ -11,6 +11,8 @@ import top.shop.shop1_service.exceptionhandler.exception.DeliveryServiceExceptio
 import top.shop.shop1_service.repository.DeliveryOrderRepository;
 import top.shop.shop1_service.util.DeliveryStatus;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -76,9 +78,9 @@ public class DeliveryService {
         deliveryOrder.setAmount(dto.getAmount());
         deliveryOrder.setTotalPrice(dto.getTotalPrice());
         deliveryOrder.setDeliveryStatus(dto.getDeliveryStatus());
-        deliveryOrder.setProducts(List.of(productService.getProduct(dto.getProductName())));
+        deliveryOrder.setProducts(Collections.singletonList(productService.getProduct(dto.getProductName())));
         deliveryOrder.setPayment(paymentService.getPayment(dto.getOrderUuidNumber()));
-        deliveryOrder.setCustomer(customerService.getCustomer(dto.getCustomerName()));
+        deliveryOrder.setCustomer(customerService.getCustomer(dto.getCustomerEmail()));
 
         return deliveryOrderRepository.save(deliveryOrder);
     }
@@ -89,7 +91,7 @@ public class DeliveryService {
         dto.setShopServiceName(order.getShopServiceName());
         dto.setShopName(order.getShopName());
         dto.setProductName(order.getProducts().get(0).getName());
-        dto.setCustomerName(order.getCustomer().getUsername());
+        dto.setCustomerEmail(order.getCustomer().getEmail());
         dto.setAmount(order.getAmount());
         dto.setTotalPrice(order.getTotalPrice());
         dto.setDeliveryStatus(order.getDeliveryStatus());

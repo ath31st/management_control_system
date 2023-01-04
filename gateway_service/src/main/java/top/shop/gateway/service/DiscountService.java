@@ -79,7 +79,7 @@ public class DiscountService {
         return discountWrapper;
     }
 
-    public List<String> getCustomersUsername(String shopUrl) {
+    public List<String> getCustomersEmail(String shopUrl) {
         String url = shopUrl + "/api/customers";
 
         return List.of(Objects.requireNonNull(restTemplate.exchange(RequestEntity.get(url)
@@ -98,7 +98,7 @@ public class DiscountService {
         return dto;
     }
 
-    private PrivateDiscountDto preparePrivateDiscountDto(String productServiceName, String customerUsername, PrivateDiscountDto dtoFromForm, String shopServiceName) {
+    private PrivateDiscountDto preparePrivateDiscountDto(String productServiceName, String customerEmail, PrivateDiscountDto dtoFromForm, String shopServiceName) {
         PrivateDiscountDto dto = new PrivateDiscountDto();
         dto.setProductServiceName(productServiceName);
         dto.setShopServiceName(shopServiceName);
@@ -109,7 +109,7 @@ public class DiscountService {
 
         dto.setStacking(dtoFromForm.isStacking());
         dto.setPromoCode(dtoFromForm.getPromoCode());
-        dto.setCustomerUsername(customerUsername);
+        dto.setCustomerEmail(customerEmail);
         return dto;
     }
 

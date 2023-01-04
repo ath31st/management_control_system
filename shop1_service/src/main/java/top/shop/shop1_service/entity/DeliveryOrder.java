@@ -8,6 +8,7 @@ import top.shop.shop1_service.util.DeliveryStatus;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
@@ -25,7 +26,11 @@ public class DeliveryOrder {
     private int amount;
     private double totalPrice;
     private DeliveryStatus deliveryStatus;
-    @ManyToMany(mappedBy = "deliveryOrders")
+    @ManyToMany
+    @JoinTable(
+            name = "product_deliveryOrder",
+            joinColumns = @JoinColumn(name = "deliveryOrder_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     @ToString.Exclude
     private List<Product> products;
     @OneToOne
@@ -35,4 +40,30 @@ public class DeliveryOrder {
     @JoinColumn(name = "customer_id", nullable = false)
     @ToString.Exclude
     private Customer customer;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryOrder that = (DeliveryOrder) o;
+        return Objects.equals(id, that.id) && Objects.equals(orderUuidNumber, that.orderUuidNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, orderUuidNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "DeliveryOrder{" +
+                "id=" + id +
+                ", orderUuidNumber='" + orderUuidNumber + '\'' +
+                ", shopServiceName='" + shopServiceName + '\'' +
+                ", shopName='" + shopName + '\'' +
+                ", amount=" + amount +
+                ", totalPrice=" + totalPrice +
+                ", deliveryStatus=" + deliveryStatus +
+                '}';
+    }
 }

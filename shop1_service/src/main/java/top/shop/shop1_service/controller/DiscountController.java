@@ -8,8 +8,6 @@ import top.shop.shop1_service.service.CustomerService;
 import top.shop.shop1_service.service.DiscountService;
 import top.shop.shop1_service.util.wrapper.DiscountWrapper;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -38,6 +36,6 @@ public class DiscountController {
 
     @GetMapping("/customers")
     public ResponseEntity<String[]> getCustomersList() {
-        return ResponseEntity.ok(customerService.getCustomersUsername());
+        return ResponseEntity.ok(customerService.getCustomersEmail());
     }
 }

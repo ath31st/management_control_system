@@ -9,7 +9,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,5 +37,15 @@ public class Category {
     @Override
     public int hashCode() {
         return Objects.hash(id, serviceName);
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

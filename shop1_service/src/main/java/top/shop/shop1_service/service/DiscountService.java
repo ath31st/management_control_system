@@ -76,7 +76,7 @@ public class DiscountService {
         dto.setPercentageDiscount(privateDiscount.getPercentageDiscount());
         dto.setActive(privateDiscount.isActive());
 
-        dto.setCustomerUsername(privateDiscount.getCustomer().getUsername());
+        dto.setCustomerEmail(privateDiscount.getCustomer().getEmail());
         dto.setPromoCode(privateDiscount.getPromoCode());
         dto.setStacking(privateDiscount.isStacking());
 
@@ -133,7 +133,7 @@ public class DiscountService {
         d.setActive(dto.isActive());
         d.setProduct(productService.getProduct(dto.getProductServiceName()));
 
-        d.setCustomer(customerService.getCustomer(dto.getCustomerUsername()));
+        d.setCustomer(customerService.getCustomer(dto.getCustomerEmail()));
         d.setPromoCode(dto.getPromoCode());
         d.setStacking(dto.isStacking());
 

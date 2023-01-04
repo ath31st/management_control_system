@@ -21,6 +21,7 @@ public class Customer {
     @Column(name = "id", nullable = false)
     private Long id;
     private String username;
+    private String email;
     private BigDecimal balance;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     @ToString.Exclude

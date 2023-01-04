@@ -25,7 +25,7 @@ public class Order {
     @JoinColumn(name = "shop_id")
     private Shop shop;
     private String productName;
-    private String customerName;
+    private String customerEmail;
     private LocalDateTime orderDate;
     private LocalDateTime executionDate;
     private OrderStatus status;

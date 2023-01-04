@@ -13,5 +13,6 @@ import java.math.BigDecimal;
 @Setter
 public class CustomerDto {
     private String username;
+    private String email;
     private BigDecimal balance;
 }

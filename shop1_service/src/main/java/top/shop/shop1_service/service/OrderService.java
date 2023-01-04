@@ -30,9 +30,9 @@ public class OrderService {
     public PaymentDto createOrder(OrderDto orderDto) {
         checkAvailableProductForSale(orderDto.getProductName());
         checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
-        checkExistsCustomer(orderDto.getCustomerName());
+        checkExistsCustomer(orderDto.getCustomerEmail());
 
-        Customer customer = customerService.getCustomer(orderDto.getCustomerName());
+        Customer customer = customerService.getCustomer(orderDto.getCustomerEmail());
 
         PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(
                 paymentService.createPayment(customer, orderDto.getProductName(), orderDto.getAmount()));
@@ -61,9 +61,9 @@ public class OrderService {
             throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is not enough for the order");
     }
 
-    private void checkExistsCustomer(String username) {
-        if (!customerService.isExistsCustomer(username))
-            throw new CustomerServiceException(HttpStatus.NOT_FOUND, "The customer with username: " + username + " not found.");
+    private void checkExistsCustomer(String email) {
+        if (!customerService.isExistsCustomer(email))
+            throw new CustomerServiceException(HttpStatus.NOT_FOUND, "The customer with email: " + email + " not found.");
     }
 
 }

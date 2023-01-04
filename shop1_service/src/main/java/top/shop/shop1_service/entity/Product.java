@@ -6,12 +6,12 @@ import top.shop.shop1_service.entity.discount.Discount;
 import top.shop.shop1_service.entity.discount.PrivateDiscount;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "products")
@@ -45,11 +45,31 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "privateDiscount_id")
     private PrivateDiscount privateDiscount;
-    @ManyToMany
-    @JoinTable(
-            name = "product_deliveryOrder",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "deliveryOrder_id"))
+    @ManyToMany(mappedBy = "products")
     @ToString.Exclude
-    private Set<DeliveryOrder> deliveryOrders;
+    private List<DeliveryOrder> deliveryOrders;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(serviceName, product.serviceName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, serviceName);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }
