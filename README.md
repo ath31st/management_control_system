@@ -31,8 +31,8 @@ Despite the shortcomings and errors (including architectural ones), this is a gr
 ## Project objectives
 ### What has already been implemented
 
-- Backend service (receiving, processing, delivering orders, making payments, refunding funds, creating, updating, mailing catalogs)
-- Shop service (providing catalogs, placing orders, issuing deliveries, returning deliveries, initial payment processing)
+- Backend service (receiving, processing, delivering orders, making payments, refunding funds, ~~creating, updating, mailing~~, storing catalogs)
+- Shop service (creating, updating, mailing catalogs, placing orders, issuing deliveries, returning deliveries, initial payment processing)
 - Gateway service (for the administrator - editing users, adding storage. for managers - creating and editing catalogs)
 - Integrating in project a message broker Apache Kafka
 - Integration authentication server where users can centrally login, logout, register, and manage their user accounts. 
