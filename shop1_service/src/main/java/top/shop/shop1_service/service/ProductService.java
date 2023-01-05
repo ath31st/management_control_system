@@ -39,8 +39,8 @@ public class ProductService {
         }
     }
 
-    public List<Product> getProductsByListServiceNames(List<String> serviceNames) {
-        return productRepository.getProductsByList("'" + String.join(",", serviceNames) + "'");
+    public List<Product> getProductsByListServiceNames(List<String> listNames) {
+        return productRepository.getProductsByList(listNames);
     }
 
     public void updateAmountProduct(ProductAmountDto pAmountDto) {

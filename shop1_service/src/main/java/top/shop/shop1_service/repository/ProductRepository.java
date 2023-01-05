@@ -17,8 +17,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     boolean existsByServiceName(String serviceName);
 
-    @Query(value = "SELECT * FROM products WHERE service_name = ANY(ARRAY [:serviceNames])", nativeQuery = true)
-    List<Product> getProductsByList(String serviceNames);
+    @Query(value = "SELECT * FROM products WHERE service_name IN(:serviceNames)", nativeQuery = true)
+    List<Product> getProductsByList(List<String> serviceNames);
 
     Optional<Product> findByServiceName(String serviceName);
 

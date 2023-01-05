@@ -38,7 +38,6 @@ public class CatalogueController {
     public String catalogue(@Valid @ModelAttribute("productPricingWrapper") ProductPricingWrapper productPricingWrapper,
                             BindingResult bindingResult,
                             Model model) {
-        String shopServiceName = userService.getUserAttribute("shopServiceName");
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
