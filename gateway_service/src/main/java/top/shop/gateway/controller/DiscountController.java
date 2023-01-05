@@ -43,7 +43,7 @@ public class DiscountController {
         String shopServiceName = userService.getUserAttribute("shopServiceName");
 
         model.addAttribute("discountDto", new DiscountDto());
-        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromShop(shopServiceName).getProducts());
         return "discount-templates/new-discount";
     }
 
@@ -55,7 +55,7 @@ public class DiscountController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromShop(shopServiceName).getProducts());
             model.addAttribute("discountDto", discountDto);
             return "discount-templates/new-discount";
         }
@@ -64,7 +64,7 @@ public class DiscountController {
             discountService.sendDiscountWrapper(discountWrapper, shopUrl);
         } catch (HttpClientErrorException e) {
             bindingResult.rejectValue("productServiceName", "discountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
-            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromShop(shopServiceName).getProducts());
             model.addAttribute("discountDto", discountDto);
             return "discount-templates/new-discount";
         }
@@ -79,7 +79,7 @@ public class DiscountController {
 
         model.addAttribute("customersEmail", discountService.getCustomersEmail(shopUrl));
         model.addAttribute("privateDiscountDto", new PrivateDiscountDto());
-        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromShop(shopServiceName).getProducts());
         return "discount-templates/new-private-discount";
     }
 
@@ -92,7 +92,7 @@ public class DiscountController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromShop(shopServiceName).getProducts());
             model.addAttribute("privateDiscountDto", privateDiscountDto);
             return "discount-templates/new-private-discount";
         }
@@ -113,7 +113,7 @@ public class DiscountController {
         String shopServiceName = userService.getUserAttribute("shopServiceName");
 
         model.addAttribute("commonDiscountDto", new CommonDiscountDto());
-        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+        model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromShop(shopServiceName).getProducts());
         return "discount-templates/new-common-discount";
     }
 
@@ -125,7 +125,7 @@ public class DiscountController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromStorage(shopServiceName).getProducts());
+            model.addAttribute("productListFromCatalogue", catalogueService.getCatalogueFromShop(shopServiceName).getProducts());
             model.addAttribute("commonDiscountDto", commonDiscountDto);
             return "discount-templates/new-common-discount";
         }

@@ -1,11 +1,12 @@
 package top.shop.backend.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.shop.backend.dto.CatalogueDto;
-import top.shop.backend.dto.product.ProductServiceNameDto;
 import top.shop.backend.service.CatalogueService;
 
 @RestController
@@ -18,17 +19,5 @@ public class CatalogueController {
     @GetMapping("/catalogue/{shopServiceName}")
     public ResponseEntity<CatalogueDto> catalogue(@PathVariable String shopServiceName) {
         return ResponseEntity.ok(catalogueService.getCatalogueDto(shopServiceName));
-    }
-
-    @PostMapping("/catalogue")
-    public ResponseEntity<HttpStatus> catalogueHandler(@RequestBody CatalogueDto catalogueDto) {
-        catalogueService.catalogueHandler(catalogueDto);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/catalogue-changes")
-    public ResponseEntity<HttpStatus> catalogueChangesHandler(@RequestBody ProductServiceNameDto productServiceNameDto) {
-        catalogueService.updateCatalogue(productServiceNameDto);
-        return ResponseEntity.ok().build();
     }
 }

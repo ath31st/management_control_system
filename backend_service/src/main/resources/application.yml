@@ -28,7 +28,7 @@ spring:
     database: POSTGRESQL
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
   kafka:
     #bootstrap-servers: "kafka:9092"

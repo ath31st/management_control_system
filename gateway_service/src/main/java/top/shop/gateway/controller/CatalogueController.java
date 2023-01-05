@@ -29,7 +29,7 @@ public class CatalogueController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         model.addAttribute("shopServiceName", shopServiceName);
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(shopServiceName));
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromShop(shopUrl));
         model.addAttribute("productPricingWrapper", catalogueService.getProductPricingWrapperFromShop(shopUrl));
         return "catalogue-templates/catalogue";
     }
@@ -42,7 +42,7 @@ public class CatalogueController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(shopServiceName));
+            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromShop(shopUrl));
             model.addAttribute("productPricingWrapper", productPricingWrapper);
             return "catalogue-templates/catalogue";
         }
@@ -65,6 +65,7 @@ public class CatalogueController {
                                   @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
                                   BindingResult bindingResult, Model model) {
         String shopServiceName = userService.getUserAttribute("shopServiceName");
+        String shopUrl = userService.getUserAttribute("shopUrl");
         ProductWrapper productWrapper = storageService.getProductWrapper();
 
         if (bindingResult.hasErrors()) {
@@ -74,7 +75,7 @@ public class CatalogueController {
         }
         try {
             catalogueDto = catalogueService.prepareCatalogue(shopServiceName, productServiceNames, productWrapper);
-            catalogueService.sendCatalogueToStorage(catalogueDto);
+            catalogueService.sendCatalogueToShop(catalogueDto, shopUrl);
         } catch (HttpClientErrorException e) {
             model.addAttribute("productWrapper", productWrapper);
             model.addAttribute("catalogueDto", catalogueDto);
@@ -84,9 +85,10 @@ public class CatalogueController {
         return "redirect:/catalogue";
     }
 
-    @GetMapping("/edit-catalogue/{shopServiceName}")
-    public String updateCatalogue(@PathVariable String shopServiceName, Model model) {
-        CatalogueDto catalogueDto = catalogueService.getCatalogueFromStorage(shopServiceName);
+    @GetMapping("/edit-catalogue")
+    public String updateCatalogue(Model model) {
+        String shopUrl = userService.getUserAttribute("shopUrl");
+        CatalogueDto catalogueDto = catalogueService.getCatalogueFromShop(shopUrl);
         ProductWrapper productWrapper = storageService.getProductWrapperWithoutCatalogue(catalogueDto);
 
         model.addAttribute("productWrapper", productWrapper);
@@ -99,13 +101,15 @@ public class CatalogueController {
                                   @RequestParam(value = "addProductServiceNames", required = false) String[] addProductServiceNames,
                                   @RequestParam(value = "deleteProductServiceNames", required = false) String[] deleteProductServiceNames,
                                   BindingResult bindingResult, Model model) {
+        String shopUrl = userService.getUserAttribute("shopUrl");
         String shopServiceName = userService.getUserAttribute("shopServiceName");
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("catalogueDto", catalogueDto);
             return "catalogue-templates/edit-catalogue";
         }
         model.addAttribute("catalogueDto", catalogueDto);
-        catalogueService.sendCatalogueChangesToStorage(shopServiceName, addProductServiceNames, deleteProductServiceNames);
+        catalogueService.sendCatalogueChangesToShop(shopServiceName, shopUrl, addProductServiceNames, deleteProductServiceNames);
         return "redirect:/catalogue";
     }
 

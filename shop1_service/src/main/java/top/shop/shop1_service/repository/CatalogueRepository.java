@@ -8,4 +8,7 @@ import java.util.Optional;
 
 public interface CatalogueRepository extends JpaRepository<Catalogue, Long> {
     Optional<Catalogue> findCatalogueByShopServiceName(String shopServiceName);
+
+    boolean existsByShopServiceName(String shopServiceName);
+
 }

@@ -11,6 +11,8 @@ import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.ProductServiceException;
 import top.shop.shop1_service.repository.ProductRepository;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,10 @@ public class ProductService {
 
             return productRepository.save(p);
         }
+    }
+
+    public List<Product> getProductsByListServiceNames(List<String> serviceNames) {
+        return productRepository.getProductsByList("'" + String.join(",", serviceNames) + "'");
     }
 
     public void updateAmountProduct(ProductAmountDto pAmountDto) {

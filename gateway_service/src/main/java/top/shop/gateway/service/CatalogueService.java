@@ -2,7 +2,6 @@ package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import top.shop.gateway.dto.CatalogueDto;
-import top.shop.gateway.dto.CategoryDto;
 import top.shop.gateway.dto.product.ProductServiceNameDto;
 import top.shop.gateway.util.TokenExtractor;
 import top.shop.gateway.util.wrapper.ProductPricingWrapper;
@@ -25,13 +23,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CatalogueService {
-
-    @Value("${backend.url}")
-    private String backendUrl;
     private final RestTemplate restTemplate;
 
-    public CatalogueDto getCatalogueFromStorage(String shopNameService) {
-        String url = backendUrl + "/api/catalogue/" + shopNameService;
+    public CatalogueDto getCatalogueFromShop(String shopUrl) {
+        String url = shopUrl + "/api/manager/catalogue/";
 
         try {
             return restTemplate.exchange(RequestEntity.get(url)
@@ -42,7 +37,7 @@ public class CatalogueService {
                 return CatalogueDto.builder()
                         .products(Collections.emptyList())
                         .catalogueOnDate(LocalDateTime.now())
-                        .shopServiceName(shopNameService)
+                        .shopServiceName(shopUrl)
                         .build();
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,12 +56,12 @@ public class CatalogueService {
                 .build();
     }
 
-    public void sendCatalogueToStorage(CatalogueDto catalogueDto) {
-        String url = backendUrl + "/api/catalogue";
+    public void sendCatalogueToShop(CatalogueDto catalogueDto, String shopUrl) {
+        String url = shopUrl + "/api/manager/catalogue";
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(catalogueDto), CatalogueDto.class);
     }
 
-    public void sendCatalogueChangesToStorage(String shopServiceName, String[] add, String[] delete) {
+    public void sendCatalogueChangesToShop(String shopServiceName, String shopUrl, String[] add, String[] delete) {
         ProductServiceNameDto productServiceNameDto = new ProductServiceNameDto();
         productServiceNameDto.setShopServiceName(shopServiceName);
 
@@ -82,7 +77,7 @@ public class CatalogueService {
             productServiceNameDto.setDeleteProductServiceNames(Collections.emptyList());
         }
 
-        String url = backendUrl + "/api/catalogue-changes";
+        String url = shopUrl + "/api/manager/catalogue-changes";
         restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(productServiceNameDto), ProductServiceNameDto.class);
     }
 
