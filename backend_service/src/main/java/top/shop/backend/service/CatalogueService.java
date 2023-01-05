@@ -1,7 +1,6 @@
 package top.shop.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.backend.dto.CatalogueDto;
@@ -21,7 +20,6 @@ public class CatalogueService {
     private final CatalogueRepository catalogueRepository;
     private final ShopService shopService;
     private final ProductService productService;
-    private final ApplicationEventPublisher eventPublisher;
 
     public Catalogue getCatalogue(String shopServiceName) {
         return catalogueRepository.findByShop_ServiceName(shopServiceName).orElseThrow(
@@ -53,41 +51,5 @@ public class CatalogueService {
 
         catalogueRepository.save(catalogue);
     }
-
-//    public Catalogue updateCatalogue(ProductServiceNameDto productServiceNameDto) {
-//        Catalogue catalogue = getCatalogue(productServiceNameDto.getShopServiceName());
-//
-//        List<Product> products = new java.util.ArrayList<>(catalogue.getProducts()
-//                .stream()
-//                .filter(p -> !productServiceNameDto.getDeleteProductServiceNames().contains(p.getServiceName()))
-//                .toList());
-//        products.addAll(productService.getProductsByListServiceNames(productServiceNameDto.getAddProductServiceNames()));
-//        products.sort(Comparator.comparing(Product::getServiceName));
-//
-//        catalogue.setProducts(products);
-//
-//        CatalogueDto catalogueDto = getCatalogueDto(productServiceNameDto.getShopServiceName());
-//  //      eventPublisher.publishEvent(new CatalogueEvent(catalogueDto));
-//
-//        return catalogueRepository.save(catalogue);
-//    }
-
-//    public void catalogueHandler(CatalogueDto catalogueDto) {
-//        //  if (!catalogueRepository.existsByShop_ServiceName(catalogueDto.getShopServiceName())) {
-//        createCatalogue(catalogueDto);
-//
-//        CatalogueDto catalogue = getCatalogueDto(catalogueDto.getShopServiceName());
-//  //      eventPublisher.publishEvent(new CatalogueEvent(catalogue));
-//        //   }
-//    }
-
-//    @EventListener
-//    public void sendCatalogue(CatalogueEvent event) {
-//        try {
-//            catalogueProducer.sendMessage((CatalogueDto) event.getSource());
-//        } catch (JsonProcessingException e) {
-//            throw new CatalogueException(HttpStatus.BAD_REQUEST, e.getMessage());
-//        }
-//    }
 
 }

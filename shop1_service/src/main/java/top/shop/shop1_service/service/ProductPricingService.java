@@ -50,18 +50,7 @@ public class ProductPricingService {
         productPricingRepository.save(pp);
     }
 
-    public ProductDto updatePriceOfProductDto(ProductDto productDto) {
-        productDto.setPrice(getProductPricingDto(productDto.getServiceName()).getPrice());
-        return productDto;
-    }
-
     public List<ProductPricingDto> getProductPricingDtoList(List<String> productServiceName) {
-        // TODO this is crutch!!!
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         return productPricingRepository.findAll().stream()
                 .filter(pp -> productServiceName.contains(pp.getProduct().getServiceName()))
                 .map(this::productPricingToDtoConverter)

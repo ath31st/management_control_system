@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.config.kafkaconfig.CatalogueProducer;
@@ -16,7 +15,6 @@ import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.CatalogueException;
 import top.shop.shop1_service.repository.CatalogueRepository;
-import top.shop.shop1_service.service.event.CatalogueEvent;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -43,19 +41,12 @@ public class CatalogueService {
     }
 
     public CatalogueDto getCatalogueForCustomers() {
-        List<ProductDto> updatedProducts = getCatalogueDto().getProducts()
-                .stream()
-                .filter(p -> productPricingService.productPricingExists(p.getServiceName()) &&
-                        productPricingService.getProductPricingDto(p.getServiceName()).getPrice() != 0)
-                .map(productPricingService::updatePriceOfProductDto)
-                .sorted(Comparator.comparing(ProductDto::getServiceName))
+        CatalogueDto catalogueDto = getCatalogueDto();
+        List<ProductDto> productDtoList = catalogueDto.getProducts().stream()
+                .filter(p -> p.getPrice() != 0)
                 .toList();
-
-        return CatalogueDto.builder()
-                .catalogueOnDate(LocalDateTime.now())
-                .products(updatedProducts)
-                .shopServiceName(serviceName)
-                .build();
+        catalogueDto.setProducts(productDtoList);
+        return catalogueDto;
     }
 
     public void saveCatalogueFromDto(CatalogueDto dto) {
@@ -97,6 +88,7 @@ public class CatalogueService {
                 .shopServiceName(catalogue.getShopServiceName())
                 .products(catalogue.getProducts().stream()
                         .map(productService::productToDtoConverter)
+                        .sorted(Comparator.comparing(ProductDto::getServiceName))
                         .toList())
                 .build();
     }

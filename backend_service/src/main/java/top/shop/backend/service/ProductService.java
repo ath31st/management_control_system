@@ -113,13 +113,6 @@ public class ProductService {
         return new ProductWrapper(getProductDtoList());
     }
 
-    public List<Product> getProductsByListServiceNames(List<String> productServiceNames) {
-        return productRepository.findAll()
-                .stream()
-                .filter(p -> productServiceNames.contains(p.getServiceName()))
-                .toList();
-    }
-
     public ProductWrapper getProductWrapperWithoutCatalogue(List<String> catalogueProductNames) {
         List<Product> products = productRepository.findAll();
         products.sort(Comparator.comparing(Product::getServiceName));
