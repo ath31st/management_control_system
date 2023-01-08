@@ -67,4 +67,8 @@ public class ProductService {
     public long getAmountProductFromCatalogue(String productServiceName) {
         return productRepository.getAmountProductFromCatalogue(productServiceName);
     }
+
+    public double getProductPrice(String productServiceName) {
+        return productRepository.getPoductPrice(productServiceName);
+    }
 }

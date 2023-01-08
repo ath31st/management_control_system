@@ -27,19 +27,21 @@ import java.util.UUID;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final ProductPricingService productPricingService;
+    private final DiscountService discountService;
     private final PaymentProducer paymentProducer;
     private final ApplicationEventPublisher eventPublisher;
     private static final int MINUTES_BEFORE_EXPIRATION = 5; // after that time order will close like expired
 
-    public Payment createPayment(Customer customer, String productName, int amount) {
-        ProductPricing pp = productPricingService.getProductPricing(productName);
+    public Payment createPayment(Customer customer, String productServiceName, int amount) {
         Payment payment = new Payment();
+
+        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(discountService.applyDiscount(productServiceName));
 
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentUuid(UUID.randomUUID().toString());
         payment.setPaymentStatus(PaymentStatus.UNPAID);
         payment.setMinutesBeforeExpiration(MINUTES_BEFORE_EXPIRATION);
-        payment.setTotalPrice(BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(pp.getPrice())));
+        payment.setTotalPrice(totalPrice);
         payment.setCustomer(customer);
 
         eventPublisher.publishEvent(new PaymentEvent(payment));

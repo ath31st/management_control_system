@@ -14,6 +14,8 @@ import top.shop.shop1_service.repository.discount.DiscountRepository;
 import top.shop.shop1_service.repository.discount.PrivateDiscountRepository;
 import top.shop.shop1_service.util.wrapper.DiscountWrapper;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +36,7 @@ public class DiscountService {
         return discountWrapper;
     }
 
-    public List<DiscountDto> getDiscountDtoList() {
+    private List<DiscountDto> getDiscountDtoList() {
         return discountRepository.findAllDiscount()
                 .stream()
                 .map(this::discountToDtoConverter)
@@ -48,14 +50,14 @@ public class DiscountService {
                 .toList();
     }
 
-    public List<PrivateDiscountDto> getPrivateDiscountDtoList() {
+    private List<PrivateDiscountDto> getPrivateDiscountDtoList() {
         return privateDiscountRepository.findAll()
                 .stream()
                 .map(this::privateDiscountToDtoConverter)
                 .toList();
     }
 
-    public List<CommonDiscountDto> getCommonDiscountDtoList() {
+    private List<CommonDiscountDto> getCommonDiscountDtoList() {
         return commonDiscountRepository.findAll()
                 .stream()
                 .map(this::commonDiscountToDtoConverter)
@@ -162,4 +164,16 @@ public class DiscountService {
 
         privateDiscountRepository.save(d);
     }
+
+    public BigDecimal applyDiscount(String productServiceName) {
+        Discount d = discountRepository.getByProduct_ServiceName(productServiceName);
+        double productPrice = productService.getProductPrice(productServiceName);
+
+        if (d != null && d.isActive() & LocalDateTime.now().isAfter(d.getStartingDate()) & LocalDateTime.now().isBefore(d.getEndingDate())) {
+            productPrice = productPrice * ((100.0 - d.getPercentageDiscount()) / 100.0);
+        }
+
+        return BigDecimal.valueOf(productPrice);
+    }
+
 }
