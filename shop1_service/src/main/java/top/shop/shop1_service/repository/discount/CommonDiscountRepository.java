@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import top.shop.shop1_service.entity.discount.CommonDiscount;
 
 public interface CommonDiscountRepository extends JpaRepository<CommonDiscount, Long> {
-
+    CommonDiscount getByProduct_ServiceName(String serviceName);
 }

@@ -41,6 +41,13 @@ public class DiscountService {
                 .toList();
     }
 
+    public List<DiscountDto> getActiveDiscountDtoList() {
+        return discountRepository.findAllActiveDiscount()
+                .stream()
+                .map(this::discountToDtoConverter)
+                .toList();
+    }
+
     public List<PrivateDiscountDto> getPrivateDiscountDtoList() {
         return privateDiscountRepository.findAll()
                 .stream()
@@ -100,23 +107,33 @@ public class DiscountService {
     }
 
     public void saveDiscount(DiscountDto dto) {
-        Discount d = new Discount();
+        Discount d = discountRepository.getByProduct_ServiceName(dto.getProductServiceName());
+
+        if (d == null) {
+            d = new Discount();
+            d.setProduct(productService.getProduct(dto.getProductServiceName()));
+        }
+
         d.setStartingDate(dto.getStartingDate());
         d.setEndingDate(dto.getEndingDate());
         d.setPercentageDiscount(dto.getPercentageDiscount());
         d.setActive(dto.isActive());
-        d.setProduct(productService.getProduct(dto.getProductServiceName()));
 
         discountRepository.save(d);
     }
 
     public void saveCommonDiscount(CommonDiscountDto dto) {
-        CommonDiscount d = new CommonDiscount();
+        CommonDiscount d = commonDiscountRepository.getByProduct_ServiceName(dto.getProductServiceName());
+
+        if (d == null) {
+            d = new CommonDiscount();
+            d.setProduct(productService.getProduct(dto.getProductServiceName()));
+        }
+
         d.setStartingDate(dto.getStartingDate());
         d.setEndingDate(dto.getEndingDate());
         d.setPercentageDiscount(dto.getPercentageDiscount());
         d.setActive(dto.isActive());
-        d.setProduct(productService.getProduct(dto.getProductServiceName()));
 
         d.setNumberOfAvailable(dto.getNumberOfAvailable());
         d.setPromoCode(dto.getPromoCode());
@@ -126,14 +143,20 @@ public class DiscountService {
     }
 
     public void savePrivateDiscount(PrivateDiscountDto dto) {
-        PrivateDiscount d = new PrivateDiscount();
+        PrivateDiscount d = privateDiscountRepository.getByProduct_ServiceNameAndCustomer_Email(dto.getProductServiceName(),
+                dto.getCustomerEmail());
+
+        if (d == null) {
+            d = new PrivateDiscount();
+            d.setProduct(productService.getProduct(dto.getProductServiceName()));
+            d.setCustomer(customerService.getCustomer(dto.getCustomerEmail()));
+        }
+
         d.setStartingDate(dto.getStartingDate());
         d.setEndingDate(dto.getEndingDate());
         d.setPercentageDiscount(dto.getPercentageDiscount());
         d.setActive(dto.isActive());
-        d.setProduct(productService.getProduct(dto.getProductServiceName()));
 
-        d.setCustomer(customerService.getCustomer(dto.getCustomerEmail()));
         d.setPromoCode(dto.getPromoCode());
         d.setStacking(dto.isStacking());
 

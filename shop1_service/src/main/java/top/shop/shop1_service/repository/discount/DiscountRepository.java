@@ -9,4 +9,14 @@ import java.util.List;
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
     @Query(value = "SELECT * FROM discounts WHERE discount_type = 0", nativeQuery = true)
     List<Discount> findAllDiscount();
+
+    @Query(value = "SELECT * FROM discounts WHERE discount_type = 0 AND is_active = true", nativeQuery = true)
+    List<Discount> findAllActiveDiscount();
+
+    @Query("select (count(d) > 0) from Discount d where d.product.serviceName = ?1")
+    boolean existsByProduct_ServiceName(String serviceName);
+
+    Discount getByProduct_ServiceName(String serviceName);
+
+
 }

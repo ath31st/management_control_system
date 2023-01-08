@@ -51,7 +51,6 @@ public class DiscountController {
     public String discountHandler(@Valid @ModelAttribute("discountDto") DiscountDto discountDto,
                                   @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
                                   BindingResult bindingResult, Model model) {
-        String shopServiceName = userService.getUserAttribute("shopServiceName");
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
@@ -60,7 +59,7 @@ public class DiscountController {
             return "discount-templates/new-discount";
         }
         try {
-            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, discountDto, shopServiceName);
+            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, discountDto);
             discountService.sendDiscountWrapper(discountWrapper, shopUrl);
         } catch (HttpClientErrorException e) {
             bindingResult.rejectValue("productServiceName", "discountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
@@ -87,7 +86,6 @@ public class DiscountController {
                                   @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
                                   @RequestParam(value = "customers", required = false) String[] customers,
                                   BindingResult bindingResult, Model model) {
-        String shopServiceName = userService.getUserAttribute("shopServiceName");
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
@@ -96,7 +94,7 @@ public class DiscountController {
             return "discount-templates/new-private-discount";
         }
         try {
-            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, customers, privateDiscountDto, shopServiceName);
+            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, customers, privateDiscountDto);
             discountService.sendDiscountWrapper(discountWrapper, shopUrl);
         } catch (HttpClientErrorException e) {
             bindingResult.rejectValue("productServiceName", "privateDiscountDto.productServiceName", Objects.requireNonNull(e.getMessage()));
@@ -120,7 +118,6 @@ public class DiscountController {
     public String discountHandler(@Valid @ModelAttribute("commonDiscountDto") CommonDiscountDto commonDiscountDto,
                                   @RequestParam(value = "productServiceNames", required = false) String[] productServiceNames,
                                   BindingResult bindingResult, Model model) {
-        String shopServiceName = userService.getUserAttribute("shopServiceName");
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
@@ -129,7 +126,7 @@ public class DiscountController {
             return "discount-templates/new-common-discount";
         }
         try {
-            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, commonDiscountDto, shopServiceName);
+            DiscountWrapper discountWrapper = discountService.prepareDiscountWrapper(productServiceNames, commonDiscountDto);
             discountService.sendDiscountWrapper(discountWrapper, shopUrl);
         } catch (HttpClientErrorException e) {
             bindingResult.rejectValue("productServiceName", "commonDiscountDto.productServiceName", Objects.requireNonNull(e.getMessage()));

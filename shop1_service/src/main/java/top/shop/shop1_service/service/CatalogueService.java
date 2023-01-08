@@ -30,6 +30,7 @@ public class CatalogueService {
     private String serviceName;
     private final ProductPricingService productPricingService;
     private final ProductService productService;
+    private final DiscountService discountService;
     private final CatalogueRepository catalogueRepository;
     private final CatalogueProducer catalogueProducer;
 
@@ -46,6 +47,7 @@ public class CatalogueService {
                 .filter(p -> p.getPrice() != 0)
                 .toList();
         catalogueDto.setProducts(productDtoList);
+        catalogueDto.setDiscounts(discountService.getActiveDiscountDtoList());
         return catalogueDto;
     }
 
