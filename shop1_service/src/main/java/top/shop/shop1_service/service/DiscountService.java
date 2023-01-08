@@ -165,7 +165,7 @@ public class DiscountService {
         privateDiscountRepository.save(d);
     }
 
-    public BigDecimal applyDiscount(String productServiceName) {
+    public BigDecimal getPriceWithOptionalDiscount(String productServiceName) {
         Discount d = discountRepository.getByProduct_ServiceName(productServiceName);
         double productPrice = productService.getProductPrice(productServiceName);
 
@@ -176,4 +176,11 @@ public class DiscountService {
         return BigDecimal.valueOf(productPrice);
     }
 
+    public boolean existsPrivateDiscount(String promoCode, String productServiceName, String email) {
+        return privateDiscountRepository.existsByPromoCodeAndProduct_ServiceNameAndCustomer_Email(promoCode, productServiceName, email);
+    }
+
+    public boolean existsCommonDiscount(String promoCode, String productServiceName) {
+        return commonDiscountRepository.existsByPromoCodeAndProduct_ServiceName(promoCode, productServiceName);
+    }
 }

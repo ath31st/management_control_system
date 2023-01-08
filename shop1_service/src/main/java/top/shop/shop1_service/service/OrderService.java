@@ -11,6 +11,7 @@ import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.entity.Customer;
 import top.shop.shop1_service.exceptionhandler.exception.CustomerServiceException;
+import top.shop.shop1_service.exceptionhandler.exception.DiscountServiceException;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class OrderService {
     private String serviceName;
     private final CatalogueService catalogueService;
     private final OrderProducer orderProducer;
+    private final DiscountService discountService;
     private final CustomerService customerService;
     private final PaymentService paymentService;
 
@@ -31,6 +33,7 @@ public class OrderService {
         checkAvailableProductForSale(orderDto.getProductName());
         checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
         checkExistsCustomer(orderDto.getCustomerEmail());
+        checkExistsPrivateOrCommonDiscount(orderDto.getPromoCode(), orderDto.getProductName(), orderDto.getCustomerEmail());
 
         Customer customer = customerService.getCustomer(orderDto.getCustomerEmail());
 
@@ -64,6 +67,11 @@ public class OrderService {
     private void checkExistsCustomer(String email) {
         if (!customerService.isExistsCustomer(email))
             throw new CustomerServiceException(HttpStatus.NOT_FOUND, "The customer with email: " + email + " not found.");
+    }
+
+    private void checkExistsPrivateOrCommonDiscount(String promoCode, String productServiceName, String email) {
+        if (!discountService.existsPrivateDiscount(promoCode, productServiceName, email) & !discountService.existsCommonDiscount(promoCode,productServiceName))
+            throw new DiscountServiceException(HttpStatus.NOT_FOUND, "The promo code : " + promoCode + " not found.");
     }
 
 }

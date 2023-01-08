@@ -11,7 +11,6 @@ import top.shop.shop1_service.dto.payment.PaymentRequestDto;
 import top.shop.shop1_service.entity.Customer;
 import top.shop.shop1_service.entity.DeliveryOrder;
 import top.shop.shop1_service.entity.Payment;
-import top.shop.shop1_service.entity.ProductPricing;
 import top.shop.shop1_service.exceptionhandler.exception.PaymentServiceException;
 import top.shop.shop1_service.repository.PaymentRepository;
 import top.shop.shop1_service.service.event.PaymentEvent;
@@ -35,7 +34,7 @@ public class PaymentService {
     public Payment createPayment(Customer customer, String productServiceName, int amount) {
         Payment payment = new Payment();
 
-        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(discountService.applyDiscount(productServiceName));
+        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(discountService.getPriceWithOptionalDiscount(productServiceName));
 
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentUuid(UUID.randomUUID().toString());
