@@ -2,6 +2,7 @@ package top.shop.shop1_service.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import top.shop.shop1_service.dto.discount.CommonDiscountDto;
 import top.shop.shop1_service.dto.discount.DiscountDto;
@@ -9,6 +10,7 @@ import top.shop.shop1_service.dto.discount.PrivateDiscountDto;
 import top.shop.shop1_service.entity.discount.CommonDiscount;
 import top.shop.shop1_service.entity.discount.Discount;
 import top.shop.shop1_service.entity.discount.PrivateDiscount;
+import top.shop.shop1_service.exceptionhandler.exception.DiscountServiceException;
 import top.shop.shop1_service.repository.discount.CommonDiscountRepository;
 import top.shop.shop1_service.repository.discount.DiscountRepository;
 import top.shop.shop1_service.repository.discount.PrivateDiscountRepository;
@@ -166,7 +168,7 @@ public class DiscountService {
     }
 
     public BigDecimal getPercentageDiscount(String productServiceName) {
-        Discount d = discountRepository.getByProduct_ServiceName(productServiceName);
+        Discount d = discountRepository.getDiscountByProductServiceName(productServiceName);
 
         if (d != null && d.isActive() & LocalDateTime.now().isAfter(d.getStartingDate()) & LocalDateTime.now().isBefore(d.getEndingDate())) {
             return BigDecimal.valueOf(d.getPercentageDiscount());
@@ -184,13 +186,44 @@ public class DiscountService {
 
     public BigDecimal totalDiscountHandler(BigDecimal totalDiscount, String productServiceName, String promoCode, String email) {
         PrivateDiscount d = privateDiscountRepository.getByProduct_ServiceNameAndCustomer_Email(productServiceName, email);
-        if (d.getPromoCode().equals(promoCode) & LocalDateTime.now().isAfter(d.getStartingDate())
-                & LocalDateTime.now().isBefore(d.getEndingDate()) & d.g) {
+        checkTimeRange(d.getStartingDate(), d.getEndingDate());
+        checkActiveDiscount(d.isActive());
+        checkPromoCode(d.getPromoCode(), promoCode);
 
+        if (d.isStacking()) {
+            return totalDiscount.add(BigDecimal.valueOf(d.getPercentageDiscount()));
+        } else {
+            return BigDecimal.valueOf(d.getPercentageDiscount());
         }
     }
 
     public BigDecimal totalDiscountHandler(BigDecimal totalDiscount, String productServiceName, String promoCode) {
         CommonDiscount d = commonDiscountRepository.getByProduct_ServiceName(productServiceName);
+        checkTimeRange(d.getStartingDate(), d.getEndingDate());
+        checkActiveDiscount(d.isActive());
+        checkPromoCode(d.getPromoCode(), promoCode);
+
+        if (d.isStacking()) {
+            return totalDiscount.add(BigDecimal.valueOf(d.getPercentageDiscount()));
+        } else {
+            return BigDecimal.valueOf(d.getPercentageDiscount());
+        }
+    }
+
+    private void checkTimeRange(LocalDateTime startingDate, LocalDateTime endingDate) {
+        if (LocalDateTime.now().isBefore(startingDate))
+            throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "The discount period has not yet come.");
+        if (LocalDateTime.now().isAfter(endingDate))
+            throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "The discount period has already passed.");
+    }
+
+    private void checkActiveDiscount(boolean isActive) {
+        if (!isActive)
+            throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "The discount is not active.");
+    }
+
+    private void checkPromoCode(String promoCodeFromDB, String promoCode) {
+        if (!promoCodeFromDB.equals(promoCode))
+            throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "The promo code " + promoCode + " is wrong.");
     }
 }
