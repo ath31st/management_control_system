@@ -34,16 +34,15 @@ public class PaymentService {
     public Payment createPayment(Customer customer, String productServiceName, int amount, String promoCode) {
         Payment payment = new Payment();
 
-        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(productPricingService.);
+        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(productPricingService.getProductPrice(productServiceName));
         BigDecimal totalDiscount = discountService.getPercentageDiscount(productServiceName);
 
         if (!promoCode.isBlank() & discountService.existsPrivateDiscount(promoCode, productServiceName, customer.getEmail())) {
-            discountService.totalPriceHandler(totalPrice, promoCode, customer.getEmail());
+            totalDiscount = discountService.totalDiscountHandler(totalDiscount, productServiceName, promoCode, customer.getEmail());
         } else if (!promoCode.isBlank() & discountService.existsCommonDiscount(promoCode, productServiceName)) {
-            discountService.totalPriceHandler(totalPrice, promoCode);
+            totalDiscount = discountService.totalDiscountHandler(totalDiscount, productServiceName, promoCode);
         }
-       // productPrice = productPrice * ((100.0 - d.getPercentageDiscount()) / 100.0);
-
+        totalPrice = totalPrice.multiply((BigDecimal.valueOf(100.0).subtract(totalDiscount)).divide(BigDecimal.valueOf(100.0)));
 
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentUuid(UUID.randomUUID().toString());

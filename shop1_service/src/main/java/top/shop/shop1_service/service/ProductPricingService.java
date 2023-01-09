@@ -11,6 +11,7 @@ import top.shop.shop1_service.exceptionhandler.exception.ProductPricingException
 import top.shop.shop1_service.repository.ProductPricingRepository;
 import top.shop.shop1_service.util.wrapper.ProductPricingWrapper;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -86,7 +87,7 @@ public class ProductPricingService {
         return dto;
     }
 
-    public double getProductPrice(String productServiceName) {
-        return
+    public BigDecimal getProductPrice(String productServiceName) {
+        return BigDecimal.valueOf(productPricingRepository.getProductPrice(productServiceName));
     }
 }

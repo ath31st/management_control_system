@@ -182,9 +182,15 @@ public class DiscountService {
         return commonDiscountRepository.existsByPromoCodeAndProduct_ServiceName(promoCode, productServiceName);
     }
 
-    public void totalPriceHandler(BigDecimal totalPrice, String promoCode, String email) {
+    public BigDecimal totalDiscountHandler(BigDecimal totalDiscount, String productServiceName, String promoCode, String email) {
+        PrivateDiscount d = privateDiscountRepository.getByProduct_ServiceNameAndCustomer_Email(productServiceName, email);
+        if (d.getPromoCode().equals(promoCode) & LocalDateTime.now().isAfter(d.getStartingDate())
+                & LocalDateTime.now().isBefore(d.getEndingDate()) & d.g) {
+
+        }
     }
 
-    public void totalPriceHandler(BigDecimal totalPrice, String promoCode) {
+    public BigDecimal totalDiscountHandler(BigDecimal totalDiscount, String productServiceName, String promoCode) {
+        CommonDiscount d = commonDiscountRepository.getByProduct_ServiceName(productServiceName);
     }
 }
