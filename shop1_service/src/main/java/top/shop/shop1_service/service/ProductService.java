@@ -69,6 +69,6 @@ public class ProductService {
     }
 
     public double getProductPrice(String productServiceName) {
-        return productRepository.getPoductPrice(productServiceName);
+        return productRepository.getProductPrice(productServiceName);
     }
 }

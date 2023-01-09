@@ -10,6 +10,7 @@ import top.shop.shop1_service.config.kafkaconfig.OrderProducer;
 import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.entity.Customer;
+import top.shop.shop1_service.entity.Payment;
 import top.shop.shop1_service.exceptionhandler.exception.CustomerServiceException;
 import top.shop.shop1_service.exceptionhandler.exception.DiscountServiceException;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
@@ -37,8 +38,8 @@ public class OrderService {
 
         Customer customer = customerService.getCustomer(orderDto.getCustomerEmail());
 
-        PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(
-                paymentService.createPayment(customer, orderDto.getProductName(), orderDto.getAmount()));
+        Payment payment = paymentService.createPayment(customer, orderDto.getProductName(), orderDto.getAmount(), orderDto.getPromoCode());
+        PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(payment);
 
         orderDto.setPaymentDto(paymentDto);
         orderDto.setShopServiceName(serviceName);
@@ -70,6 +71,8 @@ public class OrderService {
     }
 
     private void checkExistsPrivateOrCommonDiscount(String promoCode, String productServiceName, String email) {
+        if (promoCode.isBlank()) return;
+
         if (!discountService.existsPrivateDiscount(promoCode, productServiceName, email) & !discountService.existsCommonDiscount(promoCode,productServiceName))
             throw new DiscountServiceException(HttpStatus.NOT_FOUND, "The promo code : " + promoCode + " not found.");
     }

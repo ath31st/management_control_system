@@ -86,4 +86,7 @@ public class ProductPricingService {
         return dto;
     }
 
+    public double getProductPrice(String productServiceName) {
+        return
+    }
 }

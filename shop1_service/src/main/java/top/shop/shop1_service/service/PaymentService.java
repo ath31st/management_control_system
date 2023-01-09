@@ -31,10 +31,19 @@ public class PaymentService {
     private final ApplicationEventPublisher eventPublisher;
     private static final int MINUTES_BEFORE_EXPIRATION = 5; // after that time order will close like expired
 
-    public Payment createPayment(Customer customer, String productServiceName, int amount) {
+    public Payment createPayment(Customer customer, String productServiceName, int amount, String promoCode) {
         Payment payment = new Payment();
 
-        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(discountService.getPriceWithOptionalDiscount(productServiceName));
+        BigDecimal totalPrice = BigDecimal.valueOf(amount).multiply(productPricingService.);
+        BigDecimal totalDiscount = discountService.getPercentageDiscount(productServiceName);
+
+        if (!promoCode.isBlank() & discountService.existsPrivateDiscount(promoCode, productServiceName, customer.getEmail())) {
+            discountService.totalPriceHandler(totalPrice, promoCode, customer.getEmail());
+        } else if (!promoCode.isBlank() & discountService.existsCommonDiscount(promoCode, productServiceName)) {
+            discountService.totalPriceHandler(totalPrice, promoCode);
+        }
+       // productPrice = productPrice * ((100.0 - d.getPercentageDiscount()) / 100.0);
+
 
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentUuid(UUID.randomUUID().toString());

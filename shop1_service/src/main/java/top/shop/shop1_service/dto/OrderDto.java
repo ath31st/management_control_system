@@ -19,7 +19,7 @@ public class OrderDto {
     @Size(min = 3, max = 100, message = "Customer email must be minimum 3 and maximum 100 characters.")
     private String customerEmail;
 //    @NotBlank(message = "Promo code string cannot be blank")
-    @Size(min = 3, max = 20, message = "Promo code string must be minimum 3 and maximum 20 characters.")
+    @Size(max = 20, message = "Promo code string must be maximum 20 characters.")
     private String promoCode;
     private LocalDateTime orderDate;
     @Min(value = 1, message = "Amount must be minimum 1")

@@ -165,15 +165,13 @@ public class DiscountService {
         privateDiscountRepository.save(d);
     }
 
-    public BigDecimal getPriceWithOptionalDiscount(String productServiceName) {
+    public BigDecimal getPercentageDiscount(String productServiceName) {
         Discount d = discountRepository.getByProduct_ServiceName(productServiceName);
-        double productPrice = productService.getProductPrice(productServiceName);
 
         if (d != null && d.isActive() & LocalDateTime.now().isAfter(d.getStartingDate()) & LocalDateTime.now().isBefore(d.getEndingDate())) {
-            productPrice = productPrice * ((100.0 - d.getPercentageDiscount()) / 100.0);
+            return BigDecimal.valueOf(d.getPercentageDiscount());
         }
-
-        return BigDecimal.valueOf(productPrice);
+        return BigDecimal.ZERO;
     }
 
     public boolean existsPrivateDiscount(String promoCode, String productServiceName, String email) {
@@ -182,5 +180,11 @@ public class DiscountService {
 
     public boolean existsCommonDiscount(String promoCode, String productServiceName) {
         return commonDiscountRepository.existsByPromoCodeAndProduct_ServiceName(promoCode, productServiceName);
+    }
+
+    public void totalPriceHandler(BigDecimal totalPrice, String promoCode, String email) {
+    }
+
+    public void totalPriceHandler(BigDecimal totalPrice, String promoCode) {
     }
 }
