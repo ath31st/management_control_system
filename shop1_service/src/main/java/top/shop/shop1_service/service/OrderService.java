@@ -46,7 +46,6 @@ public class OrderService {
         orderDto.setOrderDate(LocalDateTime.now());
 
         try {
-            //orderProducer.sendMessage(orderDto);
             orderProducer.sendMessageWithCallback(orderDto);
         } catch (JsonProcessingException | OrderServiceException e) {
             paymentService.cancelPayment(paymentDto.getPaymentUuid());

@@ -154,6 +154,7 @@ public class DiscountService {
             d = new PrivateDiscount();
             d.setProduct(productService.getProduct(dto.getProductServiceName()));
             d.setCustomer(customerService.getCustomer(dto.getCustomerEmail()));
+            d.setApplied(false);
         }
 
         d.setStartingDate(dto.getStartingDate());
@@ -163,6 +164,7 @@ public class DiscountService {
 
         d.setPromoCode(dto.getPromoCode());
         d.setStacking(dto.isStacking());
+        d.setApplied(false);
 
         privateDiscountRepository.save(d);
     }
@@ -189,7 +191,9 @@ public class DiscountService {
         checkTimeRange(d.getStartingDate(), d.getEndingDate());
         checkActiveDiscount(d.isActive());
         checkPromoCode(d.getPromoCode(), promoCode);
+        checkApplied(d.isApplied());
 
+        updateAppliedStatusDiscount(d, true);
         if (d.isStacking()) {
             return totalDiscount.add(BigDecimal.valueOf(d.getPercentageDiscount()));
         } else {
@@ -239,7 +243,17 @@ public class DiscountService {
         commonDiscountRepository.updateNumberOfAvailableById(d.getNumberOfAvailable() - number, d.getId());
     }
 
-    private void increaseAvailableNumber(CommonDiscount d, int number) {
+    public void increaseAvailableNumber(CommonDiscount d, int number) {
         commonDiscountRepository.updateNumberOfAvailableById(d.getNumberOfAvailable() + number, d.getId());
     }
+
+    private void checkApplied(boolean applied) {
+        if (applied)
+            throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "This personal discount has already been applied.");
+    }
+
+    private void updateAppliedStatusDiscount(PrivateDiscount d, boolean status) {
+        privateDiscountRepository.updateIsAppliedById(status, d.getId());
+    }
+
 }

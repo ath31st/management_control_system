@@ -17,6 +17,7 @@ import javax.persistence.*;
 public class PrivateDiscount extends Discount {
     private String promoCode;
     private boolean isStacking;
+    private boolean isApplied;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     @ToString.Exclude
