@@ -202,12 +202,15 @@ public class DiscountService {
         checkTimeRange(d.getStartingDate(), d.getEndingDate());
         checkActiveDiscount(d.isActive());
         checkPromoCode(d.getPromoCode(), promoCode);
+        checkAvailableNumberDiscount(d);
 
+        decreaseAvailableNumber(d, 1);
         if (d.isStacking()) {
             return totalDiscount.add(BigDecimal.valueOf(d.getPercentageDiscount()));
         } else {
             return BigDecimal.valueOf(d.getPercentageDiscount());
         }
+
     }
 
     private void checkTimeRange(LocalDateTime startingDate, LocalDateTime endingDate) {
@@ -225,5 +228,18 @@ public class DiscountService {
     private void checkPromoCode(String promoCodeFromDB, String promoCode) {
         if (!promoCodeFromDB.equals(promoCode))
             throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "The promo code " + promoCode + " is wrong.");
+    }
+
+    private void checkAvailableNumberDiscount(CommonDiscount d) {
+        if (d.getNumberOfAvailable() <= 0)
+            throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "Available promo codes are over.");
+    }
+
+    private void decreaseAvailableNumber(CommonDiscount d, int number) {
+        commonDiscountRepository.updateNumberOfAvailableById(d.getNumberOfAvailable() - number, d.getId());
+    }
+
+    private void increaseAvailableNumber(CommonDiscount d, int number) {
+        commonDiscountRepository.updateNumberOfAvailableById(d.getNumberOfAvailable() + number, d.getId());
     }
 }

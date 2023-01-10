@@ -7,6 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import top.shop.shop1_service.entity.Payment;
+import top.shop.shop1_service.service.DiscountService;
 import top.shop.shop1_service.service.PaymentService;
 import top.shop.shop1_service.service.event.PaymentEvent;
 import top.shop.shop1_service.util.PaymentStatus;
@@ -21,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequiredArgsConstructor
 public class PaymentSchedulerConfig {
     private final PaymentService paymentService;
+    private final DiscountService discountService;
     private static final CopyOnWriteArrayList<Payment> payments = new CopyOnWriteArrayList<>();
 
     @PostConstruct
