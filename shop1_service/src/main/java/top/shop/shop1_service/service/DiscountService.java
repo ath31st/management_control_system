@@ -201,6 +201,10 @@ public class DiscountService {
         }
     }
 
+    public PrivateDiscount getPrivateDiscount(String productServiceName, String email) {
+        return privateDiscountRepository.getByProduct_ServiceNameAndCustomer_Email(productServiceName, email);
+    }
+
     public BigDecimal totalDiscountHandler(BigDecimal totalDiscount, String productServiceName, String promoCode) {
         CommonDiscount d = commonDiscountRepository.getByProduct_ServiceName(productServiceName);
         checkTimeRange(d.getStartingDate(), d.getEndingDate());
@@ -214,7 +218,10 @@ public class DiscountService {
         } else {
             return BigDecimal.valueOf(d.getPercentageDiscount());
         }
+    }
 
+    public CommonDiscount getCommonDiscount(String productServiceName) {
+        return commonDiscountRepository.getByProduct_ServiceName(productServiceName);
     }
 
     private void checkTimeRange(LocalDateTime startingDate, LocalDateTime endingDate) {

@@ -39,8 +39,10 @@ public class PaymentService {
 
         if (!promoCode.isBlank() & discountService.existsPrivateDiscount(promoCode, productServiceName, customer.getEmail())) {
             totalDiscount = discountService.totalDiscountHandler(totalDiscount, productServiceName, promoCode, customer.getEmail());
+            payment.setPrivateDiscount(discountService.getPrivateDiscount(productServiceName, customer.getEmail()));
         } else if (!promoCode.isBlank() & discountService.existsCommonDiscount(promoCode, productServiceName)) {
             totalDiscount = discountService.totalDiscountHandler(totalDiscount, productServiceName, promoCode);
+            payment.setCommonDiscount(discountService.getCommonDiscount(productServiceName));
         }
         totalPrice = totalPrice.multiply((BigDecimal.valueOf(100.0).subtract(totalDiscount)).divide(BigDecimal.valueOf(100.0)));
 

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import top.shop.shop1_service.entity.discount.CommonDiscount;
+import top.shop.shop1_service.entity.discount.PrivateDiscount;
 import top.shop.shop1_service.util.PaymentStatus;
 
 import javax.persistence.*;
@@ -29,6 +31,12 @@ public class Payment {
    @OneToOne(cascade = CascadeType.ALL)
    @JoinColumn(name = "deliveryOrder_id")
    private DeliveryOrder deliveryOrder;
+   @OneToOne
+   @JoinColumn(name = "commonDiscount_id")
+   private CommonDiscount commonDiscount;
+   @OneToOne
+   @JoinColumn(name = "privateDiscount_id")
+   private PrivateDiscount privateDiscount;
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "customer_id", nullable = false)
    @ToString.Exclude
