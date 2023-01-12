@@ -7,6 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import top.shop.shop1_service.entity.Payment;
+import top.shop.shop1_service.entity.discount.CommonDiscount;
 import top.shop.shop1_service.service.DiscountService;
 import top.shop.shop1_service.service.PaymentService;
 import top.shop.shop1_service.service.event.PaymentEvent;
@@ -36,8 +37,16 @@ public class PaymentSchedulerConfig {
 
         payments.stream()
                 .filter(this::checkIsExpiredPayment)
-                .forEach(p -> paymentService.updatePaymentStatus(p, PaymentStatus.EXPIRED));
-        payments.removeIf(p-> p.getPaymentStatus().equals(PaymentStatus.EXPIRED));
+                .forEach(p -> {
+                    paymentService.updatePaymentStatus(p, PaymentStatus.EXPIRED);
+                    if (p.getPrivateDiscount() != null) {
+                        discountService.updateAppliedStatusDiscount(p.getPrivateDiscount(), false);
+                    }
+                    if (p.getCommonDiscount() != null) {
+                        discountService.increaseAvailableNumber(p.getCommonDiscount(), 1);
+                    }
+                });
+        payments.removeIf(p -> p.getPaymentStatus().equals(PaymentStatus.EXPIRED));
     }
 
     @EventListener

@@ -259,7 +259,7 @@ public class DiscountService {
             throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "This personal discount has already been applied.");
     }
 
-    private void updateAppliedStatusDiscount(PrivateDiscount d, boolean status) {
+    public void updateAppliedStatusDiscount(PrivateDiscount d, boolean status) {
         privateDiscountRepository.updateIsAppliedById(status, d.getId());
     }
 
