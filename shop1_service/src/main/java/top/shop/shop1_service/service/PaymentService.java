@@ -29,7 +29,7 @@ public class PaymentService {
     private final DiscountService discountService;
     private final PaymentProducer paymentProducer;
     private final ApplicationEventPublisher eventPublisher;
-    private static final int MINUTES_BEFORE_EXPIRATION = 5; // after that time order will close like expired
+    private static final int MINUTES_BEFORE_EXPIRATION = 1; // after that time order will close like expired
 
     public Payment createPayment(Customer customer, String productServiceName, int amount, String promoCode) {
         Payment payment = new Payment();

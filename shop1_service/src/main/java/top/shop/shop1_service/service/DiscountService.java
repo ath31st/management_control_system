@@ -247,11 +247,13 @@ public class DiscountService {
     }
 
     private void decreaseAvailableNumber(CommonDiscount d, int number) {
-        commonDiscountRepository.updateNumberOfAvailableById(d.getNumberOfAvailable() - number, d.getId());
+        d.setNumberOfAvailable(d.getNumberOfAvailable() - number);
+        commonDiscountRepository.save(d);
     }
 
     public void increaseAvailableNumber(CommonDiscount d, int number) {
-        commonDiscountRepository.updateNumberOfAvailableById(d.getNumberOfAvailable() + number, d.getId());
+        d.setNumberOfAvailable(d.getNumberOfAvailable() + number);
+        commonDiscountRepository.save(d);
     }
 
     private void checkApplied(boolean applied) {
