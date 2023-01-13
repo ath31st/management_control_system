@@ -29,7 +29,7 @@ public class CatalogueController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         model.addAttribute("shopServiceName", shopServiceName);
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromShop(shopUrl));
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromShop(shopServiceName));
         model.addAttribute("productPricingWrapper", catalogueService.getProductPricingWrapperFromShop(shopUrl));
         return "catalogue-templates/catalogue";
     }

@@ -2,6 +2,7 @@ package top.shop.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CatalogueService {
+    @Value("${backend.url}")
+    private String backendUrl;
     private final RestTemplate restTemplate;
 
-    public CatalogueDto getCatalogueFromShop(String shopUrl) {
-        String url = shopUrl + "/api/manager/catalogue/";
+    public CatalogueDto getCatalogueFromShop(String shopServiceName) {
+        String url = backendUrl + "/api/catalogue/" + shopServiceName;
 
         try {
             return restTemplate.exchange(RequestEntity.get(url)
@@ -37,7 +40,7 @@ public class CatalogueService {
                 return CatalogueDto.builder()
                         .products(Collections.emptyList())
                         .catalogueOnDate(LocalDateTime.now())
-                        .shopServiceName(shopUrl)
+                        .shopServiceName(shopServiceName)
                         .build();
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
