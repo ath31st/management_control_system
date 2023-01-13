@@ -90,6 +90,7 @@ public class DiscountService {
         dto.setCustomerEmail(privateDiscount.getCustomer().getEmail());
         dto.setPromoCode(privateDiscount.getPromoCode());
         dto.setStacking(privateDiscount.isStacking());
+        dto.setApplied(privateDiscount.isApplied());
 
         return dto;
     }

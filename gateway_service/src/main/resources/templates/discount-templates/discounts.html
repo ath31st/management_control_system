@@ -96,6 +96,7 @@
                             <th> Percentage discount</th>
                             <th> Active</th>
                             <th> Stacking</th>
+                            <th> Applied</th>
                             <th></th>
                         </tr>
                         <tr th:each="privateDiscount: ${privateDiscounts}">
@@ -112,6 +113,7 @@
                             <td th:text="${privateDiscount.percentageDiscount}">percentage discount</td>
                             <td th:text="${privateDiscount.isActive}">active</td>
                             <td th:text="${privateDiscount.isStacking}">stacking</td>
+                            <td th:text="${privateDiscount.applied}">applied</td>
                             <td>
                                 <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                                    th:href="@{|/edit-private-discount/${privateDiscount.productServiceName}|}">Edit

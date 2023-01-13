@@ -11,4 +11,5 @@ public class PrivateDiscountDto extends DiscountDto {
     private String promoCode;
     private boolean isStacking;
     private String customerEmail;
+    private boolean isApplied;
 }
