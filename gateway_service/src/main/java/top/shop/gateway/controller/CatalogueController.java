@@ -29,7 +29,7 @@ public class CatalogueController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         model.addAttribute("shopServiceName", shopServiceName);
-        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromShop(shopServiceName));
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(shopServiceName));
         model.addAttribute("productPricingWrapper", catalogueService.getProductPricingWrapperFromShop(shopUrl));
         return "catalogue-templates/catalogue";
     }
@@ -38,10 +38,11 @@ public class CatalogueController {
     public String catalogue(@Valid @ModelAttribute("productPricingWrapper") ProductPricingWrapper productPricingWrapper,
                             BindingResult bindingResult,
                             Model model) {
+        String shopServiceName = userService.getUserAttribute("shopServiceName");
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromShop(shopUrl));
+            model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(shopServiceName));
             model.addAttribute("productPricingWrapper", productPricingWrapper);
             return "catalogue-templates/catalogue";
         }

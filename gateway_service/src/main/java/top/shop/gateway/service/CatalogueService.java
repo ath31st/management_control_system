@@ -28,7 +28,7 @@ public class CatalogueService {
     private String backendUrl;
     private final RestTemplate restTemplate;
 
-    public CatalogueDto getCatalogueFromShop(String shopServiceName) {
+    public CatalogueDto getCatalogueFromStorage(String shopServiceName) {
         String url = backendUrl + "/api/catalogue/" + shopServiceName;
 
         try {
@@ -41,6 +41,25 @@ public class CatalogueService {
                         .products(Collections.emptyList())
                         .catalogueOnDate(LocalDateTime.now())
                         .shopServiceName(shopServiceName)
+                        .build();
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public CatalogueDto getCatalogueFromShop(String shopUrl) {
+        String url = shopUrl + "/api/manager/catalogue/";
+
+        try {
+            return restTemplate.exchange(RequestEntity.get(url)
+                    .headers(TokenExtractor.headersWithTokenAuthUser())
+                    .build(), CatalogueDto.class).getBody();
+        } catch (HttpClientErrorException e) {
+            if (e.getRawStatusCode() == 404)
+                return CatalogueDto.builder()
+                        .products(Collections.emptyList())
+                        .catalogueOnDate(LocalDateTime.now())
+                        .shopServiceName("NOT_FOUND")
                         .build();
 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
