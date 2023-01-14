@@ -239,6 +239,32 @@ public class DiscountService {
         discountRepository.save(d);
     }
 
+    public void savePrivateDiscountChanges(PrivateDiscountDto dto) {
+        PrivateDiscount d = getPrivateDiscount(dto.getProductServiceName(), dto.getCustomerEmail());
+        d.setPercentageDiscount(dto.getPercentageDiscount());
+        d.setStartingDate(dto.getStartingDate());
+        d.setEndingDate(dto.getEndingDate());
+        d.setActive(dto.isActive());
+
+        d.setApplied(dto.isApplied());
+        d.setPromoCode(dto.getPromoCode());
+
+        privateDiscountRepository.save(d);
+    }
+
+    public void saveCommonDiscountChanges(CommonDiscountDto dto) {
+        CommonDiscount d = getCommonDiscount(dto.getProductServiceName());
+        d.setPercentageDiscount(dto.getPercentageDiscount());
+        d.setStartingDate(dto.getStartingDate());
+        d.setEndingDate(dto.getEndingDate());
+        d.setActive(dto.isActive());
+
+        d.setNumberOfAvailable(dto.getNumberOfAvailable());
+        d.setPromoCode(dto.getPromoCode());
+
+        commonDiscountRepository.save(d);
+    }
+
     private void checkTimeRange(LocalDateTime startingDate, LocalDateTime endingDate) {
         if (LocalDateTime.now().isBefore(startingDate))
             throw new DiscountServiceException(HttpStatus.BAD_REQUEST, "The discount period has not yet come.");
