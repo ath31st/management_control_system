@@ -37,10 +37,11 @@ Despite the shortcomings and errors (including architectural ones), this is a gr
 - Integrating in project a message broker Apache Kafka
 - Integration authentication server where users can centrally login, logout, register, and manage their user accounts. 
 - Project security (Keycloak for user registration, authentication and authorization, Kafka SASL authentication for services)
+- Discount system (Including discount, private discount and common discount). Application and refund of discounts. (Completed 14.01.2023)
 
 ### Planned
 
-- Implement the discount system (in progress)
+- Redesign and optimize database accesses
 - Integrate Apache Cassandra for logging events from all project modules
 - Collecting and displaying statistics for managers and administrator in the web interface
 - Make a simple but visual web interface for customers (registration, purchases, refunds, viewing purchase history)
@@ -100,7 +101,13 @@ the payment and the order are considered expired and become unavailable for paym
 number of them with minimal settings (change the marked fields in application.yml, add new service in docker-compose and register a new service on the Gateway service). 
 At the moment, the service has only a REST api for working with customers, but in the future I plan to add a web interface.
 
-Update(03.01.2023) The service has been rewritten to use the PostgresQL database. The addition of the discount system led to relationships between stored entities.
+Update(03.01.2023) The service has been rewritten to use the PostgresQL database. The addition of the discount system led
+to relationships between stored entities.
+
+Update(14.01.2023) Added a discount system consisting of discounts, private discounts and common discounts.
+Discounts are applied during order processing and implemented in the payment. Private discounts are valid through a 
+promo code and relate to a specific customer. Common discounts have a limited number of uses and are valid through a promo code. 
+If the order or payment expires on time, the discounts are canceled and returned for reuse.
 
 Its tasks include:
  - store and provide a product catalog for customers
@@ -113,6 +120,7 @@ Its tasks include:
  - accept delivery of products from the backend service
  - issue orders to customers
  - provision of order and payment status
+ - storage, processing of discounts
 
 ### Kafka
 
