@@ -66,7 +66,7 @@ public class DiscountService {
                 .toList();
     }
 
-    private DiscountDto discountToDtoConverter(Discount discount) {
+    public DiscountDto discountToDtoConverter(Discount discount) {
         DiscountDto dto = new DiscountDto();
         dto.setProductServiceName(discount.getProduct().getServiceName());
         dto.setProductName(discount.getProduct().getName());
@@ -78,7 +78,7 @@ public class DiscountService {
         return dto;
     }
 
-    private PrivateDiscountDto privateDiscountToDtoConverter(PrivateDiscount privateDiscount) {
+    public PrivateDiscountDto privateDiscountToDtoConverter(PrivateDiscount privateDiscount) {
         PrivateDiscountDto dto = new PrivateDiscountDto();
         dto.setProductServiceName(privateDiscount.getProduct().getServiceName());
         dto.setProductName(privateDiscount.getProduct().getName());
@@ -95,7 +95,7 @@ public class DiscountService {
         return dto;
     }
 
-    private CommonDiscountDto commonDiscountToDtoConverter(CommonDiscount commonDiscount) {
+    public CommonDiscountDto commonDiscountToDtoConverter(CommonDiscount commonDiscount) {
         CommonDiscountDto dto = new CommonDiscountDto();
         dto.setProductServiceName(commonDiscount.getProduct().getServiceName());
         dto.setProductName(commonDiscount.getProduct().getName());
@@ -202,8 +202,16 @@ public class DiscountService {
         }
     }
 
+    public Discount getDiscount(String productServiceName) {
+        return discountRepository.getDiscountByProductServiceName(productServiceName);
+    }
+
     public PrivateDiscount getPrivateDiscount(String productServiceName, String email) {
         return privateDiscountRepository.getByProduct_ServiceNameAndCustomer_Email(productServiceName, email);
+    }
+
+    public CommonDiscount getCommonDiscount(String productServiceName) {
+        return commonDiscountRepository.getByProduct_ServiceName(productServiceName);
     }
 
     public BigDecimal totalDiscountHandler(BigDecimal totalDiscount, String productServiceName, String promoCode) {
@@ -221,8 +229,14 @@ public class DiscountService {
         }
     }
 
-    public CommonDiscount getCommonDiscount(String productServiceName) {
-        return commonDiscountRepository.getByProduct_ServiceName(productServiceName);
+    public void saveDiscountChanges(DiscountDto dto) {
+        Discount d = getDiscount(dto.getProductServiceName());
+        d.setPercentageDiscount(dto.getPercentageDiscount());
+        d.setStartingDate(dto.getStartingDate());
+        d.setEndingDate(dto.getEndingDate());
+        d.setActive(dto.isActive());
+
+        discountRepository.save(d);
     }
 
     private void checkTimeRange(LocalDateTime startingDate, LocalDateTime endingDate) {

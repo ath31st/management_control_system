@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit-discount</title>
+
+    <link rel="icon" th:href="@{/icon/flavicon.png}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/css/wrapper.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/font-awesome/css/font-awesome.min.css}">
+</head>
+<body>
+<div class="wrapper">
+    <div lang="en" th:replace="fragments/header :: header"></div>
+    <div class="container-fluid">
+        <!-- PAGE TITLE -->
+        <div class="page-title">
+            <h3>
+                <span class="fa fa-arrow-circle-o-left"></span> Edit discount
+            </h3>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="column">
+            <form th:action="@{/edit-discount}" th:object="${categoryDto}" method="post">
+                <table>
+                    <tr>
+                        <td>Category name:</td>
+                        <td><input type="text" th:field="*{name}"></td>
+                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Category name Error</td>
+                    </tr>
+                    <tr>
+                        <td>Category description:</td>
+                        <td><input type="text" th:field="*{description}"></td>
+                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Category description Error</td>
+                    </tr>
+                    <tr hidden>
+                        <td>Service name:</td>
+                        <td><input type="text" th:field="*{serviceName}"></td>
+                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Category service name Error</td>
+                    </tr>
+                </table>
+                <div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button class="btn btn-primary"><a style="color: white;text-decoration: none"
+                                                       onclick="return confirm('Are you sure?')"
+                                                       th:href="@{|/delete-category/${categoryDto.serviceName}|}">Delete category</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div lang="en" th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

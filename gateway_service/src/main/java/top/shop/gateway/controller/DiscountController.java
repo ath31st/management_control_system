@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import top.shop.gateway.dto.discount.CommonDiscountDto;
 import top.shop.gateway.dto.discount.DiscountDto;
@@ -134,6 +131,29 @@ public class DiscountController {
             return "discount-templates/new-common-discount";
         }
 
+        return "redirect:/discounts";
+    }
+
+    @GetMapping("/edit-discount/{productServiceName}")
+    public String discountChangesHandler(@PathVariable String productServiceName, Model model) {
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        DiscountDto discountDto = discountService.getDiscount(shopUrl, productServiceName);
+        model.addAttribute("discountDto", discountDto);
+        return "discount-templates/edit-discount";
+    }
+
+    @PostMapping("/edit-discount")
+    public String discountChangesHandler(@Valid @ModelAttribute("discountDto") DiscountDto discountDto,
+                                         BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("discountDto", discountDto);
+            return "discount-templates/edit-discount";
+        }
+        model.addAttribute("discountDto", discountDto);
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        discountService.sendDiscountChanges(shopUrl, discountDto);
         return "redirect:/discounts";
     }
 }

@@ -17,6 +17,20 @@ import java.util.*;
 public class DiscountService {
     private final RestTemplate restTemplate;
 
+    public DiscountDto getDiscount(String shopUrl, String productServiceName) {
+        String url = shopUrl + "/api/discount/" + productServiceName;
+
+        return restTemplate.exchange(RequestEntity.get(url)
+                .headers(TokenExtractor.headersWithTokenAuthUser())
+                .build(), DiscountDto.class).getBody();
+    }
+
+    public void sendDiscountChanges(String shopUrl, DiscountDto discountDto) {
+        String url = shopUrl + "/api/edit-discount";
+
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(discountDto), DiscountDto.class);
+    }
+
     public DiscountWrapper getDiscounts(String shopUrl) {
         String url = shopUrl + "/api/discounts";
 

@@ -115,7 +115,7 @@
                             <td th:text="${privateDiscount.applied}">applied</td>
                             <td>
                                 <button class="btn btn-primary"><a style="color: white;text-decoration: none"
-                                                                   th:href="@{|/edit-private-discount/${privateDiscount.productServiceName}|}">Edit</a>
+                                                                   th:href="@{|/edit-private-discount?name=${privateDiscount.productServiceName}&email=${privateDiscount.customerEmail}|}">Edit</a>
                                 </button>
                             </td>
                         </tr>

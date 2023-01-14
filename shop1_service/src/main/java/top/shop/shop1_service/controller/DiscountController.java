@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import top.shop.shop1_service.dto.discount.DiscountDto;
 import top.shop.shop1_service.service.CustomerService;
 import top.shop.shop1_service.service.DiscountService;
 import top.shop.shop1_service.util.wrapper.DiscountWrapper;
@@ -38,4 +39,15 @@ public class DiscountController {
     public ResponseEntity<String[]> getCustomersList() {
         return ResponseEntity.ok(customerService.getCustomersEmail());
     }
+
+    @GetMapping("/discount/{productServiceName}")
+    public ResponseEntity<DiscountDto> getDiscount(@PathVariable String productServiceName) {
+        return ResponseEntity.ok(discountService.discountToDtoConverter(discountService.getDiscount(productServiceName)));
+    }
+
+    @PostMapping("/edit-discount")
+    public ResponseEntity<DiscountDto> discountChangesHandler(@RequestBody DiscountDto discountDto) {
+        discountService.saveDiscountChanges(discountDto);
+
+        return ResponseEntity.ok().build();    }
 }
