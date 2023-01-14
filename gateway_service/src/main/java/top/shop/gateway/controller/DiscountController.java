@@ -138,7 +138,7 @@ public class DiscountController {
     public String discountChangesHandler(@PathVariable String productServiceName, Model model) {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
-        DiscountDto discountDto = discountService.getDiscount(shopUrl, productServiceName);
+        DiscountDto discountDto = discountService.getDiscountDto(shopUrl, productServiceName);
         model.addAttribute("discountDto", discountDto);
         return "discount-templates/edit-discount";
     }
@@ -154,6 +154,53 @@ public class DiscountController {
         String shopUrl = userService.getUserAttribute("shopUrl");
 
         discountService.sendDiscountChanges(shopUrl, discountDto);
+        return "redirect:/discounts";
+    }
+
+    @GetMapping("/edit-private-discount")
+    public String discountChangesHandler(@RequestParam(value = "name") String productServiceName,
+                                         @RequestParam(name = "email") String email, Model model) {
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        PrivateDiscountDto discountDto = discountService.getPrivateDiscountDto(shopUrl, productServiceName, email);
+        model.addAttribute("discountDto", discountDto);
+        return "discount-templates/edit-private-discount";
+    }
+
+    @PostMapping("/edit-private-discount")
+    public String privateDiscountChangesHandler(@Valid @ModelAttribute("discountDto") PrivateDiscountDto discountDto,
+                                         BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("discountDto", discountDto);
+            return "discount-templates/edit-discount";
+        }
+        model.addAttribute("discountDto", discountDto);
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        discountService.sendPrivateDiscountChanges(shopUrl, discountDto);
+        return "redirect:/discounts";
+    }
+
+    @GetMapping("/edit-common-discount/{productServiceName}")
+    public String commonDiscountChangesHandler(@PathVariable String productServiceName, Model model) {
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        CommonDiscountDto discountDto = discountService.getCommonDiscountDto(shopUrl, productServiceName);
+        model.addAttribute("discountDto", discountDto);
+        return "discount-templates/edit-common-discount";
+    }
+
+    @PostMapping("/edit-common-discount")
+    public String commonDiscountChangesHandler(@Valid @ModelAttribute("discountDto") CommonDiscountDto discountDto,
+                                         BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("discountDto", discountDto);
+            return "discount-templates/edit-common-discount";
+        }
+        model.addAttribute("discountDto", discountDto);
+        String shopUrl = userService.getUserAttribute("shopUrl");
+
+        discountService.sendCommonDiscountChanges(shopUrl, discountDto);
         return "redirect:/discounts";
     }
 }

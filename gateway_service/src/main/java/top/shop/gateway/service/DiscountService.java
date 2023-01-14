@@ -17,7 +17,7 @@ import java.util.*;
 public class DiscountService {
     private final RestTemplate restTemplate;
 
-    public DiscountDto getDiscount(String shopUrl, String productServiceName) {
+    public DiscountDto getDiscountDto(String shopUrl, String productServiceName) {
         String url = shopUrl + "/api/discount/" + productServiceName;
 
         return restTemplate.exchange(RequestEntity.get(url)
@@ -25,10 +25,38 @@ public class DiscountService {
                 .build(), DiscountDto.class).getBody();
     }
 
-    public void sendDiscountChanges(String shopUrl, DiscountDto discountDto) {
+    public PrivateDiscountDto getPrivateDiscountDto(String shopUrl, String productServiceName, String email) {
+        String url = shopUrl + "/api/private-discount?name=" + productServiceName + "&email=" + email;
+
+        return restTemplate.exchange(RequestEntity.get(url)
+                .headers(TokenExtractor.headersWithTokenAuthUser())
+                .build(), PrivateDiscountDto.class).getBody();
+    }
+
+    public CommonDiscountDto getCommonDiscountDto(String shopUrl, String productServiceName) {
+        String url = shopUrl + "/api/common-discount/" + productServiceName;
+
+        return restTemplate.exchange(RequestEntity.get(url)
+                .headers(TokenExtractor.headersWithTokenAuthUser())
+                .build(), CommonDiscountDto.class).getBody();
+    }
+
+    public void sendDiscountChanges(String shopUrl, DiscountDto dto) {
         String url = shopUrl + "/api/edit-discount";
 
-        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(discountDto), DiscountDto.class);
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(dto), DiscountDto.class);
+    }
+
+    public void sendPrivateDiscountChanges(String shopUrl, PrivateDiscountDto dto) {
+        String url = shopUrl + "/api/edit-private-discount";
+
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(dto), PrivateDiscountDto.class);
+    }
+
+    public void sendCommonDiscountChanges(String shopUrl, CommonDiscountDto dto) {
+        String url = shopUrl + "/api/edit-common-discount";
+
+        restTemplate.postForObject(url, TokenExtractor.httpEntityWithTokenAuthUser(dto), CommonDiscountDto.class);
     }
 
     public DiscountWrapper getDiscounts(String shopUrl) {
@@ -146,4 +174,6 @@ public class DiscountService {
         wrapper.setCommonDiscountList(Collections.emptyList());
         return wrapper;
     }
+
+
 }
