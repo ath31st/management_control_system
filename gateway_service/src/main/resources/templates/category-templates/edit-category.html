@@ -32,19 +32,25 @@
                     <tr>
                         <td>Category description:</td>
                         <td><input type="text" th:field="*{description}"></td>
-                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Category description Error</td>
+                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Category description
+                            Error
+                        </td>
                     </tr>
                     <tr hidden>
                         <td>Service name:</td>
                         <td><input type="text" th:field="*{serviceName}"></td>
-                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Category service name Error</td>
+                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Category service name
+                            Error
+                        </td>
                     </tr>
                 </table>
                 <div>
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                        onclick="return confirm('Are you sure?')"
-                                                       th:href="@{|/delete-category/${categoryDto.serviceName}|}">Delete category</a>
+                                                       th:href="@{|/delete-category/${categoryDto.serviceName}|}">Delete
+                        category</a>
+                    </button>
                 </div>
             </form>
         </div>

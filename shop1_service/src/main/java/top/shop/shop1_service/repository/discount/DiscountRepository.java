@@ -18,6 +18,6 @@ public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
     Discount getByProduct_ServiceName(String serviceName);
 
-    @Query(value = "SELECT * FROM discounts JOIN products p ON discounts.id = p.discount_id WHERE p.service_name = ?1 AND discount_type = 0", nativeQuery = true)
+    @Query(value = "select d from Discount as d where d.product.serviceName =?1 and type(d) = Discount")
     Discount getDiscountByProductServiceName(String serviceName);
 }

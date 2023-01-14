@@ -22,29 +22,40 @@
         </div>
         <!-- END PAGE TITLE -->
         <div class="column">
-            <form th:action="@{/edit-discount}" th:object="${categoryDto}" method="post">
+            <form th:action="@{/edit-discount}" th:object="${discountDto}" method="post">
                 <table>
                     <tr>
-                        <td>Category name:</td>
-                        <td><input type="text" th:field="*{name}"></td>
-                        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Category name Error</td>
+                        <td>Starting date:</td>
+                        <td><input type="datetime-local" th:field="*{startingDate}"></td>
+                        <td th:if="${#fields.hasErrors('startingDate')}" th:errors="*{startingDate}">Starting date Error</td>
                     </tr>
                     <tr>
-                        <td>Category description:</td>
-                        <td><input type="text" th:field="*{description}"></td>
-                        <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Category description Error</td>
+                        <td>Ending date:</td>
+                        <td><input type="datetime-local" th:field="*{endingDate}"></td>
+                        <td th:if="${#fields.hasErrors('endingDate')}" th:errors="*{endingDate}">Ending date Error</td>
+                    </tr>
+                    <tr>
+                        <td>Percentage:</td>
+                        <td><input type="text" th:field="*{percentageDiscount}"></td>
+                        <td th:if="${#fields.hasErrors('percentageDiscount')}" th:errors="*{percentageDiscount}">Percentage discount Error</td>
+                    </tr>
+                    <tr>
+                        <td>Activate discount:</td>
+                        <td><input type="checkbox" th:field="*{active}"></td>
+                        <td th:if="${#fields.hasErrors('active')}" th:errors="*{active}">Is active Error</td>
                     </tr>
                     <tr hidden>
                         <td>Service name:</td>
-                        <td><input type="text" th:field="*{serviceName}"></td>
-                        <td th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Category service name Error</td>
+                        <td><input type="text" th:field="*{productServiceName}"></td>
+                        <td th:if="${#fields.hasErrors('productServiceName')}" th:errors="*{productServiceName}">Product service name Error</td>
                     </tr>
                 </table>
                 <div>
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button class="btn btn-primary"><a style="color: white;text-decoration: none"
                                                        onclick="return confirm('Are you sure?')"
-                                                       th:href="@{|/delete-category/${categoryDto.serviceName}|}">Delete category</a>
+                                                       th:href="@{|/delete-discount/${discountDto.productServiceName}|}">Delete discount</a>
+                    </button>
                 </div>
             </form>
         </div>
