@@ -28,11 +28,10 @@ public class CatalogueController {
         String shopServiceName = userService.getUserAttribute("shopServiceName");
         String shopUrl = userService.getUserAttribute("shopUrl");
 
-        CatalogueDto catalogueDto = catalogueService.getCatalogueFromShop(shopUrl);
         model.addAttribute("shopServiceName", shopServiceName);
-        model.addAttribute("catalogueFromStorage", catalogueDto);
-        if (!catalogueDto.getProducts().isEmpty())
-            model.addAttribute("productPricingWrapper", catalogueService.getProductPricingWrapperFromShop(shopUrl));
+        model.addAttribute("catalogueFromStorage", catalogueService.getCatalogueFromStorage(shopServiceName));
+        model.addAttribute("productPricingWrapper", catalogueService.getProductPricingWrapperFromShop(shopUrl));
+
         return "catalogue-templates/catalogue";
     }
 

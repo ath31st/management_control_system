@@ -47,7 +47,7 @@ spring:
       group-id: "backend"
 
 keycloak:
-  auth-server-url: http://127.0.0.1:8080/auth
+  auth-server-url: http://127.0.0.1:8080/auth  #there is only - 127.0.0.1:8080, not localhost:8080
   #auth-server-url: http://keycloak:8080/auth
   realm: "MCS"
   resource: "backend-client"

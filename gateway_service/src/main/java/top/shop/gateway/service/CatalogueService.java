@@ -55,7 +55,7 @@ public class CatalogueService {
                     .headers(TokenExtractor.headersWithTokenAuthUser())
                     .build(), CatalogueDto.class).getBody();
         } catch (HttpClientErrorException e) {
-            if (e.getRawStatusCode() == 401)
+            if (e.getRawStatusCode() == 404)
                 return CatalogueDto.builder()
                         .products(Collections.emptyList())
                         .catalogueOnDate(LocalDateTime.now())
@@ -105,9 +105,19 @@ public class CatalogueService {
 
     public ProductPricingWrapper getProductPricingWrapperFromShop(String shopUrl) {
         String url = shopUrl + "/api/manager/prices";
-        return restTemplate.exchange(RequestEntity.get(url)
-                .headers(TokenExtractor.headersWithTokenAuthUser())
-                .build(), ProductPricingWrapper.class).getBody();
+        try {
+            return restTemplate.exchange(RequestEntity.get(url)
+                    .headers(TokenExtractor.headersWithTokenAuthUser())
+                    .build(), ProductPricingWrapper.class).getBody();
+        } catch (HttpClientErrorException e) {
+            if (e.getRawStatusCode() == 404) {
+                ProductPricingWrapper wrapper = new ProductPricingWrapper();
+                wrapper.setPricingDtoList(Collections.emptyList());
+                return wrapper;
+            }
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     public void sendProductPricingWrapperToShop(ProductPricingWrapper wrapper, String shopUrl) {
