@@ -58,7 +58,7 @@ services:
       KEYCLOAK_USER: keycloak
       KEYCLOAK_PASSWORD: keycloak
       KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm-config/realm-export.json
-      #KEYCLOAK_FRONTEND_URL: http://127.0.0.1:8080/auth
+      KEYCLOAK_FRONTEND_URL: http://127.0.0.1:8080/auth
     volumes:
       - ./keycloak-config:/opt/jboss/keycloak/realm-config
     ports:
