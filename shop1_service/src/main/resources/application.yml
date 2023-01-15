@@ -22,7 +22,7 @@ shop:
 
 spring:
   kafka:
-    #    bootstrap-servers: "kafka:9092"
+    #bootstrap-servers: "kafka:9092"
     bootstrap-servers: "localhost:9093"
     jaas:
       enabled: true
@@ -40,7 +40,7 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5434/postgresShop1DB
-    #url: jdbc:postgresql://postgres-container-backend:5434/postgresShop1DB
+    #url: jdbc:postgresql://postgres-container-shop1:5434/postgresShop1DB
     username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver

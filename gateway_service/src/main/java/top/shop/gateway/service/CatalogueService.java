@@ -55,7 +55,7 @@ public class CatalogueService {
                     .headers(TokenExtractor.headersWithTokenAuthUser())
                     .build(), CatalogueDto.class).getBody();
         } catch (HttpClientErrorException e) {
-            if (e.getRawStatusCode() == 404)
+            if (e.getRawStatusCode() == 401)
                 return CatalogueDto.builder()
                         .products(Collections.emptyList())
                         .catalogueOnDate(LocalDateTime.now())

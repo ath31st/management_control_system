@@ -12,12 +12,6 @@ services:
     ports:
       - "2181:2181"
     environment:
-#      ZOO_ENABLE_AUTH: yes
-#      ZOO_SERVER_USERS: kafka
-#      ZOO_SERVER_PASSWORDS: kafka_password
-#      ZOO_CLIENT_USER: kafka
-#      ZOO_CLIENT_PASSWORD: kafka_password
-      #ALLOW_ANONYMOUS_LOGIN: yes
       JVMFLAGS: "-Djava.security.auth.login.config=/etc/zookeeper/zookeeper_jaas.conf"
     volumes:
       - './kafka-configs/zookeeper_jaas.conf:/etc/zookeeper/zookeeper_jaas.conf'
@@ -34,9 +28,6 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      #KAFKA_ZOOKEEPER_USER: kafka
-      #KAFKA_ZOOKEEPER_PASSWORD: kafka_password
-      #KAFKA_CFG_ZOOKEEPER_PROTOCOL: PLAINTEXT
       ALLOW_PLAINTEXT_LISTENER: yes
 
       KAFKA_LISTENERS: CLIENT://:9092,EXTERNAL://:9093
@@ -47,15 +38,8 @@ services:
       KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
       KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
 
-#      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ''
-#      KAFKA_CLIENT_USERS: user
-#      KAFKA_CLIENT_PASSWORDS: password
-#      KAFKA_CERTIFICATE_PASSWORD: certificatePassword123
-#      KAFKA_TLS_TYPE: JKS
       KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_jaas.conf"
     volumes:
-#      - './kafka-key-trust-store/kafka.keystore.jks:/opt/bitnami/kafka/config/certs/kafka.keystore.jks:ro'
-#      - './kafka-key-trust-store/kafka.truststore.jks:/opt/bitnami/kafka/config/certs/kafka.truststore.jks:ro'
       - './kafka-configs/kafka_server_jaas.conf:/etc/kafka/kafka_jaas.conf'
     networks:
       - kafka-net
@@ -74,6 +58,7 @@ services:
       KEYCLOAK_USER: keycloak
       KEYCLOAK_PASSWORD: keycloak
       KEYCLOAK_IMPORT: /opt/jboss/keycloak/realm-config/realm-export.json
+      #KEYCLOAK_FRONTEND_URL: http://localhost:8080/auth
     volumes:
       - ./keycloak-config:/opt/jboss/keycloak/realm-config
     ports:
@@ -145,6 +130,8 @@ services:
 #      - "28888:28888"
 #    networks:
 #      - kafka-net
+#    depends_on:
+#      - keycloak
 
 #  backend-service:
 #    container_name: backend-service
@@ -164,7 +151,7 @@ services:
 #    networks:
 #      - kafka-net
 #    depends_on:
-#      - postgres-shop2
+#      - postgres-shop1
 
 #  shop2-service:
 #    container_name: shop2-service
