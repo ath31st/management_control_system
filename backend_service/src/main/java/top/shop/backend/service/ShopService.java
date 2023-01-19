@@ -32,21 +32,22 @@ public class ShopService {
     @EventListener
     public void changeBalance(BalanceEvent event) {
         Order order = (Order) event.getSource();
-        Shop shop = getShop(order.getShop().getServiceName());
-        shop.setBalance(shop.getBalance().add(order.getPayment().getTotalPrice()));
-        shopRepository.save(shop);
+
+        BigDecimal balance = shopRepository.getBalance(order.getShop().getServiceName());
+        shopRepository.updateBalanceByServiceName(balance.add(order.getPayment().getTotalPrice()), order.getShop().getServiceName());
     }
 
-    public void moneyBackFromBalance(double payment, String shopName) {
-        Shop shop = getShop(shopName);
-        shop.setBalance(shop.getBalance().subtract(BigDecimal.valueOf(payment)));
-        shopRepository.save(shop);
+    public void moneyBackFromBalance(double payment, String shopServiceName) {
+//        Shop shop = getShop(shopServiceName);
+//        shop.setBalance(shop.getBalance().subtract(BigDecimal.valueOf(payment)));
+//        shopRepository.save(shop);
+
+        BigDecimal balance = shopRepository.getBalance(shopServiceName);
+        shopRepository.updateBalanceByServiceName(balance.subtract(BigDecimal.valueOf(payment)), shopServiceName);
     }
 
-    public void resetBalance(String shopName) {
-        Shop shop = getShop(shopName);
-        shop.setBalance(BigDecimal.ZERO);
-        shopRepository.save(shop);
+    public void resetBalance(String shopServiceName) {
+        shopRepository.updateBalanceByServiceName(BigDecimal.ZERO, shopServiceName);
     }
 
     public ResponseEntity<HttpStatus> saveNewShop(ShopDto shopDto) {
