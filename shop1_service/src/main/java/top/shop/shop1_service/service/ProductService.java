@@ -71,4 +71,8 @@ public class ProductService {
     public double getProductPrice(String productServiceName) {
         return productRepository.getProductPrice(productServiceName);
     }
+
+    public boolean existsByServiceName(String productServiceName) {
+        return productRepository.existsByServiceName(productServiceName);
+    }
 }

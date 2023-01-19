@@ -42,12 +42,12 @@ public class OrderService {
                 .payment(modelMapper.map(orderDto.getPaymentDto(), Payment.class))
                 .orderDate(orderDto.getOrderDate())
                 .customerEmail(orderDto.getCustomerEmail())
-                .productName(orderDto.getProductName())
+                .productServiceName(orderDto.getProductServiceName())
                 .shop(shopService.getShop(orderDto.getShopServiceName()))
                 .build();
 
         Order persistedOrder = orderRepository.save(order);
-        productService.reduceAmountProduct(order.getAmount(), order.getProductName());
+        productService.reduceAmountProduct(order.getAmount(), order.getProductServiceName());
 
         // add order to scheduler list
         eventPublisher.publishEvent(new OrderEvent(order));
@@ -100,7 +100,7 @@ public class OrderService {
         switch (dto.getDeliveryStatus()) {
             case DELIVERED -> order.setStatus(OrderStatus.DELIVERED);
             case REJECTED -> {
-                productService.increaseAmountProduct(dto.getAmount(), dto.getProductName());
+                productService.increaseAmountProduct(dto.getAmount(), dto.getProductServiceName());
                 shopService.moneyBackFromBalance(dto.getTotalPrice(), dto.getShopServiceName());
                 paymentService.chargeBack(dto.getCustomerEmail(), dto.getTotalPrice());
                 order.setStatus(OrderStatus.REJECTED);
@@ -119,7 +119,7 @@ public class OrderService {
                 .customerEmail(order.getCustomerEmail())
                 .shopServiceName(order.getShop().getServiceName())
                 .shopName(order.getShop().getName())
-                .productName(order.getProductName())
+                .productServiceName(order.getProductServiceName())
                 .totalPrice(order.getPayment().getTotalPrice().doubleValue())
                 .build();
     }

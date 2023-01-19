@@ -11,6 +11,7 @@ import top.shop.shop1_service.dto.OrderDto;
 import top.shop.shop1_service.dto.payment.PaymentDto;
 import top.shop.shop1_service.entity.Customer;
 import top.shop.shop1_service.entity.Payment;
+import top.shop.shop1_service.entity.Product;
 import top.shop.shop1_service.exceptionhandler.exception.CustomerServiceException;
 import top.shop.shop1_service.exceptionhandler.exception.DiscountServiceException;
 import top.shop.shop1_service.exceptionhandler.exception.OrderServiceException;
@@ -28,17 +29,18 @@ public class OrderService {
     private final DiscountService discountService;
     private final CustomerService customerService;
     private final PaymentService paymentService;
+    private final ProductService productService;
 
     @Transactional
     public PaymentDto createOrder(OrderDto orderDto) {
-        checkAvailableProductForSale(orderDto.getProductName());
-        checkAvailableAmountProductForSale(orderDto.getProductName(), orderDto.getAmount());
+        checkAvailableProductForSale(orderDto.getProductServiceName());
+        checkAvailableAmountProductForSale(orderDto.getProductServiceName(), orderDto.getAmount());
         checkExistsCustomer(orderDto.getCustomerEmail());
-        checkExistsPrivateOrCommonDiscount(orderDto.getPromoCode(), orderDto.getProductName(), orderDto.getCustomerEmail());
+        checkExistsPrivateOrCommonDiscount(orderDto.getPromoCode(), orderDto.getProductServiceName(), orderDto.getCustomerEmail());
 
         Customer customer = customerService.getCustomer(orderDto.getCustomerEmail());
 
-        Payment payment = paymentService.createPayment(customer, orderDto.getProductName(), orderDto.getAmount(), orderDto.getPromoCode());
+        Payment payment = paymentService.createPayment(customer, orderDto.getProductServiceName(), orderDto.getAmount(), orderDto.getPromoCode());
         PaymentDto paymentDto = paymentService.getPaymentDtoFromPayment(payment);
 
         orderDto.setPaymentDto(paymentDto);
@@ -55,7 +57,7 @@ public class OrderService {
     }
 
     private void checkAvailableProductForSale(String productServiceName) {
-        if (!catalogueService.getProductServiceNameList().contains(productServiceName))
+        if (!productService.existsByServiceName(productServiceName))
             throw new OrderServiceException(HttpStatus.BAD_REQUEST, "The product is absent in the catalogue");
     }
 

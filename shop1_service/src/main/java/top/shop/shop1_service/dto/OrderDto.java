@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 public class OrderDto {
     private String shopServiceName;
-    @NotEmpty(message = "Product name cannot be empty.")
-    @Size(min = 3, max = 100, message = "Product name must be minimum 3 and maximum 100 characters.")
-    private String productName;
+    @NotEmpty(message = "Product service name cannot be empty.")
+    @Size(min = 3, max = 100, message = "Product service name must be minimum 3 and maximum 100 characters.")
+    private String productServiceName;
     @NotEmpty(message = "Customer email cannot be empty.")
     @Size(min = 3, max = 100, message = "Customer email must be minimum 3 and maximum 100 characters.")
     private String customerEmail;

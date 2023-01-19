@@ -10,7 +10,7 @@ public class DeliveryOrderDto {
     private String orderUuidNumber;
     private String shopServiceName;
     private String shopName;
-    private String productName;
+    private String productServiceName;
     private String customerEmail;
     private int amount;
     private double totalPrice;

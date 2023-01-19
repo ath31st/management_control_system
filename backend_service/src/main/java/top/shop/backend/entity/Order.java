@@ -24,7 +24,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "shop_id")
     private Shop shop;
-    private String productName;
+    private String productServiceName;
     private String customerEmail;
     private LocalDateTime orderDate;
     private LocalDateTime executionDate;

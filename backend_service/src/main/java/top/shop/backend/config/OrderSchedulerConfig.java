@@ -40,22 +40,10 @@ public class OrderSchedulerConfig {
                 .forEach(o -> {
                     o.setStatus(OrderStatus.EXPIRED);
                     o.setExecutionDate(LocalDateTime.now());
-                    productService.increaseAmountProduct(o.getAmount(), o.getProductName());
+                    productService.increaseAmountProduct(o.getAmount(), o.getProductServiceName());
                     orderService.saveOrderChanges(o);
                 });
         orders.removeIf(o -> o.getStatus().equals(OrderStatus.EXPIRED));
-
-//        while (orders.listIterator().hasNext()) {
-//            Order o = orders.listIterator().next();
-//            if (checkIsExpiredOrder(o)) {
-//                o.setStatus(OrderStatus.EXPIRED);
-//                o.setExecutionDate(LocalDateTime.now());
-//                productService.increaseAmountProduct(o.getAmount(), o.getProductName());
-//                orderService.saveOrderChanges(o);
-//
-//                orders.listIterator().remove();
-//            }
-//        }
     }
 
     @EventListener

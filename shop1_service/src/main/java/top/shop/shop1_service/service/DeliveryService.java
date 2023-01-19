@@ -78,7 +78,7 @@ public class DeliveryService {
         deliveryOrder.setAmount(dto.getAmount());
         deliveryOrder.setTotalPrice(dto.getTotalPrice());
         deliveryOrder.setDeliveryStatus(dto.getDeliveryStatus());
-        deliveryOrder.setProducts(Collections.singletonList(productService.getProduct(dto.getProductName())));
+        deliveryOrder.setProducts(Collections.singletonList(productService.getProduct(dto.getProductServiceName())));
         deliveryOrder.setPayment(paymentService.getPayment(dto.getOrderUuidNumber()));
         deliveryOrder.setCustomer(customerService.getCustomer(dto.getCustomerEmail()));
 
@@ -90,7 +90,7 @@ public class DeliveryService {
         dto.setOrderUuidNumber(order.getOrderUuidNumber());
         dto.setShopServiceName(order.getShopServiceName());
         dto.setShopName(order.getShopName());
-        dto.setProductName(order.getProducts().get(0).getName());
+        dto.setProductServiceName(order.getProducts().get(0).getServiceName());
         dto.setCustomerEmail(order.getCustomer().getEmail());
         dto.setAmount(order.getAmount());
         dto.setTotalPrice(order.getTotalPrice());
