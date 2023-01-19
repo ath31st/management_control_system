@@ -33,13 +33,13 @@ public class ProductService {
 
     public void receiveProducts(ProductWrapper productWrapper) {
         productWrapper.getProductDtoList().forEach(pDto -> {
-            if (productRepository.getProduct(pDto.getServiceName()).isPresent() && pDto.getAmount() != 0) {
-                Product product = getProduct(pDto.getServiceName());
-                product.setAmount(product.getAmount() + pDto.getAmount());
+            if (productRepository.existsByServiceName(pDto.getServiceName()) && pDto.getAmount() != 0) {
 
-                productRepository.save(product);
+                long totalAmount = productRepository.getAmountByServiceName(pDto.getServiceName()) + pDto.getAmount();
+                productRepository.updateAmountByServiceName(totalAmount, pDto.getServiceName());
+
                 eventPublisher.publishEvent(new ProductAmountEvent(
-                        new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
+                        new ProductAmountDto(totalAmount, pDto.getServiceName(), LocalDateTime.now())));
             } else {
                 Category category;
                 if (categoryService.categoryExists(pDto.getCategory().getServiceName())) {
@@ -70,21 +70,19 @@ public class ProductService {
     }
 
     public void reduceAmountProduct(int amount, String productServiceName) {
-        Product product = getProduct(productServiceName);
-        product.setAmount(product.getAmount() - amount);
+        long totalAmount = productRepository.getAmountByServiceName(productServiceName) - amount;
+        productRepository.updateAmountByServiceName(totalAmount, productServiceName);
 
-        productRepository.save(product);
         eventPublisher.publishEvent(new ProductAmountEvent(
-                new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
+                new ProductAmountDto(totalAmount, productServiceName, LocalDateTime.now())));
     }
 
     public void increaseAmountProduct(int amount, String productServiceName) {
-        Product product = getProduct(productServiceName);
-        product.setAmount(product.getAmount() + amount);
+        long totalAmount = productRepository.getAmountByServiceName(productServiceName) + amount;
+        productRepository.updateAmountByServiceName(totalAmount, productServiceName);
 
-        productRepository.save(product);
         eventPublisher.publishEvent(new ProductAmountEvent(
-                new ProductAmountDto(product.getAmount(), product.getServiceName(), LocalDateTime.now())));
+                new ProductAmountDto(totalAmount, productServiceName, LocalDateTime.now())));
     }
 
     public List<ProductDto> getProductDtoList() {

@@ -38,10 +38,6 @@ public class ShopService {
     }
 
     public void moneyBackFromBalance(double payment, String shopServiceName) {
-//        Shop shop = getShop(shopServiceName);
-//        shop.setBalance(shop.getBalance().subtract(BigDecimal.valueOf(payment)));
-//        shopRepository.save(shop);
-
         BigDecimal balance = shopRepository.getBalance(shopServiceName);
         shopRepository.updateBalanceByServiceName(balance.subtract(BigDecimal.valueOf(payment)), shopServiceName);
     }
