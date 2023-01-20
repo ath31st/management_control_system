@@ -14,7 +14,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public Category categoryDtoToCategoryConverter(CategoryDto dto) {
-        if (categoryRepository.existsByServiceName(dto.getServiceName()))
+        if (existsCategory(dto.getServiceName()))
             return categoryRepository.findByServiceName(dto.getServiceName());
         else {
             return categoryRepository.save(Category.builder()
@@ -44,5 +44,23 @@ public class CategoryService {
         dto.setServiceName(c.getServiceName());
         dto.setDescription(c.getDescription());
         return dto;
+    }
+
+    public void updateCategory(CategoryDto dto) {
+        Category category = getCategory(dto.getServiceName());
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+
+        categoryRepository.save(category);
+    }
+
+    public void deleteCategory(String categoryServiceName) {
+        Category category = getCategory(categoryServiceName);
+
+        categoryRepository.delete(category);
+    }
+
+    public boolean existsCategory(String categoryServiceName) {
+        return categoryRepository.existsByServiceName(categoryServiceName);
     }
 }

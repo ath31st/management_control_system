@@ -27,4 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT p.price FROM products JOIN prices p ON p.id = products.product_pricing_id WHERE service_name = :productServiceName", nativeQuery = true)
     double getProductPrice(String productServiceName);
+
+    List<Product> findByCategory_ServiceName(String serviceName);
+
 }

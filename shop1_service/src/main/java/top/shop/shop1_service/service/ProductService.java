@@ -75,4 +75,12 @@ public class ProductService {
     public boolean existsByServiceName(String productServiceName) {
         return productRepository.existsByServiceName(productServiceName);
     }
+
+    public void changeProductsCategoryToDefault(String categoryServiceName) {
+        List<Product> products = productRepository.findByCategory_ServiceName(categoryServiceName);
+        products.forEach(p -> {
+            p.setCategory(categoryService.getCategory("default_category"));
+            productRepository.save(p);
+        });
+    }
 }
