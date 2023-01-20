@@ -141,9 +141,8 @@ public class ProductService {
         return convertProductToProductDto(product);
     }
 
-    @EventListener
-    public void changeProductsCategoryToDefault(CategoryEvent event) {
-        List<Product> products = productRepository.getProductByCategory_ServiceName((String) event.getSource());
+    public void changeProductsCategoryToDefault(String categoryServiceName) {
+        List<Product> products = productRepository.getProductByCategory_ServiceName(categoryServiceName);
         products.forEach(p -> {
             p.setCategory(categoryService.getCategory("default_category"));
             productRepository.save(p);

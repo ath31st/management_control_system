@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import top.shop.backend.dto.CategoryDto;
 import top.shop.backend.dto.ShopDto;
 import top.shop.backend.service.CategoryService;
+import top.shop.backend.service.ProductService;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final ProductService productService;
 
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryDto>> categoriesHandler() {
@@ -44,6 +46,7 @@ public class CategoryController {
     @DeleteMapping("/delete-category/{categoryServiceName}")
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable String categoryServiceName) {
         categoryService.deleteCategory(categoryServiceName);
+        productService.changeProductsCategoryToDefault(categoryServiceName);
 
         return ResponseEntity.ok().build();
     }

@@ -61,9 +61,6 @@ public class CategoryService {
     public void deleteCategory(String categoryServiceName) {
         Category category = getCategory(categoryServiceName);
 
-        // change products with deleting category on default category
-        eventPublisher.publishEvent(new CategoryEvent(categoryServiceName));
-
         categoryRepository.delete(category);
     }
 
