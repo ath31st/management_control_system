@@ -59,6 +59,7 @@ The microservice architectural style is an approach to developing a single appli
  - [Early version 005](images/early_version005.jpg)
  - [Early version 006](images/early_version006.jpg)
  - [Early version 007](images/early_version007.jpg)
+ - [Early version 008](images/early_version008.jpg)
 
 
 ## Services
