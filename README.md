@@ -6,6 +6,8 @@ Since I have no practical experience in designing and developing projects of thi
 the project scheme has also changed over time.
 Despite the shortcomings and errors (including architectural ones), this is a great experience for me after a year of starting my Java self-study.
 
+Project status: frozen at the moment of development. a lot of work has been done, maybe it will be continued someday.
+
 ## Table of Contents
 
 * [Application 'Management control system'](#management-control-system)
@@ -25,7 +27,6 @@ Despite the shortcomings and errors (including architectural ones), this is a gr
     * [Security](#security)
     * [Running Instructions](#running-instructions)
         * [Via docker](#via-docker)
-            * [Usage](#usage)
     * [References and further reading](#references-and-further-reading)
 
 ## Project objectives
@@ -38,10 +39,10 @@ Despite the shortcomings and errors (including architectural ones), this is a gr
 - Integration authentication server where users can centrally login, logout, register, and manage their user accounts. 
 - Project security (Keycloak for user registration, authentication and authorization, Kafka SASL authentication for services)
 - Discount system (Including discount, private discount and common discount). Application and refund of discounts. (Completed 14.01.2023)
+- Redesign and optimize database accesses. (Completed 20.01.2023)
 
 ### Planned
 
-- Redesign and optimize database accesses
 - Integrate Apache Cassandra for logging events from all project modules
 - Collecting and displaying statistics for managers and administrator in the web interface
 - Make a simple but visual web interface for customers (registration, purchases, refunds, viewing purchase history)
@@ -211,12 +212,9 @@ At the moment, to start, you need to uncomment the services in docker-compose an
 ```bash
 $ cd management_control_system
 $ mvn clean install
+$ mvn clean package
 $ docker-compose up --build -d
 ```
-
-#### Usage
-
-Work in progress
 
 ## References and further reading
     * http://microservices.io/

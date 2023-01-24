@@ -123,35 +123,35 @@ services:
 #    networks:
 #      - kafka-net
 
-#  gateway-service:
-#    container_name: gateway-service
-#    build: ./gateway_service/
-#    ports:
-#      - "28888:28888"
-#    networks:
-#      - kafka-net
-#    depends_on:
-#      - keycloak
+  gateway-service:
+    container_name: gateway-service
+    build: ./gateway_service/
+    ports:
+      - "28888:28888"
+    networks:
+      - kafka-net
+    depends_on:
+      - keycloak
 
-#  backend-service:
-#    container_name: backend-service
-#    build: ./backend_service/
-#    ports:
-#      - "28889:28889"
-#    networks:
-#      - kafka-net
-#    depends_on:
-#      - postgres-backend
+  backend-service:
+    container_name: backend-service
+    build: ./backend_service/
+    ports:
+      - "28889:28889"
+    networks:
+      - kafka-net
+    depends_on:
+      - postgres-backend
 
-#  shop1-service:
-#    container_name: shop1-service
-#    build: ./shop1_service/
-#    ports:
-#      - "28880:28880"
-#    networks:
-#      - kafka-net
-#    depends_on:
-#      - postgres-shop1
+  shop1-service:
+    container_name: shop1-service
+    build: ./shop1_service/
+    ports:
+      - "28880:28880"
+    networks:
+      - kafka-net
+    depends_on:
+      - postgres-shop1
 
 #  shop2-service:
 #    container_name: shop2-service
