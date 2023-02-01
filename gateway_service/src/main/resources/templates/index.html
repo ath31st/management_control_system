@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
@@ -14,8 +16,15 @@
 <div class="wrapper">
     <div lang="en" th:replace="fragments/header :: header"></div>
     <h1 class="text-center">Welcome!</h1>
-    <h4 class="text-center">This is a multi-store management system with a web interface for administrators and managers</h4>
+    <h4 class="text-center">This is a multi-store management system with a web interface for administrators and
+        managers</h4>
     <br>
+    <div sec:authorize="!isAuthenticated()">
+        Anonymous section
+        <div>
+            <button class="btn btn-primary"><a style="color: white;text-decoration: none" th:href="@{/before-we-start}">Login</a></button>
+        </div>
+    </div>
     <div th:if="${#authorization.expression('hasRole(''ROLE_ADMINISTRATOR'')')}">
         Admin section
     </div>
